@@ -310,7 +310,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         jPanel4.add(m_jLblTotalEuros1);
 
         m_jTotalEuros.setBackground(java.awt.Color.white);
-        m_jTotalEuros.setFont(new java.awt.Font("Dialog", 1, 14));
+        m_jTotalEuros.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         m_jTotalEuros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         m_jTotalEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jTotalEuros.setOpaque(true);
@@ -324,7 +324,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         jPanel6.add(m_jLblRemainingEuros);
 
         m_jRemaininglEuros.setBackground(java.awt.Color.white);
-        m_jRemaininglEuros.setFont(new java.awt.Font("Dialog", 1, 14));
+        m_jRemaininglEuros.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         m_jRemaininglEuros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         m_jRemaininglEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jRemaininglEuros.setOpaque(true);
@@ -409,7 +409,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         getContentPane().add(jPanel5, java.awt.BorderLayout.SOUTH);
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-690)/2, (screenSize.height-534)/2, 690, 534);
+        setBounds((screenSize.width-672)/2, (screenSize.height-497)/2, 672, 497);
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonRemoveActionPerformed

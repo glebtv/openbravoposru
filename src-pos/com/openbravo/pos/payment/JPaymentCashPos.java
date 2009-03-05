@@ -198,11 +198,11 @@ public class JPaymentCashPos extends javax.swing.JPanel implements JPaymentInter
 
         jLabel6.setText(AppLocal.getIntString("Label.ChangeCash")); // NOI18N
         jPanel4.add(jLabel6);
-        jLabel6.setBounds(20, 50, 100, 17);
+        jLabel6.setBounds(20, 50, 100, 15);
 
         jLabel8.setText(AppLocal.getIntString("Label.InputCash")); // NOI18N
         jPanel4.add(jLabel8);
-        jLabel8.setBounds(20, 20, 100, 17);
+        jLabel8.setBounds(20, 20, 100, 15);
 
         m_jMoneyEuros.setBackground(new java.awt.Color(153, 153, 255));
         m_jMoneyEuros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
