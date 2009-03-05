@@ -23,11 +23,11 @@
      
     <display>
         <line>
-            <text align="left" length="10">Total.</text>
+            <text align="left" length="10">Итого.</text>
             <text align="right" length="10">${ticket.printTotal()}</text>
         </line>
         <line>
-           <text align="center" length="20">Thank you.</text>
+           <text align="center" length="20">Спасибо.</text>
         </line>
     </display>
 
@@ -35,27 +35,27 @@
         <image>Printer.Ticket.Logo</image>
         <line></line>
         <line>
-            <text align="center" length="42">Receipt sample.</text>
+            <text align="center" length="42">Пример текста чека.</text>
         </line>
         <line>
-            <text align="center" length="42">You can change this template</text>
+            <text align="center" length="42">Вы можете его изменить</text>
         </line>
         <line>
-            <text align="center" length="42">in the resources panel</text>
+            <text align="center" length="42">через раздел Ресурсы.</text>
         </line>
         <line></line>
         <line>
-            <text align="left" length="15">Receipt:</text>
+            <text align="left" length="15">Чек:</text>
             <text>${ticket.printId()}</text>
-        </line>    
+        </line>
         <line>
-            <text align="left" length="15">Date:</text>
+            <text align="left" length="15">Дата:</text>
             <text>${ticket.printDate()}</text>
-        </line>  
-        
+        </line>
+
          #if ($ticket.getCustomer())
         <line>
-            <text align="left" length="15">Customer:</text>
+            <text align="left" length="15">Клиент:</text>
             <text>${ticket.getCustomer().getName()}</text>
         </line>      
         <line>
@@ -66,20 +66,20 @@
         
         #if ($place != "")
         <line>
-            <text align="left" length="15">Table:</text>
+            <text align="left" length="15">Стол:</text>
             <text>${place}</text>
-        </line>  
+        </line>
         #end
-        <line></line>    
+        <line></line>
         <line>
-            <text align ="left" length="17">Item</text>
-            <text align ="right" length="10">Price</text>
+            <text align ="left" length="17">Наименование</text>
+            <text align ="right" length="10">Цена</text>
             <text align ="right" length="5"></text>
-            <text align ="right" length="10">Value</text>
-        </line>      
+            <text align ="right" length="10">Сумма</text>
+        </line>
         <line>
              <text>------------------------------------------</text>
-        </line>   
+        </line>
 
         #foreach ($ticketline in $ticket.getLines())
         <line>
@@ -98,17 +98,17 @@
              <text>------------------------------------------</text>
         </line>   
         <line>
-            <text>Items count: </text>
+            <text>Кол-во товаров: </text>
             <text align ="right" length="10">${ticket.printArticlesCount()}</text>
         </line> 
         <line></line> 
         <line>
-            <text align ="left" length="16">Subtotal.</text>
+            <text align ="left" length="16">Всего.</text>
             <text align ="right" length="20">${ticket.printSubTotal()}</text>
         </line> 
         <line></line> 
         <line size="1">
-            <text align ="left" length="16" bold="true">Total.</text>
+            <text align ="left" length="16" bold="true">Итого.</text>
             <text align ="right" length="20" bold="true">${ticket.printTotal()}</text>
         </line>    
 
@@ -116,7 +116,7 @@
          #if ($paymentline.name == "cash")
         <line></line>     
         <line>
-            <text bold="true">Cash</text>
+            <text bold="true">Наличные</text>
         </line>  
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -125,7 +125,7 @@
          #if ($paymentline.name == "cashrefund")
         <line></line>     
         <line>
-            <text bold="true">Refund</text>
+            <text bold="true">Возврат из кассы</text>
          </line>
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -134,7 +134,7 @@
          #if ($paymentline.name == "magcard")
         <line></line>        
         <line>
-            <text bold="true">Mag card</text>
+            <text bold="true">Карта</text>
         </line>   
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -143,7 +143,7 @@
          #if ($paymentline.name == "magcardrefund")
         <line></line>     
         <line>
-            <text bold="true">Mag card refund</text>
+            <text bold="true">Возврат на карту</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -152,7 +152,7 @@
          #if ($paymentline.name == "cheque")
         <line></line>     
         <line>
-            <text bold="true">Cheque</text>
+            <text bold="true">Чек</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -161,7 +161,7 @@
          #if ($paymentline.name == "chequerefund")
         <line></line>     
         <line>
-            <text bold="true">Cheque refund</text>
+            <text bold="true">Возврат чека</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -170,7 +170,7 @@
          #if ($paymentline.name == "paperin")
         <line></line>     
         <line>
-            <text bold="true">Note</text>
+            <text bold="true">Расписка</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -179,7 +179,7 @@
          #if ($paymentline.name == "paperout")
         <line></line>     
         <line>
-            <text bold="true">Note Refund</text>
+            <text bold="true">Возврат расписки</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -188,7 +188,7 @@
          #if ($paymentline.name == "free")
         <line></line>     
         <line>
-            <text bold="true">Free</text>
+            <text bold="true">Без оплаты</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -197,7 +197,7 @@
          #if ($paymentline.name == "debt")
         <line></line>     
         <line>
-            <text bold="true">Debt</text>
+            <text bold="true">В кредит</text>
         </line>    
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
@@ -207,13 +207,13 @@
         
         <line></line>  
         <line>
-            <text align="left" length="15">Cashier:</text>
+            <text align="left" length="15">Кассир:</text>
             <text>${ticket.printUser()}</text>
         </line> 
         
         <line></line>            
         <line>
-            <text align="center" length="42">Thank you for your visit.</text>
+            <text align="center" length="42">Спасибо за покупку.</text>
         </line>    
     </ticket>
 

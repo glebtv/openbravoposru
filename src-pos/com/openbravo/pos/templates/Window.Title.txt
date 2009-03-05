@@ -1,1 +1,1 @@
-Openbravo POS is a point of sale designed for touch screens.
+Openbravo POS - автоматизированная система продаж для работы с сенсорным экраном.

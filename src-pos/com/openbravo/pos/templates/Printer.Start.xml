@@ -26,7 +26,7 @@
             <text align="center" length="20">Openbravo POS</text>
         </line>
         <line>
-            <text align="center" length="20">Welcome</text>
+            <text align="center" length="20">Добро пожаловать!</text>
         </line>
     </display>
 </output>
