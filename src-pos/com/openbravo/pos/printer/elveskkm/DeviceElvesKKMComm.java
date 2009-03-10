@@ -17,7 +17,6 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package com.openbravo.pos.printer.elveskkm;
 
-// import javax.comm.*; // Java comm library
 import gnu.io.*;
 import java.io.*;
 import java.util.TooManyListenersException;
@@ -340,5 +339,4 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
             }
         }
     }
-
 }

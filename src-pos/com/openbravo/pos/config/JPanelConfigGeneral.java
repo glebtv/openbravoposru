@@ -123,10 +123,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter.addItem("javapos");
         jcboMachinePrinter.addItem("elveskkm");
         jcboMachinePrinter.addItem("Not defined");
-
+        
         jcboConnPrinter.addItem("serial");
-        jcboConnPrinter.addItem("file");
-
+        jcboConnPrinter.addItem("file");        
+        
         jcboSerialPrinter.addItem("COM1");
         jcboSerialPrinter.addItem("COM2");
         jcboSerialPrinter.addItem("COM3");
@@ -136,8 +136,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter.addItem("/dev/ttyS1");
         jcboSerialPrinter.addItem("/dev/ttyS2");
         jcboSerialPrinter.addItem("/dev/ttyS3");
-
-        // Printer 2
+        
+        // Printer 2        
         jcboMachinePrinter2.addItem("screen");
         jcboMachinePrinter2.addItem("printer");
         jcboMachinePrinter2.addItem("epson");
@@ -148,10 +148,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter2.addItem("javapos");
         jcboMachinePrinter2.addItem("elveskkm");
         jcboMachinePrinter2.addItem("Not defined");
-
+        
         jcboConnPrinter2.addItem("serial");
-        jcboConnPrinter2.addItem("file");
-
+        jcboConnPrinter2.addItem("file");   
+        
         jcboSerialPrinter2.addItem("COM1");
         jcboSerialPrinter2.addItem("COM2");
         jcboSerialPrinter2.addItem("COM3");
@@ -161,7 +161,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter2.addItem("/dev/ttyS1");
         jcboSerialPrinter2.addItem("/dev/ttyS2");
         jcboSerialPrinter2.addItem("/dev/ttyS3");
-
+        
         // Printer 3
         jcboMachinePrinter3.addItem("screen");
         jcboMachinePrinter3.addItem("printer");
@@ -175,8 +175,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter3.addItem("Not defined");
         
         jcboConnPrinter3.addItem("serial");
-        jcboConnPrinter3.addItem("file");
-
+        jcboConnPrinter3.addItem("file");   
+        
         jcboSerialPrinter3.addItem("COM1");
         jcboSerialPrinter3.addItem("COM2");
         jcboSerialPrinter3.addItem("COM3");
@@ -186,13 +186,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter3.addItem("/dev/ttyS1");
         jcboSerialPrinter3.addItem("/dev/ttyS2");
         jcboSerialPrinter3.addItem("/dev/ttyS3");
-
+        
         // Display
         jcboMachineDisplay.addItem("screen");
         jcboMachineDisplay.addItem("window");
         jcboMachineDisplay.addItem("javapos");
         jcboMachineDisplay.addItem("epson");
         jcboMachineDisplay.addItem("ld200");
+        jcboMachineDisplay.addItem("cd5220rus");                
         jcboMachineDisplay.addItem("surepos");
         jcboMachineDisplay.addItem("Not defined");
         
@@ -405,7 +406,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
         
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
-        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
+        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "cd5220rus".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
         } else if ("javapos".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
@@ -924,7 +925,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineDisplayActionPerformed
         CardLayout cl = (CardLayout)(m_jDisplayParams.getLayout());
         
-        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
+        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "cd5220rus".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "comm");
         } else if ("javapos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "javapos");
