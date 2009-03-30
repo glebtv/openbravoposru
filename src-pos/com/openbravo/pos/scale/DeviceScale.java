@@ -40,7 +40,9 @@ public class DeviceScale {
         } else if ("fake".equals(sScaleType)) { // a fake scale for debugging purposes
             m_scale = new ScaleFake();            
         } else if ("screen".equals(sScaleType)) { // on screen scale
-            m_scale = new ScaleDialog();            
+            m_scale = new ScaleDialog();
+        } else if ("tves4149".equals(sScaleType)) { // scale ВР4149-10 & ВР4149-11
+            m_scale = new ScaleTves(sScaleParam1);
         } else {
             m_scale = null;
         }
