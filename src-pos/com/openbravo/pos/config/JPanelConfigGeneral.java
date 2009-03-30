@@ -214,6 +214,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachineScale.addItem("screen");
         jcboMachineScale.addItem("dialog1");
         jcboMachineScale.addItem("samsungesp");
+        jcboMachineScale.addItem("tves4149");
         jcboMachineScale.addItem("Not defined");
         
         jcboSerialScale.addItem("COM1");
@@ -349,7 +350,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         p = new StringParser(config.getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
-        if ("dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
+        if ("dialog1".equals(sparam) || "samsungesp".equals(sparam) || "tves4149".equals(sparam)) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
         }
         
@@ -416,7 +417,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         
         // La bascula
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
-        if ("dialog1".equals(sMachineScale) || "samsungesp".equals(sMachineScale)) {
+        if ("dialog1".equals(sMachineScale) || "samsungesp".equals(sMachineScale) || "tves4149".equals(sMachineScale)) {
             config.setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
         } else {
             config.setProperty("machine.scale", sMachineScale);
@@ -891,7 +892,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScaleActionPerformed
         CardLayout cl = (CardLayout)(m_jScaleParams.getLayout());
         
-        if ("dialog1".equals(jcboMachineScale.getSelectedItem()) || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {
+        if ("dialog1".equals(jcboMachineScale.getSelectedItem()) || "samsungesp".equals(jcboMachineScale.getSelectedItem())|| "tves4149".equals(jcboMachineScale.getSelectedItem())) {
             cl.show(m_jScaleParams, "comm");
         } else {
             cl.show(m_jScaleParams, "empty");
