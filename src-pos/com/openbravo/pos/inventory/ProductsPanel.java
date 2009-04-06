@@ -125,7 +125,7 @@ public class ProductsPanel extends JPanelTable implements EditorListener {
     }  
     
     @Override
-    public Component getToolbarExtras() {
+    public Component getToolbarExtrasScanPal() {
         
         JButton btnScanPal = new JButton();
         btnScanPal.setText("ScanPal");
@@ -138,11 +138,31 @@ public class ProductsPanel extends JPanelTable implements EditorListener {
         
         return btnScanPal;
     }
+
+    @Override
+    public Component getToolbarExtrasMercury130() {
+
+        JButton btnMercury130 = new JButton();
+        btnMercury130.setText("Mercury130");
+        btnMercury130.setVisible(app.getDeviceMercury130() != null);
+        btnMercury130.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMercury130ActionPerformed(evt);
+            }
+        });
+
+        return btnMercury130;
+    }
     
     private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
   
         JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
-    }  
+    }
+
+    private void btnMercury130ActionPerformed(java.awt.event.ActionEvent evt) {
+        JDlgUploadProductsMercury130.showMessage(this, app.getDeviceMercury130(), bd);
+    }
     
     public String getTitle() {
         return AppLocal.getIntString("Menu.Products");

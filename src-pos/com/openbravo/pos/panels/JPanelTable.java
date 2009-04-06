@@ -100,7 +100,13 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
             }
 
             // add toolbar extras
-            c = getToolbarExtras();
+            c = getToolbarExtrasScanPal();
+            if (c != null) {
+                c.applyComponentOrientation(getComponentOrientation());
+                toolbar.add(c);
+            }
+
+            c = getToolbarExtrasMercury130();
             if (c != null) {
                 c.applyComponentOrientation(getComponentOrientation());
                 toolbar.add(c);
@@ -122,7 +128,11 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         }
     }
     
-    public Component getToolbarExtras() {
+    public Component getToolbarExtrasScanPal() {
+        return null;
+    }
+
+    public Component getToolbarExtrasMercury130() {
         return null;
     }
 

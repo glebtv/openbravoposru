@@ -42,6 +42,8 @@ import com.openbravo.data.loader.Session;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.scanpal2.DeviceScannerFactory;
+import com.openbravo.pos.mercury130.DeviceMercury130;
+import com.openbravo.pos.mercury130.DeviceMercury130Factory;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -68,6 +70,7 @@ public class JRootApp extends JPanel implements AppView {
    
     private DeviceScale m_Scale;
     private DeviceScanner m_Scanner;
+    private DeviceMercury130 m_Mercury130;
     private DeviceTicket m_TP;   
     private TicketParser m_TTP;
     
@@ -198,6 +201,8 @@ public class JRootApp extends JPanel implements AppView {
         
         // Inicializamos la scanpal
         m_Scanner = DeviceScannerFactory.createInstance(m_props);
+
+        m_Mercury130 = DeviceMercury130Factory.createInstance(m_props);
             
         // Leemos los recursos basicos
         BufferedImage imgicon = m_dlSystem.getResourceAsImage("Window.Logo");
@@ -261,8 +266,13 @@ public class JRootApp extends JPanel implements AppView {
     public DeviceScale getDeviceScale() {
         return m_Scale;
     }
+
     public DeviceScanner getDeviceScanner() {
         return m_Scanner;
+    }
+
+    public DeviceMercury130 getDeviceMercury130() {
+        return m_Mercury130;
     }
     
     public Session getSession() {
