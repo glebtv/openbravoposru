@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.catalog;
 
@@ -58,7 +59,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private ThumbNailBuilder tnbcat;
     
     private CategoryInfo showingcategory = null;
-    
+        
     /** Creates new form JCatalog */
     public JCatalog(DataLogicSales dlSales) {
         this(dlSales, false, false, 64, 54);
@@ -101,7 +102,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_categoriesset.clear();
         
         showingcategory = null;
-        
+                
         // Load the taxes logic
         taxeslogic = new TaxesLogic(m_dlSales.getTaxList().list());
 
@@ -131,7 +132,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_jUp.setEnabled(value);
         m_jDown.setEnabled(value);
         m_lblIndicator.setEnabled(value);
-        m_btnBack.setEnabled(value);
+        m_btnBack1.setEnabled(value);
         m_jProducts.setEnabled(value); 
         synchronized (m_jProducts.getTreeLock()) {
             int compCount = m_jProducts.getComponentCount();
@@ -183,10 +184,11 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
                 jcurrTab.applyComponentOrientation(getComponentOrientation());
                 m_jProducts.add(jcurrTab, catid);
                 m_categoriesset.add(catid);
-                
+               
                 // Add subcategories
                 java.util.List<CategoryInfo> categories = m_dlSales.getSubcategories(catid);
                 for (CategoryInfo cat : categories) {
+
                     jcurrTab.addButton(new ImageIcon(tnbbutton.getThumbNailText(cat.getImage(), cat.getName())), new SelectedCategory(cat));
                 }
                 
@@ -209,7 +211,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
 
         if (pricevisible) {
             if (taxesincluded) {
-                TaxInfo tax = taxeslogic.getTaxInfo(product.getTaxCategoryInfo());
+                TaxInfo tax = taxeslogic.getTaxInfo(product.getTaxCategoryID());
                 return "<html><center>" + product.getName() + "<br>" + product.printPriceSellTax(tax);
             } else {
                 return "<html><center>" + product.getName() + "<br>" + product.printPriceSell();
@@ -240,6 +242,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         selectIndicatorCategories();
         // Show selected root category
         CategoryInfo cat = (CategoryInfo) m_jListCategories.getSelectedValue();
+        
         if (cat != null) {
             selectCategoryPanel(cat.getID());
         }
@@ -247,14 +250,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     }
     
     private void showSubcategoryPanel(CategoryInfo category) {
-        
         selectIndicatorPanel(new ImageIcon(tnbbutton.getThumbNail(category.getImage())), category.getName());
         selectCategoryPanel(category.getID());
         showingcategory = category;
     }
-    
+   
     private void showProductPanel(String id) {
-            
+        
         ProductInfoExt product = m_productsset.get(id);
 
         if (product == null) {
@@ -383,18 +385,19 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_lblIndicator = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        m_btnBack = new javax.swing.JButton();
+        m_btnBack1 = new javax.swing.JButton();
         m_jProducts = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
 
+        m_jCategories.setMaximumSize(new java.awt.Dimension(275, 600));
+        m_jCategories.setPreferredSize(new java.awt.Dimension(275, 600));
         m_jCategories.setLayout(new java.awt.CardLayout());
 
         m_jRootCategories.setLayout(new java.awt.BorderLayout());
 
         m_jscrollcat.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         m_jscrollcat.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        m_jscrollcat.setPreferredSize(new java.awt.Dimension(210, 0));
 
         m_jListCategories.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         m_jListCategories.setFocusable(false);
@@ -405,7 +408,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         });
         m_jscrollcat.setViewportView(m_jListCategories);
 
-        m_jRootCategories.add(m_jscrollcat, java.awt.BorderLayout.LINE_START);
+        m_jRootCategories.add(m_jscrollcat, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
@@ -438,7 +441,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.NORTH);
 
-        m_jRootCategories.add(jPanel2, java.awt.BorderLayout.CENTER);
+        m_jRootCategories.add(jPanel2, java.awt.BorderLayout.LINE_END);
 
         m_jCategories.add(m_jRootCategories, "rootcategories");
 
@@ -456,17 +459,17 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         jPanel5.setLayout(new java.awt.GridLayout(0, 1, 0, 5));
 
-        m_btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/3uparrow.png"))); // NOI18N
-        m_btnBack.setFocusPainted(false);
-        m_btnBack.setFocusable(false);
-        m_btnBack.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        m_btnBack.setRequestFocusEnabled(false);
-        m_btnBack.addActionListener(new java.awt.event.ActionListener() {
+        m_btnBack1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/3uparrow2.png"))); // NOI18N
+        m_btnBack1.setFocusPainted(false);
+        m_btnBack1.setFocusable(false);
+        m_btnBack1.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_btnBack1.setRequestFocusEnabled(false);
+        m_btnBack1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_btnBackActionPerformed(evt);
+                m_btnBack1ActionPerformed(evt);
             }
         });
-        jPanel5.add(m_btnBack);
+        jPanel5.add(m_btnBack1);
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.NORTH);
 
@@ -479,12 +482,6 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_jProducts.setLayout(new java.awt.CardLayout());
         add(m_jProducts, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void m_btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_btnBackActionPerformed
-
-        showRootCategoriesPanel();        
-        
-    }//GEN-LAST:event_m_btnBackActionPerformed
 
     private void m_jDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDownActionPerformed
 
@@ -535,6 +532,13 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         }
         
     }//GEN-LAST:event_m_jListCategoriesValueChanged
+
+    private void m_btnBack1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_btnBack1ActionPerformed
+
+        showRootCategoriesPanel();
+
+    }//GEN-LAST:event_m_btnBack1ActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -543,7 +547,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JButton m_btnBack;
+    private javax.swing.JButton m_btnBack1;
     private javax.swing.JPanel m_jCategories;
     private javax.swing.JButton m_jDown;
     private javax.swing.JList m_jListCategories;

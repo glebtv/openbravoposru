@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer.escpos;
 
@@ -56,21 +57,5 @@ public class UnicodeTranslatorEur extends UnicodeTranslator {
                 default: return 0x3F; // ? Not valid character.
             }          
         }
-    } 
-    
-    public byte transNumberChar(char sChar) {
-        switch (sChar) {
-        case '0' : return 0x30;
-        case '1' : return 0x31;
-        case '2' : return 0x32;
-        case '3' : return 0x33;
-        case '4' : return 0x34;
-        case '5' : return 0x35;
-        case '6' : return 0x36;
-        case '7' : return 0x37;
-        case '8' : return 0x38;
-        case '9' : return 0x39;
-        default: return 0x30;
-        }          
-    }       
+    }      
 }

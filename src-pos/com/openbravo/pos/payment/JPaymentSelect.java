@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.payment;
 
@@ -28,7 +29,6 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.customers.CustomerInfoExt;
 import com.openbravo.pos.forms.DataLogicSystem;
-import com.openbravo.pos.payment.JPaymentInterface;
 import java.awt.ComponentOrientation;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +52,8 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     private DataLogicSystem dlSystem;
     
     private Map<String, JPaymentInterface> payments = new HashMap<String, JPaymentInterface>();
-
+    private String m_sTransactionID;
+    
     
     /** Creates new form JPaymentSelect */
     protected JPaymentSelect(java.awt.Frame parent, boolean modal, ComponentOrientation o) {
@@ -68,14 +69,12 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         super(parent, modal);
         initComponents();       
         
-        this.applyComponentOrientation(o);
-        
-        getRootPane().setDefaultButton(m_jButtonOK); 
+        this.applyComponentOrientation(o);        
     }    
     
     public void init(AppView app) {
         this.app = app;
-        dlSystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystemCreate");
+        dlSystem = (DataLogicSystem) app.getBean("com.openbravo.pos.forms.DataLogicSystem");
         printselected = true;
     }
     
@@ -88,7 +87,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     }
 
     public List<PaymentInfo> getSelectedPayments() {
-        return m_aPaymentInfo.getPayments();        
+        return m_aPaymentInfo.getPayments();
     }
             
     public boolean showDialog(double total, CustomerInfoExt customerext) {
@@ -104,12 +103,13 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         m_jTotalEuros.setText(Formats.CURRENCY.formatValue(new Double(m_dTotal)));
         
         addTabs();
-        
+
         if (m_jTabPayment.getTabCount() == 0) {
             // No payment panels available            
             m_aPaymentInfo.add(getDefaultPayment(total));
             accepted = true;            
-        } else {        
+        } else {
+            getRootPane().setDefaultButton(m_jButtonOK);
             printState();
             setVisible(true);
         }
@@ -259,7 +259,7 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         m_jRemaininglEuros.setText(Formats.CURRENCY.formatValue(new Double(m_dTotal - m_aPaymentInfo.getTotal())));
         m_jButtonRemove.setEnabled(!m_aPaymentInfo.isEmpty());
         m_jTabPayment.setSelectedIndex(0); // selecciono el primero
-        ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal());
+        ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal(), m_sTransactionID);
     }
     
     protected static Window getWindow(Component parent) {
@@ -276,7 +276,11 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
         
         setStatusPanel(isPositive, isComplete);
     }
-     
+    
+    public void setTransactionID(String tID){
+        this.m_sTransactionID = tID;
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -430,15 +434,15 @@ public abstract class JPaymentSelect extends javax.swing.JDialog
     }//GEN-LAST:event_m_jButtonAddActionPerformed
 
     private void m_jTabPaymentStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_m_jTabPaymentStateChanged
-        
+
         if (m_jTabPayment.getSelectedComponent() != null) {
-            ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal());
+            ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).activate(customerext, m_dTotal - m_aPaymentInfo.getTotal(), m_sTransactionID);
         }
         
     }//GEN-LAST:event_m_jTabPaymentStateChanged
 
     private void m_jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jButtonOKActionPerformed
-
+        
         PaymentInfo returnPayment = ((JPaymentInterface) m_jTabPayment.getSelectedComponent()).executePayment();
         if (returnPayment != null) {
             m_aPaymentInfo.add(returnPayment);

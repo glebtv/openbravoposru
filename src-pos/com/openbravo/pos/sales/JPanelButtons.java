@@ -1,23 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.sales;
 
+import com.openbravo.data.loader.LocalRes;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -39,10 +41,14 @@ import com.openbravo.pos.util.ThumbNailBuilder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class JPanelButtons extends javax.swing.JPanel {
-    
+
+    private static Logger logger = Logger.getLogger("com.openbravo.pos.sales.JPanelButtons");
+
     private static SAXParser m_sp = null;
     
     private Properties props;
@@ -75,11 +81,11 @@ public class JPanelButtons extends javax.swing.JPanel {
                 m_sp.parse(new InputSource(new StringReader(sConfigRes)), new ConfigurationHandler());
 
             } catch (ParserConfigurationException ePC) {
-                System.out.println("Error en el analizador XML. Consulte con su administrador");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.parserconfig"), ePC);
             } catch (SAXException eSAX) {
-                System.out.println("El archivo no es un documento XML valido. Error de analisis.");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.xmlfile"), eSAX);
             } catch (IOException eIO) {
-                System.out.println("Error al leer el archivo. Consulte con su administrador.");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.iofile"), eIO);
             }
         }     
     
@@ -117,8 +123,6 @@ public class JPanelButtons extends javax.swing.JPanel {
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
             if ("button".equals(qName)){
                 
-                // The template resource
-                String stemplate = attributes.getValue("template");
                 
                 // The button title text
                 String titlekey = attributes.getValue("titlekey");
@@ -130,15 +134,30 @@ public class JPanelButtons extends javax.swing.JPanel {
                         : AppLocal.getIntString(titlekey);
                 
                 // adding the button to the panel
-                add(new JButtonFunc(
-                        attributes.getValue("key"), 
+                JButton btn = new JButtonFunc(attributes.getValue("key"), 
                         attributes.getValue("image"), 
-                        title,  
-                        stemplate == null
-                            ? panelticket.getResourceAsXML(attributes.getValue("code"))
-                            : "sales.printTicket(\"" + stemplate + "\");"));
+                        title);
+                
+                 // The template resource or the code resource
+                final String template = attributes.getValue("template");
+                if (template == null) {
+                    final String code = attributes.getValue("code");
+                    btn.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            panelticket.evalScriptAndRefresh(code);
+                        }
+                    });
+                } else {
+                    btn.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent evt) {
+                            panelticket.printTicket(template);
+                        }
+                    });     
+                }
+                add(btn);
+                
             } else if ("event".equals(qName)) {
-                events.put(attributes.getValue("key"), panelticket.getResourceAsXML(attributes.getValue("code")));
+                events.put(attributes.getValue("key"), attributes.getValue("code"));
             } else {
                 String value = attributes.getValue("value");
                 if (value != null) {                  
@@ -153,24 +172,16 @@ public class JPanelButtons extends javax.swing.JPanel {
     }  
         
     private class JButtonFunc extends JButton {
-        private String m_sCode;
-        
-        public JButtonFunc(String sKey, String sImage, String title, String sCode) {
+       
+        public JButtonFunc(String sKey, String sImage, String title) {
             
-            m_sCode = sCode;
             setName(sKey);
             setText(title);
             setIcon(new ImageIcon(tnbmacro.getThumbNail(panelticket.getResourceAsImage(sImage))));
             setFocusPainted(false);
             setFocusable(false);
             setRequestFocusEnabled(false);
-            setMargin(new Insets(8, 14, 8, 14));
-  
-            addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    panelticket.evalScriptAndRefresh(m_sCode);
-                }
-            });
+            setMargin(new Insets(8, 14, 8, 14));  
         }         
     }
     

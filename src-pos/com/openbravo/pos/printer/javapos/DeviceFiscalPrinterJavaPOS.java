@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer.javapos;
 
@@ -23,6 +24,7 @@ import jpos.FiscalPrinter;
 import jpos.JposException;
 import com.openbravo.pos.printer.DeviceFiscalPrinter;
 import com.openbravo.pos.printer.TicketPrinterException;
+import com.openbravo.pos.util.RoundUtils;
 
 public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements DeviceFiscalPrinter  {
     
@@ -73,9 +75,9 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         }        
     }
     
-    public void printLine(String sproduct, double dprice, double dunits) {
+    public void printLine(String sproduct, double dprice, double dunits, int taxinfo) {
         try {
-            m_fiscal.printRecItem(sproduct, (int)(dprice * dunits * 10000.0), 0, 0, (int)(dprice * 10000.0), "");
+            m_fiscal.printRecItem(sproduct, roundFiscal(dprice * dunits), (int)(dunits * 1000), taxinfo, roundFiscal(dprice), "");
         } catch (JposException e) {
         }             
     }
@@ -91,7 +93,7 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         try {
             // el primer valor es el total calculado por la aplicacion.
             // al poner 0 no se debe chequear: CAPCHECKTOTAL = false.
-            m_fiscal.printRecTotal(0, (int)(dpaid * 10000), sPayment);
+            m_fiscal.printRecTotal(0, roundFiscal(dpaid), sPayment);
         } catch (JposException e) {
         }          
     }
@@ -118,6 +120,10 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         
         super.finalize();       
     } 
+    
+    private int roundFiscal(double value) {
+        return (int) Math.floor(RoundUtils.round(value) * 10000.0 + 0.5);
+    }
     
     /** This method is called from within the constructor to
      * initialize the form.

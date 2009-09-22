@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.forms;
 
@@ -22,7 +23,10 @@ import com.openbravo.basic.BasicException;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import com.openbravo.beans.RoundedBorder;
 import com.openbravo.data.gui.MessageInf;
@@ -34,6 +38,7 @@ import com.openbravo.pos.util.Hashcypher;
 
 //import com.l2fprod.common.swing.JTaskPane;
 //import com.l2fprod.common.swing.JTaskPaneGroup;
+import com.openbravo.pos.util.StringUtils;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
@@ -42,6 +47,8 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  * @author adrianromero
  */
 public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
+
+    private static Logger logger = Logger.getLogger("com.openbravo.pos.forms.JPrincipalApp");
     
     private JRootApp m_appview;
     private AppUser m_appuser;
@@ -65,7 +72,7 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         m_appview = appview; 
         m_appuser = appuser;
                    
-        m_dlSystem = (DataLogicSystem) m_appview.getBean("com.openbravo.pos.forms.DataLogicSystemCreate");
+        m_dlSystem = (DataLogicSystem) m_appview.getBean("com.openbravo.pos.forms.DataLogicSystem");
         
         // Cargamos los permisos del usuario
         m_appuser.fillPermissions(m_dlSystem);
@@ -105,18 +112,28 @@ public class JPrincipalApp extends javax.swing.JPanel implements AppUserView {
         showView("<NULL>");     
         
         try {
-            
-            ScriptMenu menu = new ScriptMenu();
-            
-            ScriptEngine eng = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
-            eng.put("menu", menu);
-            eng.eval(m_dlSystem.getResourceAsText("Menu.Root"));
-        
-            m_jPanelLeft.setViewportView(menu.getTaskPane());
+
+            m_jPanelLeft.setViewportView(getScriptMenu(m_dlSystem.getResourceAsText("Menu.Root")));
         } catch (ScriptException e) {
-            e.printStackTrace();
-            // Error Message 
+            logger.log(Level.SEVERE, "Cannot read Menu.Root resource. Trying defaut menu.", e);
+            try {
+                m_jPanelLeft.setViewportView(getScriptMenu(StringUtils.readResource("/com/openbravo/pos/templates/Menu.Root.txt")));
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "Cannot read default menu", ex);
+            } catch (ScriptException es) {
+                logger.log(Level.SEVERE, "Cannot read default menu", es);
+            }
         }               
+    }
+
+    private Component getScriptMenu(String menutext) throws ScriptException {
+
+        ScriptMenu menu = new ScriptMenu();
+
+        ScriptEngine eng = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
+        eng.put("menu", menu);
+        eng.eval(menutext);
+        return menu.getTaskPane();
     }
     
     private void assignMenuButtonIcon() {

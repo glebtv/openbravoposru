@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2008-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.sales;
 
@@ -27,6 +28,8 @@ import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -105,62 +108,120 @@ public class SimpleReceipt extends javax.swing.JPanel {
         return ticket;
     }
     
-    public TicketLineInfo getSelectedLine() {
+    private int findFirstNonAuxiliarLine() {
         
-        int i = ticketlines.getSelectedIndex();
+        int i = ticketlines.getSelectedIndex();       
+	while (i >= 0 && ticket.getLine(i).isProductCom()) {
+	    i--;
+        } 
+        return i;
+    }
+    
+    public TicketLineInfo[] getSelectedLines() {
+        
+        // never returns an empty array, or null, or an array with at least one element.
+               
+        int i = findFirstNonAuxiliarLine();       
+       
         if (i >= 0) {
+
+            List<TicketLineInfo> l = new ArrayList<TicketLineInfo>();
+            
             TicketLineInfo line = ticket.getLine(i);
+            l.add(line);
             ticket.removeLine(i);
             ticketlines.removeTicketLine(i);
+            
+            // add also auxiliars
+            while (i < ticket.getLinesCount() && ticket.getLine(i).isProductCom()) {
+                l.add(ticket.getLine(i));
+                ticket.removeLine(i);
+                ticketlines.removeTicketLine(i);
+            }        
             printTotals();
-            return line;
+            return l.toArray(new TicketLineInfo[l.size()]);
         } else {
             return null;
         }
     }
     
-    public TicketLineInfo getSelectedLineUnit() {
+    public TicketLineInfo[] getSelectedLinesUnit() {
+
+       // never returns an empty array, or null, or an array with at least one element.
+
+        int i = findFirstNonAuxiliarLine();
         
-        int i = ticketlines.getSelectedIndex();
-        if (i >= 0) {
+        if (i >= 0) {       
+            
             TicketLineInfo line = ticket.getLine(i);
-            if (line.getMultiply() > 1.0) {
-                line.setMultiply(line.getMultiply() -1.0);
-                ticketlines.setTicketLine(i, line);
-                line = line.copyTicketLine();
-                line.setMultiply(1.0);
+            
+            if (line.getMultiply() >= 1.0) {
+                
+                List<TicketLineInfo> l = new ArrayList<TicketLineInfo>();
+                
+                if (line.getMultiply() > 1.0) {
+                    line.setMultiply(line.getMultiply() -1.0);
+                    ticketlines.setTicketLine(i, line);
+                    line = line.copyTicketLine();
+                    line.setMultiply(1.0);
+                    l.add(line);  
+                    i++;
+                } else { // == 1.0
+                    l.add(line);
+                    ticket.removeLine(i);
+                    ticketlines.removeTicketLine(i);
+                }
+                
+                // add also auxiliars
+                while (i < ticket.getLinesCount() && ticket.getLine(i).isProductCom()) {
+                    l.add(ticket.getLine(i));
+                    ticket.removeLine(i);
+                    ticketlines.removeTicketLine(i);
+                }              
                 printTotals();
-                return line;
-            } else if (line.getMultiply() == 1.0) {                
-                ticket.removeLine(i);
-                ticketlines.removeTicketLine(i);
-                printTotals();
-                return line;
-            } else {
+                return l.toArray(new TicketLineInfo[l.size()]);                    
+            } else { // < 1.0
                 return null;
             }            
         } else {
             return null;
         }
     }
-    
-    public void addSelectedLine(TicketLineInfo line) {
-        int i = ticketlines.getSelectedIndex();
+
+    public void addSelectedLines(TicketLineInfo[] lines) {
+        
+        int i = findFirstNonAuxiliarLine();         
+              
+        TicketLineInfo firstline = lines[0];
+        
         if (i >= 0 
-                && ticket.getLine(i).getProductID() != null && line.getProductID() != null && ticket.getLine(i).getProductID().equals(line.getProductID())
-                && ticket.getLine(i).getTaxInfo().getId().equals(line.getTaxInfo().getId())
-                && ticket.getLine(i).getPrice() == line.getPrice()) {    
+                && ticket.getLine(i).getProductID() != null && firstline.getProductID() != null && ticket.getLine(i).getProductID().equals(firstline.getProductID())
+                && ticket.getLine(i).getTaxInfo().getId().equals(firstline.getTaxInfo().getId())
+                && ticket.getLine(i).getPrice() == firstline.getPrice()) {  
+            
+            // add the auxiliars.
+            for (int j = 1; j < lines.length; j++) {
+                ticket.insertLine(i + 1, lines[j]);
+                ticketlines.insertTicketLine(i + 1, lines[j]);
+            }
+            
             // inc the line
-            ticket.getLine(i).setMultiply(ticket.getLine(i).getMultiply() + line.getMultiply());
+            ticket.getLine(i).setMultiply(ticket.getLine(i).getMultiply() + firstline.getMultiply());
             ticketlines.setTicketLine(i, ticket.getLine(i));  
-            printTotals();
+            ticketlines.setSelectedIndex(i);
+            
         } else {
-            ticket.addLine(line);
-            ticketlines.addTicketLine(line);
-            printTotals();
-        }
+            // add all at the end in inverse order.
+            int insertpoint = ticket.getLinesCount();
+            for (int j = lines.length - 1; j >= 0; j--) {
+                ticket.insertLine(insertpoint, lines[j]);
+                ticketlines.insertTicketLine(insertpoint, lines[j]);
+            }
+        }       
+        
+        printTotals();
     }
-    
+  
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

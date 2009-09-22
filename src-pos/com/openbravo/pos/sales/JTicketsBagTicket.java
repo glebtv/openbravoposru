@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.sales;
 
@@ -29,14 +30,18 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.printer.*;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.JMessageDialog;
+import com.openbravo.pos.customers.DataLogicCustomers;
 import com.openbravo.pos.scripting.ScriptEngine;
 import com.openbravo.pos.scripting.ScriptException;
 import com.openbravo.pos.scripting.ScriptFactory;
 import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.panels.JTicketsFinder;
+import com.openbravo.pos.ticket.FindTicketsInfo;
 
 public class JTicketsBagTicket extends JTicketsBag {
     
     private DataLogicSystem m_dlSystem = null;
+    protected DataLogicCustomers dlCustomers = null;
 
     private DeviceTicket m_TP;    
     private TicketParser m_TTP;    
@@ -54,7 +59,8 @@ public class JTicketsBagTicket extends JTicketsBag {
         
         super(app, panelticket);
         m_panelticketedit = panelticket; 
-        m_dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystemCreate");
+        m_dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
+        dlCustomers = (DataLogicCustomers) m_App.getBean("com.openbravo.pos.customers.DataLogicCustomers");
         
         // Inicializo la impresora...
         m_TP = new DeviceTicket();
@@ -85,7 +91,9 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jTicketEditor.reset();
         m_jTicketEditor.activate();
         
-        m_panelticketedit.setActiveTicket(null, null); 
+        m_panelticketedit.setActiveTicket(null, null);
+
+        jrbSales.setSelected(true);
         
         m_jEdit.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.EditTicket"));
         m_jRefund.setVisible(m_App.getAppUserView().getUser().hasPermission("sales.RefundTicket"));
@@ -128,7 +136,8 @@ public class JTicketsBagTicket extends JTicketsBag {
     
     private void resetToTicket() {       
         printTicket();
-        m_jTicketEditor.reset();        
+        m_jTicketEditor.reset();
+        m_jTicketEditor.activate();
         m_panelticketedit.setActiveTicket(null, null); 
     }
     
@@ -140,11 +149,13 @@ public class JTicketsBagTicket extends JTicketsBag {
         return this;
     }
       
-    private void readTicket() {
+    private void readTicket(int iTicketid, int iTickettype) {
         
         try {
-            Integer ticketid = m_jTicketEditor.getValueInteger();
-            TicketInfo ticket = m_dlSales.loadTicket(ticketid);
+            TicketInfo ticket = (iTicketid==-1) 
+                ? m_dlSales.loadTicket(iTickettype,  m_jTicketEditor.getValueInteger())
+                : m_dlSales.loadTicket(iTickettype, iTicketid) ;
+
             if (ticket == null) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.notexiststicket"));
                 msg.show(this);
@@ -160,6 +171,7 @@ public class JTicketsBagTicket extends JTicketsBag {
         }
         
         m_jTicketEditor.reset();
+        m_jTicketEditor.activate();
     }
     
     private void printTicket() {
@@ -167,11 +179,14 @@ public class JTicketsBagTicket extends JTicketsBag {
         // imprimo m_ticket
         
         try {
-            m_jEdit.setEnabled(m_ticket != null && m_dlSales.isCashActive(m_ticket.getActiveCash()));
+            m_jEdit.setEnabled(
+                    m_ticket != null
+                    && (m_ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL || m_ticket.getTicketType() == TicketInfo.RECEIPT_REFUND)
+                    && m_dlSales.isCashActive(m_ticket.getActiveCash()));
         } catch (BasicException e) {
             m_jEdit.setEnabled(false);
         }
-        m_jRefund.setEnabled(m_ticket != null && m_ticket.getSubTotal() > 0.0);
+        m_jRefund.setEnabled(m_ticket != null && m_ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL);
         m_jPrint.setEnabled(m_ticket != null);
         
         // Este deviceticket solo tiene una impresora, la de pantalla
@@ -205,9 +220,11 @@ public class JTicketsBagTicket extends JTicketsBag {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         m_jOptions = new javax.swing.JPanel();
         m_jButtons = new javax.swing.JPanel();
         m_jTicketId = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         m_jEdit = new javax.swing.JButton();
         m_jRefund = new javax.swing.JButton();
         m_jPrint = new javax.swing.JButton();
@@ -219,6 +236,9 @@ public class JTicketsBagTicket extends JTicketsBag {
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         m_jTicketEditor = new com.openbravo.editor.JEditorIntegerPositive();
+        jPanel1 = new javax.swing.JPanel();
+        jrbSales = new javax.swing.JRadioButton();
+        jrbRefunds = new javax.swing.JRadioButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -233,6 +253,19 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_jTicketId.setPreferredSize(new java.awt.Dimension(160, 25));
         m_jTicketId.setRequestFocusEnabled(false);
         m_jButtons.add(m_jTicketId);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/search.png"))); // NOI18N
+        jButton2.setText(AppLocal.getIntString("label.search")); // NOI18N
+        jButton2.setFocusPainted(false);
+        jButton2.setFocusable(false);
+        jButton2.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jButton2.setRequestFocusEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        m_jButtons.add(jButton2);
 
         m_jEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/edit.png"))); // NOI18N
         m_jEdit.setText(AppLocal.getIntString("button.edit")); // NOI18N
@@ -325,6 +358,22 @@ public class JTicketsBagTicket extends JTicketsBag {
 
         jPanel3.add(jPanel4, java.awt.BorderLayout.NORTH);
 
+        buttonGroup1.add(jrbSales);
+        jrbSales.setText(AppLocal.getIntString("label.sales")); // NOI18N
+        jrbSales.setFocusPainted(false);
+        jrbSales.setFocusable(false);
+        jrbSales.setRequestFocusEnabled(false);
+        jPanel1.add(jrbSales);
+
+        buttonGroup1.add(jrbRefunds);
+        jrbRefunds.setText(AppLocal.getIntString("label.refunds")); // NOI18N
+        jrbRefunds.setFocusPainted(false);
+        jrbRefunds.setFocusable(false);
+        jrbRefunds.setRequestFocusEnabled(false);
+        jPanel1.add(jrbRefunds);
+
+        jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
+
         add(jPanel3, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -367,29 +416,48 @@ public class JTicketsBagTicket extends JTicketsBag {
         m_panelticketedit.showRefundLines(aRefundLines);
         
         TicketInfo refundticket = new TicketInfo();
+        refundticket.setTicketType(TicketInfo.RECEIPT_REFUND);
         refundticket.setCustomer(m_ticket.getCustomer());
+        refundticket.setPayments(m_ticket.getPayments());
         m_panelticketedit.setActiveTicket(refundticket, null);      
         
     }//GEN-LAST:event_m_jRefundActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        readTicket();
+        
+        readTicket(-1, jrbSales.isSelected() ? 0 : 1);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void m_jKeysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jKeysActionPerformed
-        
-        readTicket();
+
+        readTicket(-1, jrbSales.isSelected() ? 0 : 1);
         
     }//GEN-LAST:event_m_jKeysActionPerformed
+
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        JTicketsFinder finder = JTicketsFinder.getReceiptFinder(this, m_dlSales, dlCustomers);
+        finder.setVisible(true);
+        FindTicketsInfo selectedTicket = finder.getSelectedCustomer();
+        if (selectedTicket == null) {
+            m_jTicketEditor.reset();
+            m_jTicketEditor.activate();
+        } else {
+            readTicket(selectedTicket.getTicketId(), selectedTicket.getTicketType());
+        }
+}//GEN-LAST:event_jButton2ActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JRadioButton jrbRefunds;
+    private javax.swing.JRadioButton jrbSales;
     private javax.swing.JPanel m_jButtons;
     private javax.swing.JButton m_jEdit;
     private com.openbravo.editor.JEditorKeys m_jKeys;

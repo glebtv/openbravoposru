@@ -1,25 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    http://sourceforge.net/projects/openbravopos
-//
+//    http://www.openbravo.com/product/pos
 //    Copyright (c) 2007 openTrends Solucions i Sistemes, S.L
 //    Modified by Openbravo SL on March 22, 2007
 //    These modifications are copyright Openbravo SL
 //    Author/s: A. Romero
 //    You may contact Openbravo SL at: http://www.openbravo.com
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.possync;
 
@@ -52,9 +52,9 @@ public class ExternalSalesHelper {
     
     private String m_sERPUser;
     private String m_sERPPassword;
-    private int m_iERPId;
-    private int m_iERPOrg;
-    private int m_iERPPos;
+    private String m_iERPId;
+    private String m_iERPOrg;
+    private String m_iERPPos;
     
     /** Creates a new instance of WebServiceHelper */
     public ExternalSalesHelper(DataLogicSystem dlsystem) throws BasicException, ServiceException, MalformedURLException {
@@ -87,9 +87,9 @@ public class ExternalSalesHelper {
                     m_sERPPassword = cypher.decrypt(m_sERPPassword.substring(6));
                 } 
                 m_sERPPassword = getPasswordHash(m_sERPPassword);
-                m_iERPId = Integer.parseInt(prop.getProperty("id"));
-                m_iERPOrg = Integer.parseInt(prop.getProperty("org"));
-                m_iERPPos = Integer.parseInt(prop.getProperty("pos"));
+                m_iERPId = prop.getProperty("id");
+                m_iERPOrg = prop.getProperty("org");
+                m_iERPPos = prop.getProperty("pos");
             }
         }
     }
@@ -114,8 +114,8 @@ public class ExternalSalesHelper {
         }        
     }
     
-    public void uploadOrders(Order[] orderstoupload) throws RemoteException {
-        externalSales.uploadOrders(m_iERPId, m_iERPOrg, m_iERPPos, orderstoupload, m_sERPUser, m_sERPPassword);
+    public boolean uploadOrders(Order[] orderstoupload) throws RemoteException {
+        return externalSales.uploadOrders(m_iERPId, m_iERPOrg, m_iERPPos, orderstoupload, m_sERPUser, m_sERPPassword);
     }
        
     private static String getPasswordHash(String password) {

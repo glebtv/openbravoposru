@@ -1,94 +1,74 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer.escpos;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public abstract class PrinterWritter {
     
-    private static final Integer ACTION_FLUSH = new Integer(0);
-    private static final Integer ACTION_CLOSE = new Integer(1);
-    
-    // private OutputStream m_out = null;
-    private PrinterBuffer m_buff = null;    
-    private MyDaemon m_daemon = null;
     private boolean initialized = false;
+
+    private ExecutorService exec;
     
     public PrinterWritter() {
-        m_buff = new PrinterBuffer();
-        m_daemon = new MyDaemon();        
-        m_daemon.start();
+        exec = Executors.newSingleThreadExecutor();
     }
     
-    protected abstract void daemonWrite(byte[] data);
-    protected abstract void daemonFlush();
-    protected abstract void daemonClose();
+    protected abstract void internalWrite(byte[] data);
+    protected abstract void internalFlush();
+    protected abstract void internalClose();
     
-    public void init(byte[] data) {
+    public void init(final byte[] data) {
         if (!initialized) {
-            m_buff.putData(data);
+            write(data);
             initialized = true;
         }
     }
-    
-    public void write(byte[] data) {
-        m_buff.putData(data);
-    }
-    
+       
     public void write(String sValue) {
-        m_buff.putData(sValue.getBytes());
+        write(sValue.getBytes());
+    }
+
+    public void write(final byte[] data) {
+        exec.execute(new Runnable() {
+            public void run() {
+                internalWrite(data);
+            }
+        });
     }
     
     public void flush() {
-        m_buff.putData(ACTION_FLUSH);
+        exec.execute(new Runnable() {
+            public void run() {
+                internalFlush();
+            }
+        });
     }
     
     public void close() {
-        m_buff.putData(ACTION_CLOSE);
-    }
-
-    private class MyDaemon extends Thread {
-
-        public void run() {
-
-            boolean bItsRunning = true;
-
-            while (bItsRunning) {               
-                Object data = m_buff.getData();                   
-                // esperemos un poco que estoy vago
-                //try {
-                //    this.sleep(1000);
-                //} catch (InterruptedException ei) {
-                //}
-
-                // Que hacemos con ese objeto tan raro?
-                if (data instanceof byte[]) {
-                    // m_out.write((byte[]) data); // Lo imprimimos
-                    daemonWrite((byte[]) data);
-                } else if (data == ACTION_FLUSH) { 
-                    // m_out.flush(); // flush
-                    daemonFlush();
-                } else if (data == ACTION_CLOSE) {
-                    // m_out.flush(); // flush y terminamos con el demonio
-                    daemonFlush();
-                    daemonClose();
-                    bItsRunning = false;
-                }
+        exec.execute(new Runnable() {
+            public void run() {
+                internalClose();
             }
-        }
-    }   
+        });
+        exec.shutdown();
+    }
 }

@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.admin;
 
@@ -167,6 +168,9 @@ public class ResourcesView extends JPanel implements EditorRecord {
         return this;
     }
     
+    public void refresh() {
+    }
+    
     private void showView(String view) {
         CardLayout cl = (CardLayout)(m_jContainer.getLayout());
         cl.show(m_jContainer, view);  
@@ -187,16 +191,12 @@ public class ResourcesView extends JPanel implements EditorRecord {
         m_jText = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         m_jImage = new com.openbravo.data.gui.JImageEditor();
-        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         m_jName = new javax.swing.JTextField();
         m_jType = new javax.swing.JComboBox();
 
-        setLayout(new java.awt.BorderLayout());
-
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        m_jContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 0));
         m_jContainer.setLayout(new java.awt.CardLayout());
 
         m_jText.setFont(new java.awt.Font("DialogInput", 0, 12));
@@ -208,26 +208,42 @@ public class ResourcesView extends JPanel implements EditorRecord {
 
         jPanel3.add(m_jContainer, java.awt.BorderLayout.CENTER);
 
-        add(jPanel3, java.awt.BorderLayout.CENTER);
-
-        jPanel2.setPreferredSize(new java.awt.Dimension(150, 100));
-        jPanel2.setLayout(null);
-
         jLabel2.setText(AppLocal.getIntString("label.resname")); // NOI18N
-        jPanel2.add(jLabel2);
-        jLabel2.setBounds(20, 20, 90, 14);
-        jPanel2.add(m_jName);
-        m_jName.setBounds(110, 20, 180, 18);
 
         m_jType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_jTypeActionPerformed(evt);
             }
         });
-        jPanel2.add(m_jType);
-        m_jType.setBounds(300, 20, 90, 20);
 
-        add(jPanel2, java.awt.BorderLayout.NORTH);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_jType, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jType, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTypeActionPerformed
@@ -249,7 +265,6 @@ public class ResourcesView extends JPanel implements EditorRecord {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel m_jContainer;

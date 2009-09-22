@@ -1,19 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-130
 
 package com.openbravo.pos.inventory;
@@ -30,11 +32,12 @@ import com.openbravo.pos.forms.AppLocal;
  * @author adrianromero
  */
 public class ProductsWarehouseEditor extends javax.swing.JPanel implements EditorRecord {
-    
-    public Object m_id;
-    public Object m_ref;
-    public Object m_sName;
-    public Object m_sLocation;
+
+    public Object id;
+    public Object prodid;
+    public Object prodref;
+    public Object prodname;
+    public Object location;
     
     /** Creates new form ProductsWarehouseEditor */
     public ProductsWarehouseEditor(DirtyManager dirty) {
@@ -46,10 +49,11 @@ public class ProductsWarehouseEditor extends javax.swing.JPanel implements Edito
     
     public void writeValueEOF() {
         m_jTitle.setText(AppLocal.getIntString("label.recordeof"));
-        m_id = null;
-        m_ref = null;
-        m_sName = null;
-        m_sLocation = null;
+        id = null;
+        prodid = null;
+        prodref = null;
+        prodname = null;
+        location = null;
         m_jQuantity.setText(null);
         m_jMinimum.setText(null);
         m_jMaximum.setText(null);
@@ -58,10 +62,11 @@ public class ProductsWarehouseEditor extends javax.swing.JPanel implements Edito
     }
     public void writeValueInsert() {
         m_jTitle.setText(AppLocal.getIntString("label.recordnew"));
-        m_id = null;
-        m_ref = null;
-        m_sName = null;
-        m_sLocation = null;
+        id = null;
+        prodid = null;
+        prodref = null;
+        prodname = null;
+        location = null;
         m_jQuantity.setText(null);
         m_jMinimum.setText(null);
         m_jMaximum.setText(null);
@@ -70,44 +75,50 @@ public class ProductsWarehouseEditor extends javax.swing.JPanel implements Edito
     }
     public void writeValueEdit(Object value) {
         Object[] myprod = (Object[]) value;
-        m_id = myprod[0];
-        m_ref = myprod[1];
-        m_sName = myprod[2];
-        m_sLocation = myprod[3];
-        m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) + " - " + Formats.STRING.formatValue(myprod[2]));
-        m_jQuantity.setText(Formats.DOUBLE.formatValue(myprod[6]));
-        m_jMinimum.setText(Formats.DOUBLE.formatValue(myprod[4]));
-        m_jMaximum.setText(Formats.DOUBLE.formatValue(myprod[5]));
+        id = myprod[0];
+        prodid = myprod[1];
+        prodref = myprod[2];
+        prodname = myprod[3];
+        location = myprod[4];
+        m_jTitle.setText(Formats.STRING.formatValue(myprod[2]) + " - " + Formats.STRING.formatValue(myprod[3]));
+        m_jQuantity.setText(Formats.DOUBLE.formatValue(myprod[7]));
+        m_jMinimum.setText(Formats.DOUBLE.formatValue(myprod[5]));
+        m_jMaximum.setText(Formats.DOUBLE.formatValue(myprod[6]));
         m_jMinimum.setEnabled(true);
         m_jMaximum.setEnabled(true);
      }
     public void writeValueDelete(Object value) {
         Object[] myprod = (Object[]) value;
-        m_id = myprod[0];
-        m_ref = myprod[1];
-        m_sName = myprod[2];
-        m_sLocation = myprod[3];
-        m_jTitle.setText(Formats.STRING.formatValue(myprod[1]) + " - " + Formats.STRING.formatValue(myprod[2]) + " " + AppLocal.getIntString("label.recorddeleted"));
-        m_jQuantity.setText(Formats.DOUBLE.formatValue(myprod[6]));
-        m_jMinimum.setText(Formats.DOUBLE.formatValue(myprod[4]));
-        m_jMaximum.setText(Formats.DOUBLE.formatValue(myprod[5]));
+        id = myprod[0];
+        prodid = myprod[1];
+        prodref = myprod[2];
+        prodname = myprod[3];
+        location = myprod[4];
+        m_jTitle.setText(Formats.STRING.formatValue(myprod[2]) + " - " + Formats.STRING.formatValue(myprod[3]));
+        m_jQuantity.setText(Formats.DOUBLE.formatValue(myprod[7]));
+        m_jMinimum.setText(Formats.DOUBLE.formatValue(myprod[5]));
+        m_jMaximum.setText(Formats.DOUBLE.formatValue(myprod[6]));
         m_jMinimum.setEnabled(false);
         m_jMaximum.setEnabled(false);
     }
     public Object createValue() throws BasicException {
-        Object[] productstock = new Object[7];
-        productstock[0] = m_id;
-        productstock[1] = m_ref;
-        productstock[2] = m_sName;
-        productstock[3] = m_sLocation;
-        productstock[4] = Formats.DOUBLE.parseValue(m_jMinimum.getText());
-        productstock[5] = Formats.DOUBLE.parseValue(m_jMaximum.getText());
-        productstock[6] = Formats.DOUBLE.parseValue(m_jQuantity.getText());
-        return productstock;
+        return new Object[] {
+            id,
+            prodid,
+            prodref,
+            prodname,
+            location,
+            Formats.DOUBLE.parseValue(m_jMinimum.getText()),
+            Formats.DOUBLE.parseValue(m_jMaximum.getText()),
+            Formats.DOUBLE.parseValue(m_jQuantity.getText())
+        };
     }
     
     public Component getComponent() {
         return this;
+    }
+    
+    public void refresh() {
     }
     
     /** This method is called from within the constructor to

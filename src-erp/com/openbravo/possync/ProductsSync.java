@@ -1,25 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    http://sourceforge.net/projects/openbravopos
-//
+//    http://www.openbravo.com/product/pos
 //    Copyright (c) 2007 openTrends Solucions i Sistemes, S.L
 //    Modified by Openbravo SL on March 22, 2007
 //    These modifications are copyright Openbravo SL
 //    Author/s: A. Romero
 //    You may contact Openbravo SL at: http://www.openbravo.com
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.possync;
 
@@ -86,39 +86,37 @@ public class ProductsSync implements ProcessAction {
                 for (Product product : products) {
                     
                     // Synchonization of taxcategories
-                    TaxCategoryInfo tc = new TaxCategoryInfo();
-                    tc.setID(Integer.toString(product.getTax().getId()));
-                    tc.setName(product.getTax().getName());                     
+                    TaxCategoryInfo tc = new TaxCategoryInfo(product.getTax().getId(), product.getTax().getName());
                     dlintegration.syncTaxCategory(tc);
                     
                     // Synchonization of taxes
-                    TaxInfo t = new TaxInfo();
-                    t.setID(Integer.toString(product.getTax().getId()));
-                    t.setName(product.getTax().getName());
-                    t.setTaxCategoryID(tc.getID());
-                    t.setRate(product.getTax().getPercentage() / 100);   
-                    t.setCascade(false);
+                    TaxInfo t = new TaxInfo(
+                            product.getTax().getId(),
+                            product.getTax().getName(),
+                            tc.getID(),
+                            null,
+                            null,
+                            product.getTax().getPercentage() / 100,
+                            false,
+                            0);
                     dlintegration.syncTax(t);
                    
                     // Synchonization of categories
-                    CategoryInfo c = new CategoryInfo();
-                    c.setID(Integer.toString(product.getCategory().getId()));
-                    c.setName(product.getCategory().getName());
-                    c.setImage(null);                        
+                    CategoryInfo c = new CategoryInfo(product.getCategory().getId(), product.getCategory().getName(), null);
                     dlintegration.syncCategory(c);
 
                     // Synchonization of products
                     ProductInfoExt p = new ProductInfoExt();
-                    p.setID(Integer.toString(product.getId()));
-                    p.setReference(Integer.toString(product.getId()));
-                    p.setCode(product.getEan() == null || product.getEan().equals("") ? Integer.toString(product.getId()) : product.getEan());
+                    p.setID(product.getId());
+                    p.setReference(product.getId());
+                    p.setCode(product.getEan() == null || product.getEan().equals("") ? product.getId() : product.getEan());
                     p.setName(product.getName());
                     p.setCom(false);
                     p.setScale(false);
                     p.setPriceBuy(product.getPurchasePrice());
                     p.setPriceSell(product.getListPrice());
                     p.setCategoryID(c.getID());
-                    p.setTaxCategoryInfo(tc);
+                    p.setTaxCategoryID(tc.getID());
                     p.setImage(ImageUtils.readImage(product.getImageUrl()));
                     dlintegration.syncProduct(p);  
                     
@@ -127,7 +125,7 @@ public class ProductsSync implements ProcessAction {
                         
                         ProductPlus productplus = (ProductPlus) product;
                         
-                        double diff = productplus.getQtyonhand() - dlsales.findProductStock(p.getID(), warehouse);
+                        double diff = productplus.getQtyonhand() - dlsales.findProductStock(warehouse, p.getID(), null);
                         
                         Object[] diary = new Object[7];
                         diary[0] = UUID.randomUUID().toString();
@@ -151,7 +149,7 @@ public class ProductsSync implements ProcessAction {
                 dlintegration. syncCustomersBefore();
                 
                 for (Customer customer : customers) {                    
-                    CustomerInfoExt cinfo = new CustomerInfoExt(Integer.toString(customer.getId()));
+                    CustomerInfoExt cinfo = new CustomerInfoExt(customer.getId());
                     cinfo.setSearchkey(customer.getSearchKey());
                     cinfo.setName(customer.getName());          
                     cinfo.setNotes(customer.getDescription());

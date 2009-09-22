@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.forms;
 
@@ -110,7 +111,7 @@ public class JRootApp extends JPanel implements AppView {
             return false;
         }
 
-        m_dlSystem = (DataLogicSystem) getBean("com.openbravo.pos.forms.DataLogicSystemCreate");
+        m_dlSystem = (DataLogicSystem) getBean("com.openbravo.pos.forms.DataLogicSystem");
         
         // Create or upgrade the database if database version is not the expected
         String sDBVersion = readDataBaseVersion();        
@@ -123,8 +124,9 @@ public class JRootApp extends JPanel implements AppView {
                     : m_dlSystem.getInitScript() + "-upgrade-" + sDBVersion + ".sql";
 
             if (JRootApp.class.getResource(sScript) == null) {
-                // Upgrade script does not exist.
-                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, AppLocal.getIntString("message.noupdatescript")));
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_DANGER, sDBVersion == null
+                            ? AppLocal.getIntString("message.databasenotsupported", session.DB.getName()) // Create script does not exists. Database not supported
+                            : AppLocal.getIntString("message.noupdatescript"))); // Upgrade script does not exist.
                 session.close();
                 return false;
             } else {
@@ -162,10 +164,12 @@ public class JRootApp extends JPanel implements AppView {
         // creamos la caja activa si esta no existe      
         try {
             String sActiveCashIndex = m_propsdb.getProperty("activecash");
-            Object[] valcash = m_dlSystem.findActiveCash(sActiveCashIndex);
+            Object[] valcash = sActiveCashIndex == null
+                    ? null
+                    : m_dlSystem.findActiveCash(sActiveCashIndex);
             if (valcash == null || !m_props.getHost().equals(valcash[0])) {
                 // no la encuentro o no es de mi host por tanto creo una...
-                setActiveCash(UUID.randomUUID().toString(), 1, new Date(), null);
+                setActiveCash(UUID.randomUUID().toString(), m_dlSystem.getSequenceCash(m_props.getHost()) + 1, new Date(), null);
 
                 // creamos la caja activa      
                 m_dlSystem.execInsertCash(
@@ -190,18 +194,18 @@ public class JRootApp extends JPanel implements AppView {
         }
         
         // Inicializo la impresora...
-        m_TP = new DeviceTicket(m_props);   
+        m_TP = new DeviceTicket(this, m_props);
         
         // Inicializamos 
         m_TTP = new TicketParser(getDeviceTicket(), m_dlSystem);
         printerStart();
         
         // Inicializamos la bascula
-        m_Scale = new DeviceScale(m_props);
+        m_Scale = new DeviceScale(this, m_props);
         
         // Inicializamos la scanpal
         m_Scanner = DeviceScannerFactory.createInstance(m_props);
-
+            
         m_Mercury130 = DeviceMercury130Factory.createInstance(m_props);
             
         // Leemos los recursos basicos
@@ -234,11 +238,7 @@ public class JRootApp extends JPanel implements AppView {
         try {
             return m_dlSystem.findVersion();
         } catch (BasicException ed) {
-            try {
-                return m_dlSystem.findLibreposVersion();
-            } catch (BasicException ed2) {
-                return null;
-            }
+            return null;
         }
     }
     
@@ -270,7 +270,7 @@ public class JRootApp extends JPanel implements AppView {
     public DeviceScanner getDeviceScanner() {
         return m_Scanner;
     }
-
+    
     public DeviceMercury130 getDeviceMercury130() {
         return m_Mercury130;
     }
@@ -628,15 +628,14 @@ public class JRootApp extends JPanel implements AppView {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/logo.png"))); // NOI18N
         jLabel1.setText("<html><center>Openbravo POS is a point of sale application designed for touch screens.<br>" +
-            "Copyright \u00A9 2007-2008 Openbravo, S.L.<br>" +
-            "http://www.openbravo.com<br>" +
+            "Copyright \u00A9 2007-2009 Openbravo, S.L.<br>" +
+            "http://www.openbravo.com/product/pos<br>" +
             "<br>" +
-            "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.<br>" +
+            "Openbravo POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
             "<br>" +
-            "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>" +
+            "Openbravo POS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>" +
             "<br>" +
-            "You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA." +
-            "<br>" +
+            "You should have received a copy of the GNU General Public License along with Openbravo POS.  If not, see http://www.gnu.org/licenses/.<br>" +
             "</center>");
         jLabel1.setAlignmentX(0.5F);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

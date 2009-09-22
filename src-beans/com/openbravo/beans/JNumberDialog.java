@@ -1,30 +1,30 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.beans;
 
-import com.openbravo.basic.BasicException;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
 import javax.swing.Icon;
-import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -60,7 +60,7 @@ public class JNumberDialog extends javax.swing.JDialog {
         
         m_jnumber.addEditorKeys(m_jKeys);
         m_jnumber.reset();
-        m_jnumber.setValue(0.0);
+        m_jnumber.setDoubleValue(0.0);
         m_jnumber.activate();
         
         m_jPanelTitle.setBorder(RoundedBorder.createGradientBorder());
@@ -74,16 +74,6 @@ public class JNumberDialog extends javax.swing.JDialog {
         m_lblMessage.setIcon(icon);
     }
     
-    private static Window getWindow(Component parent) {
-        if (parent == null) {
-            return new JFrame();
-        } else if (parent instanceof Frame || parent instanceof Dialog) {
-            return (Window) parent;
-        } else {
-            return getWindow(parent.getParent());
-        }
-    }    
-    
     public static Double showEditNumber(Component parent, String title) {
         return showEditNumber(parent, title, null, null);
     }
@@ -92,7 +82,7 @@ public class JNumberDialog extends javax.swing.JDialog {
     }
     public static Double showEditNumber(Component parent, String title, String message, Icon icon) {
         
-        Window window = getWindow(parent);      
+        Window window = SwingUtilities.windowForComponent(parent);
         
         JNumberDialog myMsg;
         if (window instanceof Frame) { 
@@ -188,13 +178,11 @@ public class JNumberDialog extends javax.swing.JDialog {
 
     private void jcmdOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdOKActionPerformed
 
-        try {
-            m_value = new Double(m_jnumber.getValue());
-        } catch (BasicException e) {
-        } finally {
-            setVisible(false);
-            dispose();
-        }
+
+        m_value = m_jnumber.getDoubleValue();
+        setVisible(false);
+        dispose();
+
         
     }//GEN-LAST:event_jcmdOKActionPerformed
 

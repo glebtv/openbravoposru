@@ -1,33 +1,35 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.scale;
 
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppProperties;
 import com.openbravo.pos.util.StringParser;
+import java.awt.Component;
 
 public class DeviceScale {
     
     private Scale m_scale;
     
     /** Creates a new instance of DeviceScale */
-    public DeviceScale(AppProperties props) {
+    public DeviceScale(Component parent, AppProperties props) {
         StringParser sd = new StringParser(props.getProperty("machine.scale"));
         String sScaleType = sd.nextToken(':');
         String sScaleParam1 = sd.nextToken(',');
@@ -40,9 +42,7 @@ public class DeviceScale {
         } else if ("fake".equals(sScaleType)) { // a fake scale for debugging purposes
             m_scale = new ScaleFake();            
         } else if ("screen".equals(sScaleType)) { // on screen scale
-            m_scale = new ScaleDialog();
-        } else if ("tves4149".equals(sScaleType)) { // scale ВР4149-10 & ВР4149-11
-            m_scale = new ScaleTves(sScaleParam1);
+            m_scale = new ScaleDialog(parent);
         } else {
             m_scale = null;
         }

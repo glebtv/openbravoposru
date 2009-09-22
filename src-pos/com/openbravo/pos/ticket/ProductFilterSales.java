@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.ticket;
 
@@ -43,10 +44,10 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
         m_sentcat = dlSales.getCategoriesList();
         m_CategoryModel = new ComboBoxValModel();           
         
-        m_jCboPriceBuy.setModel(new ListQBFModelNumber());
+        m_jCboPriceBuy.setModel(ListQBFModelNumber.getMandatoryNumber());
         m_jPriceBuy.addEditorKeys(jKeys);
         
-        m_jCboPriceSell.setModel(new ListQBFModelNumber());
+        m_jCboPriceSell.setModel(ListQBFModelNumber.getMandatoryNumber());
         m_jPriceSell.addEditorKeys(jKeys);
         
         m_jtxtName.addEditorKeys(jKeys);
@@ -87,22 +88,12 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
         }
         
         // Precio de compra
-        try {
-            afilter[2] = m_jCboPriceBuy.getSelectedItem();
-            afilter[3] =  new Double(m_jPriceBuy.getValue());
-        } catch (BasicException e) {
-            afilter[2] = QBFCompareEnum.COMP_NONE;
-            afilter[3] = null;
-        }
+        afilter[3] = m_jPriceBuy.getDoubleValue();
+        afilter[2] = afilter[3] == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceBuy.getSelectedItem();
 
         // Precio de venta
-        try {
-            afilter[4] = m_jCboPriceSell.getSelectedItem();
-            afilter[5] =  new Double(m_jPriceSell.getValue());
-        } catch (BasicException e) {
-            afilter[4] = QBFCompareEnum.COMP_NONE;
-            afilter[5] = null;
-        }
+        afilter[5] = m_jPriceSell.getDoubleValue();
+        afilter[4] = afilter[5] == null ? QBFCompareEnum.COMP_NONE : m_jCboPriceSell.getSelectedItem();
         
         // Categoria
         if (m_CategoryModel.getSelectedKey() == null) {
@@ -151,29 +142,29 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
 
         jLabel5.setText(AppLocal.getIntString("label.prodname")); // NOI18N
         add(jLabel5);
-        jLabel5.setBounds(20, 40, 110, 14);
+        jLabel5.setBounds(20, 40, 110, 15);
         add(m_jtxtName);
         m_jtxtName.setBounds(130, 40, 290, 25);
 
         jLabel2.setText(AppLocal.getIntString("label.prodcategory")); // NOI18N
         add(jLabel2);
-        jLabel2.setBounds(20, 70, 110, 14);
+        jLabel2.setBounds(20, 70, 110, 15);
         add(m_jCategory);
-        m_jCategory.setBounds(130, 70, 260, 25);
+        m_jCategory.setBounds(130, 70, 260, 24);
 
         jLabel4.setText(AppLocal.getIntString("label.prodpricebuy")); // NOI18N
         add(jLabel4);
-        jLabel4.setBounds(20, 100, 110, 14);
+        jLabel4.setBounds(20, 100, 110, 15);
         add(m_jCboPriceBuy);
-        m_jCboPriceBuy.setBounds(130, 100, 150, 20);
+        m_jCboPriceBuy.setBounds(130, 100, 150, 24);
         add(m_jPriceBuy);
         m_jPriceBuy.setBounds(290, 100, 130, 25);
 
         jLabel3.setText(AppLocal.getIntString("label.prodpricesell")); // NOI18N
         add(jLabel3);
-        jLabel3.setBounds(20, 130, 110, 14);
+        jLabel3.setBounds(20, 130, 110, 15);
         add(m_jCboPriceSell);
-        m_jCboPriceSell.setBounds(130, 130, 150, 20);
+        m_jCboPriceSell.setBounds(130, 130, 150, 24);
         add(m_jPriceSell);
         m_jPriceSell.setBounds(290, 130, 130, 25);
         add(m_jtxtBarCode);
@@ -181,7 +172,7 @@ public class ProductFilterSales extends javax.swing.JPanel implements EditorCrea
 
         jLabel1.setText(AppLocal.getIntString("label.prodbarcode")); // NOI18N
         add(jLabel1);
-        jLabel1.setBounds(20, 10, 110, 14);
+        jLabel1.setBounds(20, 10, 110, 15);
     }// </editor-fold>//GEN-END:initComponents
     
     

@@ -1,25 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    http://sourceforge.net/projects/openbravopos
-//
+//    http://www.openbravo.com/product/pos
 //    Copyright (c) 2007 openTrends Solucions i Sistemes, S.L
 //    Modified by Openbravo SL on March 22, 2007
 //    These modifications are copyright Openbravo SL
 //    Author/s: A. Romero
 //    You may contact Openbravo SL at: http://www.openbravo.com
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.possync;
 
@@ -79,8 +79,9 @@ public class OrdersSync implements ProcessAction {
                 // transformo tickets en ordenes
                 Order[] orders = transformTickets(ticketlist);
 
-                // subo las ordenes
-                externalsales.uploadOrders(orders);
+                //uploads orders and return boolean as a result
+                if(!externalsales.uploadOrders(orders))
+                    throw new BasicException(AppLocal.getIntString("message.returnnull"));
 
                 // actualizo los tickets como subidos
                 dlintegration.execTicketUpdate();
@@ -132,15 +133,15 @@ public class OrdersSync implements ProcessAction {
                 TicketLineInfo line = ticket.getLines().get(j);
 
                 orderLine[j] = new OrderLine();
-                orderLine[j].setOrderLineId(line.getTicketLine()); // o simplemente "j"
+                orderLine[j].setOrderLineId(String.valueOf(line.getTicketLine()));// o simplemente "j"
                 if (line.getProductID() == null) {
-                    orderLine[j].setProductId(0);
+                    orderLine[j].setProductId("0");
                 } else {
-                    orderLine[j].setProductId(parseInt(line.getProductID())); // capturar error
+                    orderLine[j].setProductId(line.getProductID()); // capturar error
                 }
                 orderLine[j].setUnits(line.getMultiply());
                 orderLine[j].setPrice(line.getPrice());
-                orderLine[j].setTaxId(parseInt(line.getTaxInfo().getId()));     
+                orderLine[j].setTaxId(line.getTaxInfo().getId());     
             }
             orders[i].setLines(orderLine);
 

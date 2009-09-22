@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.inventory;
 
@@ -26,11 +27,13 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.format.Formats;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ComboBoxValModel;
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.SentenceList;
 import com.openbravo.data.user.EditorRecord;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaxEditor extends JPanel implements EditorRecord {
@@ -49,7 +52,7 @@ public class TaxEditor extends JPanel implements EditorRecord {
     /** Creates new form taxEditor */
     public TaxEditor(AppView app, DirtyManager dirty) {
         
-        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSalesCreate");
+        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");
         
         initComponents();
         
@@ -84,10 +87,24 @@ public class TaxEditor extends JPanel implements EditorRecord {
         taxcustcatmodel = new ComboBoxValModel(a);
         m_jCustTaxCategory.setModel(taxcustcatmodel);    
         
-        a = taxparentsent.list();
+       
+    }
+    
+    public void refresh() {
+        
+        List a;
+        
+        try {
+            a = taxparentsent.list();
+        } catch (BasicException eD) {
+            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotloadlists"), eD);
+            msg.show(this);
+            a = new ArrayList();
+        }
+        
         a.add(0, null); // The null item
         taxparentmodel = new ComboBoxValModel(a);
-        m_jTaxParent.setModel(taxparentmodel);           
+        m_jTaxParent.setModel(taxparentmodel);    
     }
     
     public void writeValueEOF() {
@@ -109,7 +126,7 @@ public class TaxEditor extends JPanel implements EditorRecord {
         jOrder.setEnabled(false);
     }
     public void writeValueInsert() {
-        m_oId = null;
+        m_oId = UUID.randomUUID().toString();
         m_jName.setText(null);
         taxcatmodel.setSelectedKey(null);
         taxcustcatmodel.setSelectedKey(null);
@@ -171,7 +188,7 @@ public class TaxEditor extends JPanel implements EditorRecord {
         
         Object[] tax = new Object[8];
 
-        tax[0] = m_oId == null ? UUID.randomUUID().toString() : m_oId;
+        tax[0] = m_oId;
         tax[1] = m_jName.getText();
         tax[2] = taxcatmodel.getSelectedKey();
         tax[3] = taxcustcatmodel.getSelectedKey(); 

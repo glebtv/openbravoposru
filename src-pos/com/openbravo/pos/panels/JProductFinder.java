@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.panels;
 
@@ -38,6 +39,10 @@ public class JProductFinder extends javax.swing.JDialog {
     private ProductInfoExt m_ReturnProduct;
     private ListProvider lpr;
     
+    public final static int PRODUCT_ALL = 0;
+    public final static int PRODUCT_NORMAL = 1;
+    public final static int PRODUCT_AUXILIAR = 2;
+    
     /** Creates new form JProductFinder */
     private JProductFinder(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -47,7 +52,7 @@ public class JProductFinder extends javax.swing.JDialog {
         super(parent, modal);
     }    
     
-    private ProductInfoExt init(DataLogicSales dlSales) {
+    private ProductInfoExt init(DataLogicSales dlSales, int productsType) {
         
         initComponents();
         
@@ -57,8 +62,18 @@ public class JProductFinder extends javax.swing.JDialog {
         ProductFilterSales jproductfilter = new ProductFilterSales(dlSales, m_jKeys);
         jproductfilter.activate();
         m_jProductSelect.add(jproductfilter, BorderLayout.CENTER);
-        
-        lpr = new ListProviderCreator(dlSales.getProductList(), jproductfilter);   
+        switch (productsType) {
+            case PRODUCT_NORMAL:
+                lpr = new ListProviderCreator(dlSales.getProductListNormal(), jproductfilter);
+                break;
+            case PRODUCT_AUXILIAR:               
+                lpr = new ListProviderCreator(dlSales.getProductListAuxiliar(), jproductfilter);
+                break;
+            default: // PRODUCT_ALL
+                lpr = new ListProviderCreator(dlSales.getProductList(), jproductfilter);
+                break;
+                
+        }
        
         jListProducts.setCellRenderer(new ProductRenderer());
         
@@ -84,17 +99,21 @@ public class JProductFinder extends javax.swing.JDialog {
     }    
     
     public static ProductInfoExt showMessage(Component parent, DataLogicSales dlSales) {
-         
+        return showMessage(parent, dlSales, PRODUCT_ALL);
+    }
+
+    public static ProductInfoExt showMessage(Component parent, DataLogicSales dlSales, int productsType) {
+
         Window window = getWindow(parent);
-        
+
         JProductFinder myMsg;
-        if (window instanceof Frame) { 
+        if (window instanceof Frame) {
             myMsg = new JProductFinder((Frame) window, true);
         } else {
             myMsg = new JProductFinder((Dialog) window, true);
         }
-        return myMsg.init(dlSales);
-    }    
+        return myMsg.init(dlSales, productsType);
+    }
     
     private static class MyListData extends javax.swing.AbstractListModel {
         

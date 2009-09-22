@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.inventory;
 
@@ -36,6 +37,7 @@ import com.openbravo.data.user.EditorRecord;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
+import java.util.ArrayList;
 
 /**
  *
@@ -54,7 +56,7 @@ public class CategoriesEditor extends JPanel implements EditorRecord {
     /** Creates new form JPanelCategories */
     public CategoriesEditor(AppView app, DirtyManager dirty) {
         
-        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSalesCreate");
+        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.forms.DataLogicSales");
              
         initComponents();
              
@@ -72,9 +74,18 @@ public class CategoriesEditor extends JPanel implements EditorRecord {
         writeValueEOF();
     }
     
-    public void activate() throws BasicException {
+    public void refresh() {
         
-        List a = m_sentcat.list();
+        List a;
+        
+        try {
+            a = m_sentcat.list();
+        } catch (BasicException eD) {
+            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotloadlists"), eD);
+            msg.show(this);
+            a = new ArrayList();
+        }
+        
         a.add(0, null); // The null item
         m_CategoryModel = new ComboBoxValModel(a);
         m_jCategory.setModel(m_CategoryModel);
@@ -92,7 +103,7 @@ public class CategoriesEditor extends JPanel implements EditorRecord {
         m_jCatalogAdd.setEnabled(false);
     }
     public void writeValueInsert() {
-        m_id = null;
+        m_id = UUID.randomUUID().toString();
         m_jName.setText(null);
         m_CategoryModel.setSelectedKey(null);
         m_jImage.setImage(null);
@@ -131,7 +142,7 @@ public class CategoriesEditor extends JPanel implements EditorRecord {
         
         Object[] cat = new Object[4];
 
-        cat[0] = m_id == null ? UUID.randomUUID().toString() : m_id;
+        cat[0] = m_id;
         cat[1] = m_jName.getText();
         cat[2] = m_CategoryModel.getSelectedKey();
         cat[3] = m_jImage.getImage();

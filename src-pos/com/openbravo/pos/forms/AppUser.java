@@ -1,23 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2008-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.forms;
 
+import com.openbravo.data.loader.LocalRes;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
@@ -27,6 +29,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import com.openbravo.pos.ticket.UserInfo;
 import com.openbravo.pos.util.Hashcypher;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -37,7 +41,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author adrianromero
  */
 public class AppUser {
-    
+
+    private static Logger logger = Logger.getLogger("com.openbravo.pos.forms.AppUser");
+
     private static SAXParser m_sp = null;
     private static HashMap<String, String> m_oldclasses; // This is for backwards compatibility purposes
     
@@ -119,13 +125,13 @@ public class AppUser {
                 m_sp.parse(new InputSource(new StringReader(sRolePermisions)), new ConfigurationHandler());
 
             } catch (ParserConfigurationException ePC) {
-                System.out.println("Error en el analizador XML. Consulte con su administrador");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.parserconfig"), ePC);
             } catch (SAXException eSAX) {
-                System.out.println("El archivo no es un documento XML valido. Error de analisis.");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.xmlfile"), eSAX);
             } catch (IOException eIO) {
-                System.out.println("Error al leer el archivo. Consulte con su administrador.");
+                logger.log(Level.WARNING, LocalRes.getIntString("exception.iofile"), eIO);
             }
-        }         
+        }
 
     }
     

@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2008 Openbravo, S.L.
+//    Copyright (C) 2007-2009 Openbravo, S.L.
 //    http://sourceforge.net/projects/openbravopos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
     group = menu.addGroup("Menu.Main");
     group.addPanel("/com/openbravo/images/mycomputer.png", "Menu.Ticket", "com.openbravo.pos.sales.JPanelTicketSales");
@@ -36,12 +37,18 @@
         submenu.addTitle("Menu.StockManagement.Edit");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Products", "com.openbravo.pos.inventory.ProductsPanel");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.ProductsWarehouse", "com.openbravo.pos.inventory.ProductsWarehousePanel");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Auxiliar", "com.openbravo.pos.inventory.AuxiliarPanel");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Categories", "com.openbravo.pos.inventory.CategoriesPanel");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Attributes", "com.openbravo.pos.inventory.AttributesPanel");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.AttributeValues", "com.openbravo.pos.inventory.AttributeValuesPanel");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.AttributeSets", "com.openbravo.pos.inventory.AttributeSetsPanel");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.AttributeUse", "com.openbravo.pos.inventory.AttributeUsePanel");
+
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Taxes", "com.openbravo.pos.inventory.TaxPanel");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.TaxCategories", "com.openbravo.pos.inventory.TaxCategoriesPanel");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.TaxCustCategories", "com.openbravo.pos.inventory.TaxCustCategoriesPanel");
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.StockDiary", "com.openbravo.pos.inventory.StockDiaryPanel");
-        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.StockMovement", "com.openbravo.pos.inventory.StockManagement");
+        submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.StockMovement", "com.openbravo.pos.inventory.StockManagement");      
         submenu.addTitle("Menu.StockManagement.Reports");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.Products", "/com/openbravo/reports/products.bs");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.ProductLabels", "/com/openbravo/reports/productlabels.bs");
@@ -49,7 +56,9 @@
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.Inventory", "/com/openbravo/reports/inventory.bs");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.Inventory2", "/com/openbravo/reports/inventoryb.bs");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.InventoryBroken", "/com/openbravo/reports/inventorybroken.bs");
+        submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.InventoryListDetail", "/com/openbravo/reports/inventorylistdetail.bs");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.InventoryDiff", "/com/openbravo/reports/inventorydiff.bs");
+        submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.InventoryDiffDetail", "/com/openbravo/reports/inventorydiffdetail.bs");
     submenu = group.addSubmenu("/com/openbravo/images/contents.png", "Menu.SalesManagement", "com.openbravo.pos.forms.MenuSalesManagement");
         submenu.addTitle("Menu.SalesManagement.Reports");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.UserSells", "/com/openbravo/reports/usersales.bs");
@@ -67,9 +76,10 @@
         submenu.addPanel("/com/openbravo/images/bookmark.png", "Menu.Tables", "com.openbravo.pos.mant.JPanelPlaces");
         submenu.addTitle("Menu.Maintenance.Reports");
         submenu.addPanel("/com/openbravo/images/appointment.png", "Menu.UsersReport", "/com/openbravo/reports/people.bs");
-        submenu.addTitle("Menu.Maintenance.ERP");        
-        submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPProducts", "com.openbravo.possync.ProductsSyncCreate");
-        submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPOrders", "com.openbravo.possync.OrdersSyncCreate");
+// Deprecated options.
+//        submenu.addTitle("Menu.Maintenance.ERP");
+//        submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPProducts", "com.openbravo.possync.ProductsSyncCreate");
+//        submenu.addExecution("/com/openbravo/images/openbravo.png", "Menu.ERPOrders", "com.openbravo.possync.OrdersSyncCreate");
     group = menu.addGroup("Menu.System");
     group.addChangePasswordAction();
     group.addPanel("/com/openbravo/images/package_settings.png", "Menu.Configuration", "com.openbravo.pos.config.JPanelConfiguration");

@@ -35,10 +35,10 @@
 
 //    Portions:
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
-// 
-//    author adrián romero
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
+//    author adrian romero
+// This class is a copy of net.sf.jasperreports.view.JRViewer
 // The modifications are:
 // The loadJasperPrint() method 
 // And the redesign of the design properties of the toolbar
@@ -187,7 +187,6 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	private MouseListener mouseListener =
 		new java.awt.event.MouseAdapter()
 		{
-                        @Override
 			public void mouseClicked(java.awt.event.MouseEvent evt)
 			{
 				hyperlinkClicked(evt);
@@ -1138,14 +1137,16 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	{//GEN-HEADEREND:event_btnPrintActionPerformed
 		// Add your handling code here:
 
-		Thread thread =
-			new Thread(
+            SwingUtilities.invokeLater(
 				new Runnable()
 				{
 					public void run()
 					{
 						try
 						{
+							
+							btnPrint.setEnabled(false);
+							JRViewer300.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 							JasperPrintManager.printReport(jasperPrint, true);
 						}
 						catch (Exception ex)
@@ -1153,11 +1154,15 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 							ex.printStackTrace();
 							JOptionPane.showMessageDialog(JRViewer300.this, getBundleString("error.printing"));
 						}
+						finally
+						{
+							JRViewer300.this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+							btnPrint.setEnabled(true);
+						}
 					}
 				}
 			);
 
-		thread.start();
 
 	}//GEN-LAST:event_btnPrintActionPerformed
 
@@ -1562,24 +1567,29 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				boolean hasImageMap = imageMap != null;
 
 				JRPrintHyperlink hyperlink = null;
-				if (!hasImageMap && element instanceof JRPrintHyperlink)
+				if (element instanceof JRPrintHyperlink)
 				{
 					hyperlink = (JRPrintHyperlink) element;
 				}
-				boolean hasHyperlink = hyperlink != null && hyperlink.getHyperlinkType() != JRHyperlink.HYPERLINK_TYPE_NONE;
+				boolean hasHyperlink = !hasImageMap 
+					&& hyperlink != null && hyperlink.getHyperlinkType() != JRHyperlink.HYPERLINK_TYPE_NONE;
+				boolean hasTooltip = hyperlink != null && hyperlink.getHyperlinkTooltip() != null;
 
-				if (hasHyperlink || hasImageMap)
+				if (hasHyperlink || hasImageMap || hasTooltip)
 				{
 					JPanel link;
-					if (hasHyperlink)
-					{
-						link = new JPanel();
-						link.addMouseListener(mouseListener);
-					}
-					else //hasImageMap
+					if (hasImageMap)
 					{
 						Rectangle renderingArea = new Rectangle(0, 0, element.getWidth(), element.getHeight());
 						link = new ImageMapPanel(renderingArea, imageMap);
+					}
+					else //hasImageMap
+					{
+						link = new JPanel();
+						if (hasHyperlink)
+						{
+							link.addMouseListener(mouseListener);
+						}
 					}
 
 					if (hasHyperlink)
@@ -1597,12 +1607,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 						);
 					link.setOpaque(false);
 
-					String toolTip;
-					if (hasHyperlink)
-					{
-						toolTip = getHyperlinkTooltip(hyperlink);
-					}
-					else //hasImageMap
+					String toolTip = getHyperlinkTooltip(hyperlink);
+					if (toolTip == null && hasImageMap)
 					{
 						toolTip = "";//not null to register the panel as having a tool tip
 					}
@@ -1645,7 +1651,6 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			addMouseMotionListener(this);
 		}
 
-                @Override
 		public String getToolTipText(MouseEvent event)
 		{
 			String tooltip = null;
@@ -2075,7 +2080,6 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			this.viewer = viewer;
 		}
 
-                @Override
 		public void paintComponent(Graphics g)
 		{
 			if (isRenderImage())

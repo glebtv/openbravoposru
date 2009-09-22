@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.payment;
 
@@ -37,7 +38,6 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
         
         m_notifier = notifier;
         m_cardreader = cardreader;
-        // m_cardreader = MagCardReaderFac.getMagCardReader(sReader);
 
         initComponents();
         
@@ -82,7 +82,7 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
         
         if (m_cardreader != null) {
             // Se van a poder efectuar pagos con tarjeta
-            m_cardreader.reset();
+            m_cardreader.getMagCard().reset();
         }
     }
     
@@ -111,17 +111,15 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
         }
     } 
     
-    private void stateTransition(char cTrans) {
+    private void stateTransition() {
         
-        m_cardreader.appendChar(cTrans);
-        
-        if (m_cardreader.isComplete()) {
-            m_jHolderName.setText(m_cardreader.getHolderName());
-            m_jCardNumber.setText(m_cardreader.getCardNumber());
-            m_jExpirationDate.setText(m_cardreader.getExpirationDate()); 
-            track1 = m_cardreader.getTrack1();
-            track2 = m_cardreader.getTrack2();
-            track3 = m_cardreader.getTrack3();
+        if (m_cardreader.getMagCard().isComplete()) {
+            m_jHolderName.setText(m_cardreader.getMagCard().getHolderName());
+            m_jCardNumber.setText(m_cardreader.getMagCard().getCardNumber());
+            m_jExpirationDate.setText(m_cardreader.getMagCard().getExpirationDate());
+            track1 = m_cardreader.getMagCard().getTrack1();
+            track2 = m_cardreader.getMagCard().getTrack2();
+            track3 = m_cardreader.getMagCard().getTrack3();
             m_notifier.setStatus(true, true);  
         } else {
             m_jHolderName.setText(null);
@@ -135,10 +133,18 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
     }    
     
     private class KeyBarsListener extends java.awt.event.KeyAdapter {
-        
-        public void keyTyped(java.awt.event.KeyEvent e){
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            m_cardreader.keyPressed(evt);
+            stateTransition();
+        }
+        public void keyReleased(java.awt.event.KeyEvent evt) {
+            m_cardreader.keyReleased(evt);
+            stateTransition();
+        }
+        public void keyTyped(java.awt.event.KeyEvent evt){
             m_jKeyFactory.setText(null);
-            stateTransition(e.getKeyChar());
+            m_cardreader.keyTyped(evt);
+            stateTransition(); // e.getKeyChar()
         }
     }   
     
@@ -181,7 +187,7 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
             }
         });
         jPanel1.add(jReset);
-        jReset.setBounds(310, 20, 90, 30);
+        jReset.setBounds(380, 20, 90, 30);
         jPanel1.add(m_jKeyFactory);
         m_jKeyFactory.setBounds(0, 0, 0, 0);
 
@@ -205,7 +211,7 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
         m_jCardNumber.setOpaque(true);
         m_jCardNumber.setPreferredSize(new java.awt.Dimension(150, 25));
         jPanel1.add(m_jCardNumber);
-        m_jCardNumber.setBounds(120, 50, 180, 25);
+        m_jCardNumber.setBounds(120, 50, 250, 25);
 
         jLabel8.setText(AppLocal.getIntString("label.cardholder")); // NOI18N
         jPanel1.add(jLabel8);
@@ -216,7 +222,7 @@ public class PaymentPanelMagCard extends javax.swing.JPanel implements PaymentPa
         m_jHolderName.setOpaque(true);
         m_jHolderName.setPreferredSize(new java.awt.Dimension(150, 25));
         jPanel1.add(m_jHolderName);
-        m_jHolderName.setBounds(120, 20, 180, 25);
+        m_jHolderName.setBounds(120, 20, 250, 25);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents

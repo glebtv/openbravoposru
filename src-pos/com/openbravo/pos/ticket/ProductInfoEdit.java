@@ -1,27 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.ticket;
 
 import java.awt.image.BufferedImage;
-import com.openbravo.basic.BasicException;
-import com.openbravo.data.loader.DataRead;
-import com.openbravo.data.loader.ImageUtils;
 
 /**
  *
@@ -29,7 +27,7 @@ import com.openbravo.data.loader.ImageUtils;
  * Created on 21 de marzo de 2007, 21:28
  *
  */
-public class ProductInfoEdit /* implements SerializableRead , SerializableWrite */ {
+public class ProductInfoEdit {
     
     protected String m_ID;
     protected String m_sRef;
@@ -39,6 +37,7 @@ public class ProductInfoEdit /* implements SerializableRead , SerializableWrite 
     protected boolean m_bScale;
     protected String m_sCategoryID;    
     protected String m_sTaxID;
+    protected String attributeuseid;
     protected double m_dPriceBuy;
     protected double m_dPriceSell; 
     protected BufferedImage m_Image;
@@ -57,29 +56,13 @@ public class ProductInfoEdit /* implements SerializableRead , SerializableWrite 
         m_bScale = false;
         m_sCategoryID = null;
         m_sTaxID = null;
+        attributeuseid = null;
         m_dPriceBuy = 0.0;
         m_dPriceSell = 0.0;
         m_Image = null;
         m_dStockCost = null;
         m_dStockVolume = null;
         m_iCatalogOrder = null;            
-    }
-    
-    public void readValues(DataRead dr) throws BasicException {
-        m_ID = dr.getString(1);
-        m_sRef = dr.getString(2);
-        m_sCode = dr.getString(3);
-        m_sName = dr.getString(4);
-        m_bCom = dr.getBoolean(5).booleanValue();
-        m_bScale = dr.getBoolean(6).booleanValue();
-        m_dPriceBuy = dr.getDouble(7).doubleValue();
-        m_dPriceSell = dr.getDouble(8).doubleValue();
-        m_sCategoryID = dr.getString(9);
-        m_sTaxID =  dr.getString(10);      
-        m_Image = ImageUtils.readImage(dr.getBytes(11));
-        m_dStockCost =  dr.getDouble(12);
-        m_dStockVolume =  dr.getDouble(13);
-        m_iCatalogOrder = dr.getInt(14);                
     }
    
     public final String getID() {
@@ -131,7 +114,13 @@ public class ProductInfoEdit /* implements SerializableRead , SerializableWrite 
     }
     public final void setTaxID(String sTaxID) {
         m_sTaxID = sTaxID;
-    }    
+    }
+    public final String getAttributeUseID() {
+        return attributeuseid;
+    }
+    public final void setAttributeUseID(String value) {
+        attributeuseid = value;
+    }
     public final double getPriceBuy(){
         return m_dPriceBuy;
     }    
@@ -152,6 +141,7 @@ public class ProductInfoEdit /* implements SerializableRead , SerializableWrite 
         m_Image = img;
     }
     
+    @Override
     public final String toString() {
         return m_sRef + " - " + m_sName;
     }    

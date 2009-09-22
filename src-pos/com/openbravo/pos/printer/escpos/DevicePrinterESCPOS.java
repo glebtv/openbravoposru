@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer.escpos;
 
@@ -43,8 +44,11 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
 
         // Inicializamos la impresora
         m_CommOutputPrinter.init(ESCPOS.INIT);
+
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER); // A la impresora
-        m_CommOutputPrinter.write(m_trans.getCodeTable());        
+        m_CommOutputPrinter.init(m_codes.getInitSequence());
+        m_CommOutputPrinter.write(m_trans.getCodeTable());
+
         m_CommOutputPrinter.flush();  
     }
    
@@ -72,24 +76,7 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
     public void printBarCode(String type, String position, String code) {
         
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);        
-
-        if (DevicePrinter.BARCODE_EAN13.equals(type)) {
-            m_CommOutputPrinter.write(m_codes.getNewLine());
-
-            m_CommOutputPrinter.write(ESCPOS.BAR_HEIGHT);
-            if (DevicePrinter.POSITION_NONE.equals(position)) {                
-                m_CommOutputPrinter.write(ESCPOS.BAR_POSITIONNONE);
-            } else {
-                m_CommOutputPrinter.write(ESCPOS.BAR_POSITIONDOWN);
-            }           
-            m_CommOutputPrinter.write(ESCPOS.BAR_HRIFONT1);
-            m_CommOutputPrinter.write(ESCPOS.BAR_CODE02);
-            m_CommOutputPrinter.write(m_trans.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
-            m_CommOutputPrinter.write(new byte[] { 0x00 });
-
-            m_CommOutputPrinter.write(m_codes.getNewLine());
-
-        }
+        m_codes.printBarcode(m_CommOutputPrinter, type, position, code);
     }
     
     public void beginLine(int iTextSize) {
@@ -114,18 +101,18 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);   
 
         if ((iStyle & DevicePrinter.STYLE_BOLD) != 0) {
-            m_CommOutputPrinter.write(ESCPOS.BOLD_SET);
+            m_CommOutputPrinter.write(m_codes.getBoldSet());
         }
         if ((iStyle & DevicePrinter.STYLE_UNDERLINE) != 0) {
-            m_CommOutputPrinter.write(ESCPOS.UNDERLINE_SET);
+            m_CommOutputPrinter.write(m_codes.getUnderlineSet());
         }
         m_CommOutputPrinter.write(m_trans.transString(sText));
-        if ((iStyle & DevicePrinter.STYLE_BOLD) != 0) {
-            m_CommOutputPrinter.write(ESCPOS.BOLD_RESET);
-        }
         if ((iStyle & DevicePrinter.STYLE_UNDERLINE) != 0) {
-            m_CommOutputPrinter.write(ESCPOS.UNDERLINE_RESET);
-        }        
+            m_CommOutputPrinter.write(m_codes.getUnderlineReset());
+        }
+        if ((iStyle & DevicePrinter.STYLE_BOLD) != 0) {
+            m_CommOutputPrinter.write(m_codes.getBoldReset());
+        }     
     }
     public void endLine() {
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);   

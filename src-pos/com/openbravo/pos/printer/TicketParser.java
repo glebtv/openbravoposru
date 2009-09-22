@@ -1,23 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2008-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer;
 
+import com.openbravo.data.loader.LocalRes;
 import java.io.*;
 import java.awt.image.BufferedImage;
 import java.applet.*;
@@ -51,6 +53,7 @@ public class TicketParser extends DefaultHandler {
     
     private double m_dValue1;
     private double m_dValue2;
+    private int attribute3;
     
     private int m_iOutputType;
     private static final int OUTPUT_NONE = 0;
@@ -81,11 +84,11 @@ public class TicketParser extends DefaultHandler {
             m_sp.parse(new InputSource(in), this);
                         
         } catch (ParserConfigurationException ePC) {
-            throw new TicketPrinterException("Error en el analizador XML. Consulte con su administrador", ePC);
+            throw new TicketPrinterException(LocalRes.getIntString("exception.parserconfig") , ePC);
         } catch (SAXException eSAX) {
-            throw new TicketPrinterException("El archivo no es un documento XML valido. Error de analisis.", eSAX);
+            throw new TicketPrinterException(LocalRes.getIntString("exception.xmlfile") , eSAX);
         } catch (IOException eIO) {
-            throw new TicketPrinterException("Error al leer el archivo. Consulte con su administrador.", eIO);
+            throw new TicketPrinterException(LocalRes.getIntString("exception.iofile") , eIO);
         }
     }    
     
@@ -195,6 +198,8 @@ public class TicketParser extends DefaultHandler {
                 text = new StringBuffer();   
                 m_dValue1 = parseDouble(attributes.getValue("price"));
                 m_dValue2 = parseDouble(attributes.getValue("units"), 1.0);
+                attribute3 = parseInt(attributes.getValue("tax"));
+                
             } else if ("message".equals(qName)) {
                 text = new StringBuffer();               
             } else if ("total".equals(qName)) {
@@ -225,7 +230,9 @@ public class TicketParser extends DefaultHandler {
                 try {
                     // BufferedImage image = ImageIO.read(getClass().getClassLoader().getResourceAsStream(m_sText.toString()));
                     BufferedImage image = m_system.getResourceAsImage(text.toString());
-                    m_oOutputPrinter.printImage(image);
+                    if (image != null) {
+                        m_oOutputPrinter.printImage(image);
+                    }
                 } catch (Exception fnfe) {
                     //throw new ResourceNotFoundException( fnfe.getMessage() );
                 }
@@ -306,7 +313,7 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().endReceipt();
                 m_iOutputType = OUTPUT_NONE;
             } else if ("line".equals(qName)) {
-                m_printer.getFiscalPrinter().printLine(text.toString(), m_dValue1, m_dValue2);
+                m_printer.getFiscalPrinter().printLine(text.toString(), m_dValue1, m_dValue2, attribute3);
                 text = null;               
             } else if ("message".equals(qName)) {
                 m_printer.getFiscalPrinter().printMessage(text.toString());

@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2008-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.sales;
 
@@ -60,7 +61,7 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel5.add(receiptone, BorderLayout.CENTER);
         
         receipttwo = new SimpleReceipt(ticketline, dlSales, dlCustomers, taxeslogic);
-        jPanel3.add(receipttwo, BorderLayout.CENTER);  
+        jPanel3.add(receipttwo, BorderLayout.CENTER);
     }
     
     public static ReceiptSplit getDialog(Component parent, String ticketline, DataLogicSales dlSales, DataLogicCustomers dlCustomers, TaxesLogic taxeslogic) {
@@ -97,8 +98,7 @@ public class ReceiptSplit extends javax.swing.JDialog {
         
         setVisible(true);    
         return accepted;
-    }
-    
+    }    
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -115,10 +115,10 @@ public class ReceiptSplit extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jBtnToRightAll = new javax.swing.JButton();
+        jBtnToRightOne = new javax.swing.JButton();
+        jBtnToLeftOne = new javax.swing.JButton();
+        jBtnToLeftAll = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -162,64 +162,64 @@ public class ReceiptSplit extends javax.swing.JDialog {
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2rightarrow.png"))); // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.setFocusable(false);
-        jButton1.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        jButton1.setRequestFocusEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jBtnToRightAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2rightarrow.png"))); // NOI18N
+        jBtnToRightAll.setFocusPainted(false);
+        jBtnToRightAll.setFocusable(false);
+        jBtnToRightAll.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jBtnToRightAll.setRequestFocusEnabled(false);
+        jBtnToRightAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jBtnToRightAllActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
-        jPanel4.add(jButton1, gridBagConstraints);
+        jPanel4.add(jBtnToRightAll, gridBagConstraints);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1rightarrow.png"))); // NOI18N
-        jButton5.setFocusPainted(false);
-        jButton5.setFocusable(false);
-        jButton5.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        jButton5.setRequestFocusEnabled(false);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        jBtnToRightOne.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1rightarrow.png"))); // NOI18N
+        jBtnToRightOne.setFocusPainted(false);
+        jBtnToRightOne.setFocusable(false);
+        jBtnToRightOne.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jBtnToRightOne.setRequestFocusEnabled(false);
+        jBtnToRightOne.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jBtnToRightOneActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel4.add(jButton5, gridBagConstraints);
+        jPanel4.add(jBtnToRightOne, gridBagConstraints);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1leftarrow.png"))); // NOI18N
-        jButton2.setFocusPainted(false);
-        jButton2.setFocusable(false);
-        jButton2.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        jButton2.setRequestFocusEnabled(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jBtnToLeftOne.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1leftarrow.png"))); // NOI18N
+        jBtnToLeftOne.setFocusPainted(false);
+        jBtnToLeftOne.setFocusable(false);
+        jBtnToLeftOne.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jBtnToLeftOne.setRequestFocusEnabled(false);
+        jBtnToLeftOne.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jBtnToLeftOneActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel4.add(jButton2, gridBagConstraints);
+        jPanel4.add(jBtnToLeftOne, gridBagConstraints);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2leftarrow.png"))); // NOI18N
-        jButton3.setFocusPainted(false);
-        jButton3.setFocusable(false);
-        jButton3.setMargin(new java.awt.Insets(8, 14, 8, 14));
-        jButton3.setRequestFocusEnabled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jBtnToLeftAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2leftarrow.png"))); // NOI18N
+        jBtnToLeftAll.setFocusPainted(false);
+        jBtnToLeftAll.setFocusable(false);
+        jBtnToLeftAll.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jBtnToLeftAll.setRequestFocusEnabled(false);
+        jBtnToLeftAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jBtnToLeftAllActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
-        jPanel4.add(jButton3, gridBagConstraints);
+        jPanel4.add(jBtnToLeftAll, gridBagConstraints);
 
         jPanel1.add(jPanel4);
 
@@ -247,48 +247,48 @@ public class ReceiptSplit extends javax.swing.JDialog {
         
     }//GEN-LAST:event_m_jButtonCancelActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jBtnToRightAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnToRightAllActionPerformed
+       
+        TicketLineInfo[] lines = receiptone.getSelectedLines();
+        if (lines != null) {
+            receipttwo.addSelectedLines(lines);
+        }
+            
+}//GEN-LAST:event_jBtnToRightAllActionPerformed
 
-        TicketLineInfo line = receiptone.getSelectedLine();
-        if (line != null) {
-            receipttwo.addSelectedLine(line);
-        }       
+    private void jBtnToRightOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnToRightOneActionPerformed
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+        TicketLineInfo[] lines = receiptone.getSelectedLinesUnit();
+        if (lines != null) {
+            receipttwo.addSelectedLines(lines);
+        }
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+}//GEN-LAST:event_jBtnToRightOneActionPerformed
 
-        TicketLineInfo line = receiptone.getSelectedLineUnit();
-        if (line != null) {
-            receipttwo.addSelectedLine(line);
-        }    
-        
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void jBtnToLeftOneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnToLeftOneActionPerformed
+      
+        TicketLineInfo[] lines = receipttwo.getSelectedLinesUnit();
+        if (lines != null) {
+            receiptone.addSelectedLines(lines);
+        }
+       
+}//GEN-LAST:event_jBtnToLeftOneActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jBtnToLeftAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnToLeftAllActionPerformed
+       
+        TicketLineInfo[] lines = receipttwo.getSelectedLines();
+        if (lines != null) {
+            receiptone.addSelectedLines(lines);
+        }
 
-        TicketLineInfo line = receipttwo.getSelectedLineUnit();
-        if (line != null) {
-            receiptone.addSelectedLine(line);
-        }   
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-        TicketLineInfo line = receipttwo.getSelectedLine();
-        if (line != null) {
-            receiptone.addSelectedLine(line);
-        }   
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+}//GEN-LAST:event_jBtnToLeftAllActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jBtnToLeftAll;
+    private javax.swing.JButton jBtnToLeftOne;
+    private javax.swing.JButton jBtnToRightAll;
+    private javax.swing.JButton jBtnToRightOne;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

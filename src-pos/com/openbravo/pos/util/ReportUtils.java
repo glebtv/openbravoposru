@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2008 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2008-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 package com.openbravo.pos.util;
@@ -36,22 +37,30 @@ public class ReportUtils {
         
         // Initalize print service
         
-        if (printername != null) {
-            PrintService[] pservices = 
-                    PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE , null);
-            for (PrintService s : pservices) {    
-                if (printername.equals(s.getName())) {
-                    return s;
+        if (printername == null) {
+            return PrintServiceLookup.lookupDefaultPrintService();       
+        } else {
+            
+            if ("(Show dialog)".equals(printername)) {
+                return null; // null means "you have to show the print dialog"
+            } else if ("(Default)".equals(printername)) {
+                return PrintServiceLookup.lookupDefaultPrintService(); 
+            } else {
+                PrintService[] pservices = 
+                        PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PRINTABLE , null);
+                for (PrintService s : pservices) {    
+                    if (printername.equals(s.getName())) {
+                        return s;
+                    }
                 }
-            }
-        }
-        
-        return PrintServiceLookup.lookupDefaultPrintService();           
+                return PrintServiceLookup.lookupDefaultPrintService();       
+            }                
+        }                 
     }
     
     public static String[] getPrintNames() {
         PrintService[] pservices = 
-                PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE , null);
+                PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PRINTABLE , null);
         
         String printers[] = new String[pservices.length];
         for (int i = 0; i < pservices.length; i++) {    
