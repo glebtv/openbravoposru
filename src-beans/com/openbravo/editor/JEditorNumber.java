@@ -1,25 +1,27 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.editor;
 
 import java.awt.Toolkit;
 import com.openbravo.basic.BasicException;
+import com.openbravo.format.DoubleUtils;
 import com.openbravo.format.Formats;
 
 public abstract class JEditorNumber extends JEditorAbstract {
@@ -56,11 +58,15 @@ public abstract class JEditorNumber extends JEditorAbstract {
         firePropertyChange("Text", sOldText, getText());
     }   
     
-    public void setValue(double dvalue) {
+    public void setDoubleValue(Double dvalue) {
         
         String sOldText = getText();
-
-        if (dvalue >= 0.0) {
+        
+        if (dvalue == null) {
+            m_sNumber = "";
+            m_bNegative = false;
+            m_iNumberStatus = NUMBER_ZERONULL;                 
+        } else if (dvalue >= 0.0) {
             m_sNumber = formatDouble(dvalue);
             m_bNegative = false;
             m_iNumberStatus = NUMBER_ZERONULL;            
@@ -74,11 +80,17 @@ public abstract class JEditorNumber extends JEditorAbstract {
         firePropertyChange("Text", sOldText, getText());
     } 
     
-    public double getValue() throws BasicException {  
-        try {
-            return Double.parseDouble(getText());
-        } catch (NumberFormatException e) {
-            throw new BasicException(e);
+    public Double getDoubleValue() {  
+        
+        String text = getText();
+        if (text == null || text.equals("")) {
+            return null; 
+        } else {
+            try {
+                return Double.parseDouble(text);
+            } catch (NumberFormatException e) {
+                return null;
+            }
         }
     }
     
@@ -108,8 +120,8 @@ public abstract class JEditorNumber extends JEditorAbstract {
         }
     }    
     
-    private String formatDouble(double dvalue) {
-        String sNumber = Double.toString(dvalue);
+    private String formatDouble(Double value) {
+        String sNumber = Double.toString(DoubleUtils.fixDecimals(value));
         if (sNumber.endsWith(".0")) {
             sNumber = sNumber.substring(0,  sNumber.length() - 2);
         }
@@ -133,7 +145,7 @@ public abstract class JEditorNumber extends JEditorAbstract {
     }
     
     protected String getTextFormat() throws BasicException {
-        return m_fmt.formatValue(new Double(getValue()));
+        return m_fmt.formatValue(getDoubleValue());
     }
     
     protected void typeCharInternal(char cTrans) {

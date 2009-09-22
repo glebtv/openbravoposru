@@ -31,7 +31,6 @@ import com.openbravo.pos.forms.*;
 import com.openbravo.pos.printer.DeviceTicket;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
-import com.openbravo.pos.mercury130.DeviceMercury130;
 
 public class JFrmSQL extends javax.swing.JFrame implements AppView {
     
@@ -88,10 +87,6 @@ public class JFrmSQL extends javax.swing.JFrame implements AppView {
     }
     
     public DeviceScanner getDeviceScanner() {
-        return null;
-    }
-    
-    public DeviceMercury130 getDeviceMercury130() {
         return null;
     }
     

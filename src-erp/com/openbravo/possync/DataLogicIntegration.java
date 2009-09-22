@@ -1,25 +1,25 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    http://sourceforge.net/projects/openbravopos
-//
+//    http://www.openbravo.com/product/pos
 //    Copyright (c) 2007 openTrends Solucions i Sistemes, S.L
 //    Modified by Openbravo SL on March 22, 2007
 //    These modifications are copyright Openbravo SL
 //    Author/s: A. Romero
 //    You may contact Openbravo SL at: http://www.openbravo.com
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.possync;
 
@@ -52,7 +52,7 @@ import com.openbravo.pos.ticket.TicketLineInfo;
  * Created on 5 de marzo de 2007, 19:56
  *
  */
-public abstract class DataLogicIntegration extends BeanFactoryDataSingle {
+public class DataLogicIntegration extends BeanFactoryDataSingle {
     
     protected Session s;
 
@@ -64,9 +64,44 @@ public abstract class DataLogicIntegration extends BeanFactoryDataSingle {
         this.s = s;
     }
      
-    public abstract void syncCustomersBefore() throws BasicException;
-    
-    public abstract void syncCustomer(final CustomerInfoExt customer) throws BasicException;
+    public void syncCustomersBefore() throws BasicException {
+        new StaticSentence(s, "UPDATE CUSTOMERS SET VISIBLE = " + s.DB.FALSE()).exec();
+    }
+
+    public void syncCustomer(final CustomerInfoExt customer) throws BasicException {
+
+        Transaction t = new Transaction(s) {
+            public Object transact() throws BasicException {
+                // Sync the Customer in a transaction
+
+                // Try to update
+                if (new PreparedSentence(s,
+                            "UPDATE CUSTOMERS SET SEARCHKEY = ?, NAME = ?, NOTES = ?, VISIBLE = " + s.DB.TRUE() + " WHERE ID = ?",
+                            SerializerWriteParams.INSTANCE
+                            ).exec(new DataParams() { public void writeValues() throws BasicException {
+                                setString(1, customer.getSearchkey());
+                                setString(2, customer.getName());
+                                setString(3, customer.getAddress());
+                                setString(4, customer.getId());
+                            }}) == 0) {
+
+                    // If not updated, try to insert
+                    new PreparedSentence(s,
+                            "INSERT INTO CUSTOMERS(ID, SEARCHKEY, NAME, NOTES, VISIBLE) VALUES (?, ?, ?, ?, " + s.DB.TRUE() + ")",
+                            SerializerWriteParams.INSTANCE
+                            ).exec(new DataParams() { public void writeValues() throws BasicException {
+                                setString(1, customer.getId());
+                                setString(2, customer.getSearchkey());
+                                setString(3, customer.getName());
+                                setString(4, customer.getAddress());
+                            }});
+                }
+
+                return null;
+            }
+        };
+        t.execute();
+    }
         
     
     public void syncProductsBefore() throws BasicException {
@@ -238,7 +273,7 @@ public abstract class DataLogicIntegration extends BeanFactoryDataSingle {
     
     public List getTickets() throws BasicException {
         return new PreparedSentence(s
-                , "SELECT T.ID, T.TICKETID, R.DATENEW, R.MONEY, P.ID, P.NAME, C.ID, C.TAXID, C.SEARCHKEY, C.NAME FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID LEFT OUTER JOIN CUSTOMERS C ON T.CUSTOMER = C.ID WHERE T.STATUS = 0"
+                , "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, P.ID, P.NAME, C.ID, C.TAXID, C.SEARCHKEY, C.NAME FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID LEFT OUTER JOIN CUSTOMERS C ON T.CUSTOMER = C.ID WHERE (T.TICKETTYPE = 0 OR T.TICKETTYPE = 1) AND T.STATUS = 0"
                 , null
                 , new SerializerReadClass(TicketInfo.class)).list();
     }

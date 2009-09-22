@@ -22,11 +22,11 @@
 <output>   
     <display>
         <line>
-            <text align="left" length="10">Итого.</text>
+            <text align="left" length="10">Total.</text>
             <text align="right" length="10">${ticket.printTotal()}</text>
         </line>
         <line>
-           <text align="center" length="20">Спасибо.</text>
+           <text align="center" length="20">Thank you.</text>
         </line>
     </display>
 </output>

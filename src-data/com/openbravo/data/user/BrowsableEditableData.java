@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.data.user;
 
@@ -44,6 +45,8 @@ public class BrowsableEditableData {
 //    private DocumentLoader m_keyvalue;
     private int m_iIndex;
     private boolean m_bIsAdjusting;
+    
+    private boolean iseditable = true;
     
     /** Creates a new instance of BrowsableEditableData */
     public BrowsableEditableData(BrowsableData bd, EditorRecord ed, DirtyManager dirty) {
@@ -144,44 +147,47 @@ public class BrowsableEditableData {
         m_bIsAdjusting = false;
     }
     
+    
     public boolean canLoadData() {
         return m_bd.canLoadData();
     }
     
+    public void setEditable(boolean value) {
+        iseditable = value;
+    }
+    
     public boolean canInsertData() {
-        return m_bd.canInsertData();          
+        return iseditable && m_bd.canInsertData();          
     }
     
     public boolean canDeleteData() {
-        return m_bd.canDeleteData();      
+        return iseditable && m_bd.canDeleteData();      
     }
     
     public boolean canUpdateData() {
-        return m_bd.canUpdateData();      
+        return iseditable && m_bd.canUpdateData();      
     }
         
     public void refreshCurrent() {
         baseMoveTo(m_iIndex);
     }    
-    public void moveTo(int i) throws BasicException {        
-        saveData();
-        if (m_iIndex != i) {
-            baseMoveTo(i);
-        }
-    }    
+
     public void refreshData() throws BasicException {
         saveData();
         m_bd.refreshData();
+        m_editorrecord.refresh();
         baseMoveTo(0);
     }    
     public void loadData() throws BasicException {
         saveData();
         m_bd.loadData();
+        m_editorrecord.refresh();
         baseMoveTo(0);
     }
     public void unloadData() throws BasicException {
         saveData();
         m_bd.unloadData();
+        m_editorrecord.refresh();
         baseMoveTo(0);
     }
   
@@ -190,28 +196,36 @@ public class BrowsableEditableData {
         m_bd.sort(c);
         baseMoveTo(0);
     }
+    
+    public void moveTo(int i) throws BasicException {        
+        saveData();
+        if (m_iIndex != i) {
+            baseMoveTo(i);
+        }
+    }    
+    
     public final void movePrev() throws BasicException {
         saveData();
         if (m_iIndex > 0) {        
-            moveTo(m_iIndex - 1);
+            baseMoveTo(m_iIndex - 1);
         }
     }
     public final void moveNext() throws BasicException {
         saveData();
         if (m_iIndex < m_bd.getSize() - 1) {        
-            moveTo(m_iIndex + 1);
+            baseMoveTo(m_iIndex + 1);
         }
     }
     public final void moveFirst() throws BasicException {
         saveData();
         if (m_bd.getSize() > 0) {
-            moveTo(0);
+            baseMoveTo(0);
         }
     }
     public final void moveLast() throws BasicException {
         saveData();
         if (m_bd.getSize() > 0) {
-            moveTo(m_bd.getSize() - 1);
+            baseMoveTo(m_bd.getSize() - 1);
         }
     }
     public final int findNext(Finder f) throws BasicException {
@@ -222,13 +236,19 @@ public class BrowsableEditableData {
             
         if (m_Dirty.isDirty()) {
             if (m_iState == ST_UPDATE) {
-                updateCurrent(m_editorrecord.createValue());
+                int i = m_bd.updateRecord(m_iIndex, m_editorrecord.createValue());
+                m_editorrecord.refresh();
+                baseMoveTo(i);
             } else if (m_iState == ST_INSERT) {
-                insertCurrent(m_editorrecord.createValue());
+                int i = m_bd.insertRecord(m_editorrecord.createValue());
+                m_editorrecord.refresh();
+                baseMoveTo(i);
             } else if (m_iState == ST_DELETE) {
-                removeCurrent();
+                int i = m_bd.removeRecord(m_iIndex);
+                m_editorrecord.refresh();
+                baseMoveTo(i);
             } // queda ST_NORECORD  
-        }      
+        }   
     }
       
     public void actionReloadCurrent(Component c) {        
@@ -270,38 +290,33 @@ public class BrowsableEditableData {
         // primero persistimos
         saveData();
         
-        // Y nos ponemos en estado de insert
-        m_iState = ST_INSERT;
-        m_editorrecord.writeValueInsert();
-        m_Dirty.setDirty(false);
-        fireStateUpdate(); // ?
+        if (canInsertData()) {       
+            // Y nos ponemos en estado de insert
+            m_iState = ST_INSERT;
+            m_editorrecord.writeValueInsert();
+            m_Dirty.setDirty(false);
+            fireStateUpdate(); // ?
+        }
     }
     
     public final void actionDelete() throws BasicException {
         // primero persistimos
         saveData();
         
-        // Y nos ponemos en estado de delete
-        Object obj = getCurrentElement();
-        int iIndex = getIndex();
-        int iCount = m_bd.getSize();
-        if (iIndex >= 0 && iIndex < iCount) {
-            m_iState = ST_DELETE;
-            m_editorrecord.writeValueDelete(obj);
-            m_Dirty.setDirty(true);
-            fireStateUpdate(); // ?
+        if (canDeleteData()) {
+        
+            // Y nos ponemos en estado de delete
+            Object obj = getCurrentElement();
+            int iIndex = getIndex();
+            int iCount = m_bd.getSize();
+            if (iIndex >= 0 && iIndex < iCount) {
+                m_iState = ST_DELETE;
+                m_editorrecord.writeValueDelete(obj);
+                m_Dirty.setDirty(true);
+                fireStateUpdate(); // ?
+            }
         }
-    }  
-    
-    public final void removeCurrent() throws BasicException {
-        baseMoveTo(m_bd.removeRecord(m_iIndex));
-    }  
-    public final void updateCurrent(Object value) throws BasicException {
-        baseMoveTo(m_bd.updateRecord(m_iIndex, value));
-    }
-    public final void insertCurrent(Object value) throws BasicException { 
-        baseMoveTo(m_bd.insertRecord(value));
-    }  
+    }   
     
     private final void baseMoveTo(int i) {
     // Este senor y el constructor a INX_EOF, son los unicos que tienen potestad de modificar m_iIndex.

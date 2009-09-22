@@ -24,7 +24,6 @@ import com.openbravo.data.loader.Session;
 import com.openbravo.pos.printer.*;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
-import com.openbravo.pos.mercury130.DeviceMercury130;
 
 /**
  *
@@ -35,7 +34,6 @@ public interface AppView {
     public DeviceScale getDeviceScale();
     public DeviceTicket getDeviceTicket();
     public DeviceScanner getDeviceScanner();
-    public DeviceMercury130 getDeviceMercury130();
       
     public Session getSession();
     public AppProperties getProperties();

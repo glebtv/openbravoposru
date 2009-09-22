@@ -77,7 +77,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         return jproductfilter.getComponent();
     }  
     
-
+    @Override
     public Component getToolbarExtras() {
         
         JButton btnScanPal = new JButton();

@@ -1,20 +1,21 @@
 //    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
 //
-//    This program is free software; you can redistribute it and/or modify
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
+//    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
-//    This program is distributed in the hope that it will be useful,
+//    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.openbravo.format;
 
@@ -174,7 +175,7 @@ public abstract class Formats {
     }    
     private static final class FormatsDOUBLE extends Formats {       
         protected String formatValueInt(Object value) {
-            return m_doubleformat.format(((Number) value).doubleValue());
+            return m_doubleformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
         }   
         protected Object parseValueInt(String value) throws ParseException {
             return new Double(m_doubleformat.parse(value).doubleValue());
@@ -185,12 +186,10 @@ public abstract class Formats {
     }    
     private static final class FormatsPERCENT extends Formats {       
         protected String formatValueInt(Object value) {
-            //return NumberFormat.getPercentInstance().format(((Number) value).doubleValue());
-            return m_percentformat.format(((Number) value).doubleValue());
+            return m_percentformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
         }   
         protected Object parseValueInt(String value) throws ParseException {
             try {
-                //return new Double(NumberFormat.getPercentInstance().parse(value).doubleValue());
                 return new Double(m_percentformat.parse(value).doubleValue());
             } catch (ParseException e) {
                 // Segunda oportunidad como numero normalito
@@ -203,7 +202,7 @@ public abstract class Formats {
     }  
     private static final class FormatsCURRENCY extends Formats {       
         protected String formatValueInt(Object value) {
-            return m_currencyformat.format(((Number) value).doubleValue());
+            return m_currencyformat.format(DoubleUtils.fixDecimals((Number) value)); // quickfix for 3838
         }   
         protected Object parseValueInt(String value) throws ParseException {
             try {
