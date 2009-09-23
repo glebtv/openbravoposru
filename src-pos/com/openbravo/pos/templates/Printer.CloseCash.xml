@@ -60,7 +60,7 @@
             <text bold="true">Отчёт по налогам</text>
         </line>
         <line>
-            <text align ="right" length="42">Итого</text>
+            <text align ="right" length="42">Сумма</text>
         </line>
         <line>
             <text>------------------------------------------</text>
