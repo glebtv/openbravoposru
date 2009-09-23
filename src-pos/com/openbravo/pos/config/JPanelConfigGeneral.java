@@ -143,6 +143,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter.addItem("surepos");
         jcboMachinePrinter.addItem("plain");
         jcboMachinePrinter.addItem("javapos");
+        jcboMachinePrinter.addItem("elveskkm");
         jcboMachinePrinter.addItem("Not defined");
 
         jcboConnPrinter.addItem("serial");
@@ -168,6 +169,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
         jcboMachinePrinter2.addItem("javapos");
+        jcboMachinePrinter2.addItem("elveskkm");
         jcboMachinePrinter2.addItem("Not defined");
 
         jcboConnPrinter2.addItem("serial");
@@ -193,6 +195,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter3.addItem("surepos");
         jcboMachinePrinter3.addItem("plain");
         jcboMachinePrinter3.addItem("javapos");
+        jcboMachinePrinter3.addItem("elveskkm");
         jcboMachinePrinter3.addItem("Not defined");
 
         jcboConnPrinter3.addItem("serial");
@@ -215,6 +218,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachineDisplay.addItem("epson");
         jcboMachineDisplay.addItem("ld200");
         jcboMachineDisplay.addItem("surepos");
+        jcboMachineDisplay.addItem("cd5220rus");
         jcboMachineDisplay.addItem("Not defined");
 
         jcboConnDisplay.addItem("serial");
@@ -234,6 +238,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachineScale.addItem("screen");
         jcboMachineScale.addItem("dialog1");
         jcboMachineScale.addItem("samsungesp");
+        jcboMachineScale.addItem("tves4149");
         jcboMachineScale.addItem("Not defined");
 
         jcboSerialScale.addItem("COM1");
@@ -245,8 +250,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialScale.addItem("/dev/ttyS2");
         jcboSerialScale.addItem("/dev/ttyS3");
 
-        // Scanner
+        // Scanner and Device with PLUs
         jcboMachineScanner.addItem("scanpal2");
+        jcboMachineScanner.addItem("mercury130kz039");
         jcboMachineScanner.addItem("Not defined");
 
         jcboSerialScanner.addItem("COM1");
@@ -294,7 +300,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         StringParser p = new StringParser(config.getProperty("machine.printer"));
         String sparam = unifySerialInterface(p.nextToken(':'));
-        if ("serial".equals(sparam) || "file".equals(sparam)) {
+        if ("elveskkm".equals(sparam)) {
+            jcboMachinePrinter.setSelectedItem(sparam);
+            jcboConnPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+            jcboSerialPrinter.setSelectedItem(p.nextToken(','));
+        } else if ("serial".equals(sparam) || "file".equals(sparam)) {
             jcboMachinePrinter.setSelectedItem("epson");
             jcboConnPrinter.setSelectedItem(sparam);
             jcboSerialPrinter.setSelectedItem(p.nextToken(','));
@@ -313,7 +323,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         p = new StringParser(config.getProperty("machine.printer.2"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("serial".equals(sparam) || "file".equals(sparam)) {
+        if ("elveskkm".equals(sparam)) {
+            jcboMachinePrinter2.setSelectedItem(sparam);
+            jcboConnPrinter2.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+            jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
+        } else if ("serial".equals(sparam) || "file".equals(sparam)) {
             jcboMachinePrinter2.setSelectedItem("epson");
             jcboConnPrinter2.setSelectedItem(sparam);
             jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
@@ -332,7 +346,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         p = new StringParser(config.getProperty("machine.printer.3"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("serial".equals(sparam) || "file".equals(sparam)) {
+        if ("elveskkm".equals(sparam)) {
+            jcboMachinePrinter3.setSelectedItem(sparam);
+            jcboConnPrinter3.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+            jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
+        } else if ("serial".equals(sparam) || "file".equals(sparam)) {
             jcboMachinePrinter3.setSelectedItem("epson");
             jcboConnPrinter3.setSelectedItem(sparam);
             jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
@@ -367,14 +385,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         p = new StringParser(config.getProperty("machine.scale"));
         sparam = p.nextToken(':');
         jcboMachineScale.setSelectedItem(sparam);
-        if ("dialog1".equals(sparam) || "samsungesp".equals(sparam)) {
+        if ("dialog1".equals(sparam) || "samsungesp".equals(sparam) || "tves4149".equals(sparam)) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
         }
 
         p = new StringParser(config.getProperty("machine.scanner"));
         sparam = p.nextToken(':');
         jcboMachineScanner.setSelectedItem(sparam);
-        if ("scanpal2".equals(sparam)) {
+        if ("scanpal2".equals(sparam) || "mercury130kz039".equals(sparam)) {
             jcboSerialScanner.setSelectedItem(p.nextToken(','));
         }
 
@@ -396,8 +414,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         config.setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
 
         String sMachinePrinter = comboValue(jcboMachinePrinter.getSelectedItem());
-        if ("epson".equals(sMachinePrinter) || "tmu220".equals(sMachinePrinter) || "star".equals(sMachinePrinter) || "ithaca".equals(sMachinePrinter) || "surepos".equals(sMachinePrinter)) {
-            config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
+        if ("epson".equals(sMachinePrinter) || "tmu220".equals(sMachinePrinter) || "star".equals(sMachinePrinter) || "ithaca".equals(sMachinePrinter) || "surepos".equals(sMachinePrinter) || "elveskkm".equals(sMachinePrinter)) {            config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter)) {
             config.setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter.getText() + "," + m_jtxtJPOSDrawer.getText());
         } else if ("printer".equals(sMachinePrinter)) {
@@ -407,7 +424,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
 
         String sMachinePrinter2 = comboValue(jcboMachinePrinter2.getSelectedItem());
-        if ("epson".equals(sMachinePrinter2) || "tmu220".equals(sMachinePrinter2) || "star".equals(sMachinePrinter2) || "ithaca".equals(sMachinePrinter2) || "surepos".equals(sMachinePrinter2)) {
+        if ("epson".equals(sMachinePrinter2) || "tmu220".equals(sMachinePrinter2) || "star".equals(sMachinePrinter2) || "ithaca".equals(sMachinePrinter2) || "surepos".equals(sMachinePrinter2) || "elveskkm".equals(sMachinePrinter2)) {
             config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter2)) {
             config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
@@ -419,7 +436,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
 
         String sMachinePrinter3 = comboValue(jcboMachinePrinter3.getSelectedItem());
-        if ("epson".equals(sMachinePrinter3) || "tmu220".equals(sMachinePrinter3) || "star".equals(sMachinePrinter3) || "ithaca".equals(sMachinePrinter3) || "surepos".equals(sMachinePrinter3)) {
+        if ("epson".equals(sMachinePrinter3) || "tmu220".equals(sMachinePrinter3) || "star".equals(sMachinePrinter3) || "ithaca".equals(sMachinePrinter3) || "surepos".equals(sMachinePrinter3) || "elveskkm".equals(sMachinePrinter3)) {
             config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter3)) {
             config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
@@ -430,7 +447,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
 
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
-        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
+        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "cd5220rus".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
         } else if ("javapos".equals(sMachineDisplay)) {
             config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
@@ -440,15 +457,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         // La bascula
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
-        if ("dialog1".equals(sMachineScale) || "samsungesp".equals(sMachineScale)) {
+        if ("dialog1".equals(sMachineScale) || "samsungesp".equals(sMachineScale) || "tves4149".equals(sMachineScale)) {
             config.setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
         } else {
             config.setProperty("machine.scale", sMachineScale);
         }
 
-        // El scanner
+        // Scanner and Device with PLUs
         String sMachineScanner = comboValue(jcboMachineScanner.getSelectedItem());
-        if ("scanpal2".equals(sMachineScanner)) {
+        if ("scanpal2".equals(sMachineScanner) || "mercury130kz039".equals(sMachineScanner)) {
             config.setProperty("machine.scanner", sMachineScanner + ":" + comboValue(jcboSerialScanner.getSelectedItem()));
         } else {
             config.setProperty("machine.scanner", sMachineScanner);
@@ -1146,7 +1163,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineScannerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScannerActionPerformed
         CardLayout cl = (CardLayout) (m_jScannerParams.getLayout());
 
-        if ("scanpal2".equals(jcboMachineScanner.getSelectedItem())) {
+        if ("scanpal2".equals(jcboMachineScanner.getSelectedItem()) || "mercury130kz039".equals(jcboMachineScanner.getSelectedItem())) {
             cl.show(m_jScannerParams, "comm");
         } else {
             cl.show(m_jScannerParams, "empty");
@@ -1156,7 +1173,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineScaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScaleActionPerformed
         CardLayout cl = (CardLayout) (m_jScaleParams.getLayout());
 
-        if ("dialog1".equals(jcboMachineScale.getSelectedItem()) || "samsungesp".equals(jcboMachineScale.getSelectedItem())) {
+        if ("dialog1".equals(jcboMachineScale.getSelectedItem()) || "samsungesp".equals(jcboMachineScale.getSelectedItem())|| "tves4149".equals(jcboMachineScale.getSelectedItem())) {
             cl.show(m_jScaleParams, "comm");
         } else {
             cl.show(m_jScaleParams, "empty");
@@ -1166,7 +1183,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinter3ActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams3.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter3.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter3.getSelectedItem()) || "star".equals(jcboMachinePrinter3.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter3.getSelectedItem()) || "surepos".equals(jcboMachinePrinter3.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter3.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter3.getSelectedItem()) || "star".equals(jcboMachinePrinter3.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter3.getSelectedItem()) || "surepos".equals(jcboMachinePrinter3.getSelectedItem()) || "shtrihm".equals(jcboMachinePrinter3.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter3.getSelectedItem())) {
             cl.show(m_jPrinterParams3, "comm");
         } else if ("javapos".equals(jcboMachinePrinter3.getSelectedItem())) {
             cl.show(m_jPrinterParams3, "javapos");
@@ -1180,7 +1197,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinter2ActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams2.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter2.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter2.getSelectedItem()) || "star".equals(jcboMachinePrinter2.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter2.getSelectedItem()) || "surepos".equals(jcboMachinePrinter2.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter2.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter2.getSelectedItem()) || "star".equals(jcboMachinePrinter2.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter2.getSelectedItem()) || "surepos".equals(jcboMachinePrinter2.getSelectedItem()) || "shtrihm".equals(jcboMachinePrinter2.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter2.getSelectedItem())) {
             cl.show(m_jPrinterParams2, "comm");
         } else if ("javapos".equals(jcboMachinePrinter2.getSelectedItem())) {
             cl.show(m_jPrinterParams2, "javapos");
@@ -1194,7 +1211,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineDisplayActionPerformed
         CardLayout cl = (CardLayout) (m_jDisplayParams.getLayout());
 
-        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
+        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "cd5220rus".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "comm");
         } else if ("javapos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "javapos");
@@ -1206,7 +1223,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinterActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams1.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter.getSelectedItem()) || "star".equals(jcboMachinePrinter.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter.getSelectedItem()) || "surepos".equals(jcboMachinePrinter.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter.getSelectedItem()) || "star".equals(jcboMachinePrinter.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter.getSelectedItem()) || "surepos".equals(jcboMachinePrinter.getSelectedItem()) || "shtrihm".equals(jcboMachinePrinter.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter.getSelectedItem())) {
             cl.show(m_jPrinterParams1, "comm");
         } else if ("javapos".equals(jcboMachinePrinter.getSelectedItem())) {
             cl.show(m_jPrinterParams1, "javapos");

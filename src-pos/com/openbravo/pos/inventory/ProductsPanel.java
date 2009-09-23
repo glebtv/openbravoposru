@@ -77,25 +77,45 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         return jproductfilter.getComponent();
     }  
     
-    @Override
-    public Component getToolbarExtras() {
-        
+
+    public Component getToolbarExtrasScanPal() {
+
         JButton btnScanPal = new JButton();
         btnScanPal.setText("ScanPal");
         btnScanPal.setVisible(app.getDeviceScanner() != null);
         btnScanPal.addActionListener(new java.awt.event.ActionListener() {
+
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnScanPalActionPerformed(evt);
             }
-        });      
-        
+        });
+
         return btnScanPal;
     }
-    
+
+    public Component getToolbarExtrasMercury130() {
+
+        JButton btnMercury130 = new JButton();
+        btnMercury130.setText("Mercury130");
+        btnMercury130.setVisible(app.getDeviceMercury130() != null);
+        btnMercury130.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMercury130ActionPerformed(evt);
+            }
+        });
+
+        return btnMercury130;
+    }
+  
     private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
   
         JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
-    }  
+    }
+
+    private void btnMercury130ActionPerformed(java.awt.event.ActionEvent evt) {
+        JDlgUploadProductsMercury130.showMessage(this, app.getDeviceMercury130(), bd);
+    }
     
     public String getTitle() {
         return AppLocal.getIntString("Menu.Products");

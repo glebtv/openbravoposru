@@ -71,9 +71,9 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     }
     
     protected void startNavigation() {
-        
+
         if (bd == null) {
-            
+
             // init browsable editable data
             bd = new BrowsableEditableData(getListProvider(), getSaveProvider(), getEditor(), dirty);
 
@@ -87,8 +87,8 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
             // Add the editor
             c = getEditor().getComponent();
             if (c != null) {
-                c.applyComponentOrientation(getComponentOrientation());                
-                container.add(c, BorderLayout.CENTER);            
+                c.applyComponentOrientation(getComponentOrientation());
+                container.add(c, BorderLayout.CENTER);
             }
 
             // el panel este
@@ -96,12 +96,20 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
             if (cr != null) {
                 JListNavigator nl = new JListNavigator(bd);
                 nl.applyComponentOrientation(getComponentOrientation());
-                if (cr != null) nl.setCellRenderer(cr);
+                if (cr != null) {
+                    nl.setCellRenderer(cr);
+                }
                 container.add(nl, java.awt.BorderLayout.LINE_START);
             }
 
             // add toolbar extras
-            c = getToolbarExtras();
+            c = getToolbarExtrasScanPal();
+            if (c != null) {
+                c.applyComponentOrientation(getComponentOrientation());
+                toolbar.add(c);
+            }
+
+            c = getToolbarExtrasMercury130();
             if (c != null) {
                 c.applyComponentOrientation(getComponentOrientation());
                 toolbar.add(c);
@@ -123,7 +131,11 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
         }
     }
     
-    public Component getToolbarExtras() {
+    public Component getToolbarExtrasScanPal() {
+         return null;
+     }
+
+    public Component getToolbarExtrasMercury130() {
         return null;
     }
 
