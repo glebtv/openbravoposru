@@ -56,6 +56,7 @@ import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.util.JRPrinterAWT300;
 import com.openbravo.pos.util.ReportUtils;
+import com.openbravo.pos.util.AltEncrypter;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
@@ -1140,8 +1141,21 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }              
         
         public Object evalScript(String code, ScriptArg... args) throws ScriptException {
-            
+
             ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
+
+            String sDBUser = m_App.getProperties().getProperty("db.user");
+            String sDBPassword = m_App.getProperties().getProperty("db.password");
+            if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
+                AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
+                sDBPassword = cypher.decrypt(sDBPassword.substring(6));
+            }
+
+            script.put("hostname", m_App.getProperties().getProperty("machine.hostname"));
+            script.put("dbURL", m_App.getProperties().getProperty("db.URL"));
+            script.put("dbUser", sDBUser);
+            script.put("dbPassword", sDBPassword);
+
             script.put("ticket", ticket);
             script.put("place", ticketext);
             script.put("taxes", taxcollection);
