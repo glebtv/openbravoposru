@@ -25,6 +25,7 @@ import com.openbravo.pos.printer.javapos.DeviceDisplayJavaPOS;
 import com.openbravo.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import com.openbravo.pos.printer.javapos.DevicePrinterJavaPOS;
 import com.openbravo.pos.printer.printer.DevicePrinterPrinter;
+import com.openbravo.pos.printer.elveskkm.*;
 import com.openbravo.pos.printer.screen.*;
 
 import com.openbravo.pos.util.StringParser;
@@ -165,6 +166,8 @@ public class DeviceTicket {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesSurePOS(), new UnicodeTranslatorSurePOS()));
                 } else if ("plain".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterPlain(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2)));
+                } else if ("elveskkm".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterElvesKKM(sPrinterParam2));
                 } else if ("javapos".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterJavaPOS(sPrinterParam1, sPrinterParam2));
                 }
