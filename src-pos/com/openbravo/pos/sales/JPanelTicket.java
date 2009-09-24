@@ -159,8 +159,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnconfig = new JPanelButtons("Ticket.Buttons", this);
         m_jButtonsExt.add(m_jbtnconfig);           
        
-        // El panel de los productos o de las lineas...        
+        // El panel de los productos o de las lineas...
+        if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
         catcontainer.add(getSouthComponent(), BorderLayout.CENTER);
+        }
         
         // El modelo de impuestos
         senttax = dlSales.getTaxList();

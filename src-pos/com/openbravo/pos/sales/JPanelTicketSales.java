@@ -47,7 +47,7 @@ public class JPanelTicketSales extends JPanelTicket {
     public String getTitle() {
         return null;
     }
-    
+
     protected Component getSouthComponent() {
         m_cat = new JCatalog(dlSales,
                 "true".equals(m_jbtnconfig.getProperty("pricevisible")),
@@ -62,7 +62,9 @@ public class JPanelTicketSales extends JPanelTicket {
     }
 
     protected void resetSouthComponent() {
+                if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
         m_cat.showCatalogPanel(null);
+                }
     }
     
     protected JTicketsBag getJTicketsBag() {
@@ -70,10 +72,12 @@ public class JPanelTicketSales extends JPanelTicket {
     }
     
     @Override
-    public void activate() throws BasicException {      
+    public void activate() throws BasicException {
         super.activate();
+                        if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
         m_cat.loadCatalog();
-    }      
+                        }
+    }   
     
     private class CatalogListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -94,11 +98,14 @@ public class JPanelTicketSales extends JPanelTicket {
                     }
 
                     // Show the accurate catalog panel...
+                        if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
+
                     if (i >= 0) {
                         m_cat.showCatalogPanel(m_oTicket.getLine(i).getProductID());
                     } else {
                         m_cat.showCatalogPanel(null);
                     }
+                        }
                 }
             }
         }  

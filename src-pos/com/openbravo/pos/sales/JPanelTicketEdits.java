@@ -42,7 +42,9 @@ public class JPanelTicketEdits extends JPanelTicket {
     @Override
     public void activate() throws BasicException {      
         super.activate();
+                        if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
         m_catandlines.loadCatalog();
+                        }
     }
 
     public void showCatalog() {
