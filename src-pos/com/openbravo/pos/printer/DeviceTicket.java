@@ -102,6 +102,8 @@ public class DeviceTicket {
                 m_devicedisplay = new DeviceDisplaySurePOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2));
             } else if ("ld200".equals(sDisplayType)) {
                 m_devicedisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorEur());
+            } else if ("cd5220rus".equals(sDisplayType)) {
+                m_devicedisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorRus());
             } else if ("javapos".equals(sDisplayType)) {
                 m_devicedisplay = new DeviceDisplayJavaPOS(sDisplayParam1);
             } else {
