@@ -79,7 +79,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{LOCATIONNAME}]]></textFieldExpression>
 				</textField>
@@ -96,7 +96,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.sumin}]]></textFieldExpression>
 				</textField>
@@ -109,7 +109,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{SUMIN})]]></textFieldExpression>
 				</textField>
@@ -122,7 +122,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.sumout}]]></textFieldExpression>
 				</textField>
@@ -135,7 +135,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.sumdiff}]]></textFieldExpression>
 				</textField>
@@ -148,7 +148,7 @@ ORDER BY LOCATIONS.ID, CATEGORIES.NAME, PRODUCTS.NAME]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
 new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
@@ -162,7 +162,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{SUMDIFF})]]></textFieldExpression>
 				</textField>
@@ -188,7 +188,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.name}]]></textFieldExpression>
 				</textField>
@@ -201,7 +201,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.ref}]]></textFieldExpression>
 				</textField>
@@ -214,7 +214,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{CATEGORYNAME}]]></textFieldExpression>
 				</textField>
@@ -233,7 +233,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.in}]]></textFieldExpression>
 				</textField>
@@ -246,7 +246,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.out}]]></textFieldExpression>
 				</textField>
@@ -259,7 +259,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.diff}]]></textFieldExpression>
 				</textField>
@@ -282,7 +282,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{PARTIALDIFF})]]></textFieldExpression>
 				</textField>
@@ -301,7 +301,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{PARTIALIN})]]></textFieldExpression>
 				</textField>
@@ -314,7 +314,7 @@ new Double(-1.0 * ((Double)$V{SUMOUT}).doubleValue()))]]></textFieldExpression>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
 new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpression>
@@ -339,7 +339,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)  ((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
@@ -352,7 +352,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
@@ -365,7 +365,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[-
 ]]></text>
@@ -395,7 +395,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
@@ -415,7 +415,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{REFERENCE}]]></textFieldExpression>
 			</textField>
@@ -428,7 +428,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAME}]]></textFieldExpression>
 			</textField>
@@ -441,7 +441,7 @@ new Double(-1.0 * ((Double)$V{PARTIALOUT}).doubleValue()))]]></textFieldExpressi
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
 $F{TOTALDIFF})]]></textFieldExpression>
@@ -461,7 +461,7 @@ $F{TOTALDIFF})]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
 new Double(-1.0 * ((Double)$F{TOTALOUT}).doubleValue()))]]></textFieldExpression>
@@ -475,7 +475,7 @@ new Double(-1.0 * ((Double)$F{TOTALOUT}).doubleValue()))]]></textFieldExpression
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(
 $F{TOTALIN})]]></textFieldExpression>
@@ -489,7 +489,7 @@ $F{TOTALIN})]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($F{UNITSIN})]]></textFieldExpression>
 			</textField>
@@ -502,7 +502,7 @@ $F{TOTALIN})]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue(
 new Double(-1.0 * ((Double)$F{UNITSOUT}).doubleValue()))]]></textFieldExpression>
@@ -516,7 +516,7 @@ new Double(-1.0 * ((Double)$F{UNITSOUT}).doubleValue()))]]></textFieldExpression
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($F{UNITSDIFF})]]></textFieldExpression>
 			</textField>
@@ -536,7 +536,7 @@ new Double(-1.0 * ((Double)$F{UNITSOUT}).doubleValue()))]]></textFieldExpression
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -549,7 +549,7 @@ new Double(-1.0 * ((Double)$F{UNITSOUT}).doubleValue()))]]></textFieldExpression
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -562,7 +562,7 @@ new Double(-1.0 * ((Double)$F{UNITSOUT}).doubleValue()))]]></textFieldExpression
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>

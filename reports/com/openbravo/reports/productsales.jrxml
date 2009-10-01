@@ -7,14 +7,14 @@
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[SELECT 
-PRODUCTS.REFERENCE, 
-PRODUCTS.NAME, 
-SUM(TICKETLINES.UNITS) AS UNITS, 
-SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL 
-FROM RECEIPTS, TICKETS, TICKETLINES, PRODUCTS 
+		<![CDATA[SELECT
+PRODUCTS.REFERENCE,
+PRODUCTS.NAME,
+SUM(TICKETLINES.UNITS) AS UNITS,
+SUM(TICKETLINES.UNITS * TICKETLINES.PRICE) AS TOTAL
+FROM RECEIPTS, TICKETS, TICKETLINES, PRODUCTS
 WHERE RECEIPTS.ID = TICKETS.ID AND TICKETS.ID = TICKETLINES.TICKET AND TICKETLINES.PRODUCT = PRODUCTS.ID
-GROUP BY PRODUCTS.REFERENCE, PRODUCTS.NAME 
+GROUP BY PRODUCTS.REFERENCE, PRODUCTS.NAME
 ORDER BY PRODUCTS.NAME]]>
 	</queryString>
 	<field name="REFERENCE" class="java.lang.String"/>
@@ -51,7 +51,7 @@ ORDER BY PRODUCTS.NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
@@ -64,7 +64,7 @@ ORDER BY PRODUCTS.NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
@@ -77,7 +77,7 @@ ORDER BY PRODUCTS.NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
@@ -90,7 +90,7 @@ ORDER BY PRODUCTS.NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[-
 ]]></text>
@@ -133,18 +133,17 @@ ORDER BY PRODUCTS.NAME]]>
 						<categoryExpression><![CDATA[$F{NAME}]]></categoryExpression>
 						<valueExpression><![CDATA[$F{UNITS}]]></valueExpression>
 						<labelExpression><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue(new Double($F{UNITS}.doubleValue()))]]></labelExpression>
-						<itemHyperlink/>
 					</categorySeries>
 					<categorySeries>
 						<seriesExpression><![CDATA[$R{label.total}]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{NAME}]]></categoryExpression>
 						<valueExpression><![CDATA[$F{TOTAL}]]></valueExpression>
 						<labelExpression><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue(new Double($F{TOTAL}.doubleValue()))]]></labelExpression>
-						<itemHyperlink/>
 					</categorySeries>
 				</categoryDataset>
 				<bar3DPlot isShowLabels="true">
 					<plot orientation="Horizontal" labelRotation="-30.0"/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 					<categoryAxisFormat>
 						<axisFormat labelColor="#FFFFFF" tickLabelColor="#000000">
 							<labelFont/>

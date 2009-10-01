@@ -7,16 +7,16 @@
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[SELECT 
+		<![CDATA[SELECT
 CLOSEDCASH.HOST,
 CLOSEDCASH.MONEY,
 CLOSEDCASH.DATEEND,
 PRODUCTS.REFERENCE,
 PRODUCTS.NAME,
 SUM(PRODUCTSOUT.UNITS) AS UNITS,
-SUM(PRODUCTSOUT.UNITS * PRODUCTSOUT.PRICE) AS TOTAL 
-FROM CLOSEDCASH, TICKETS, PRODUCTSOUT LEFT OUTER JOIN PRODUCTS ON PRODUCTSOUT.PRODUCT = PRODUCTS.REFERENCE 
-WHERE CLOSEDCASH.MONEY = TICKETS.MONEY AND TICKETS.TICKETID = PRODUCTSOUT.TICKETID 
+SUM(PRODUCTSOUT.UNITS * PRODUCTSOUT.PRICE) AS TOTAL
+FROM CLOSEDCASH, TICKETS, PRODUCTSOUT LEFT OUTER JOIN PRODUCTS ON PRODUCTSOUT.PRODUCT = PRODUCTS.REFERENCE
+WHERE CLOSEDCASH.MONEY = TICKETS.MONEY AND TICKETS.TICKETID = PRODUCTSOUT.TICKETID
 GROUP BY CLOSEDCASH.HOST, CLOSEDCASH.MONEY, CLOSEDCASH.DATEEND, PRODUCTS.REFERENCE, PRODUCTS.NAME
 ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 	</queryString>
@@ -56,7 +56,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.partialtotal}]]></textFieldExpression>
 				</textField>
@@ -69,7 +69,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.closeddate}]]></textFieldExpression>
 				</textField>
@@ -82,7 +82,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{NAME} == null ? $R{label.noproduct} : $F{NAME}]]></textFieldExpression>
 				</textField>
@@ -95,7 +95,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{REFERENCE} == null ? $R{label.noreference} : $F{REFERENCE}]]></textFieldExpression>
 				</textField>
@@ -108,7 +108,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.units}]]></textFieldExpression>
 				</textField>
@@ -121,7 +121,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.host}]]></textFieldExpression>
 				</textField>
@@ -144,7 +144,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($V{BIGUNITS})]]></textFieldExpression>
 				</textField>
@@ -157,7 +157,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{label.total}]]></textFieldExpression>
 				</textField>
@@ -170,7 +170,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{BIGTOTAL})]]></textFieldExpression>
 				</textField>
@@ -199,7 +199,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($V{PARTIALTOTAL})]]></textFieldExpression>
 				</textField>
@@ -212,7 +212,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<font fontName="Dialog" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($V{PARTIALUNITS})]]></textFieldExpression>
 				</textField>
@@ -233,7 +233,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.TIMESTAMP.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
@@ -246,7 +246,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.TIMESTAMP.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
@@ -259,7 +259,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[-
 ]]></text>
@@ -289,7 +289,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
@@ -312,7 +312,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.TIMESTAMP.formatValue($F{DATEEND})]]></textFieldExpression>
 			</textField>
@@ -325,7 +325,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DOUBLE.formatValue($F{UNITS})]]></textFieldExpression>
 			</textField>
@@ -338,7 +338,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{HOST}]]></textFieldExpression>
 			</textField>
@@ -351,7 +351,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.CURRENCY.formatValue($F{TOTAL})]]></textFieldExpression>
 			</textField>
@@ -377,7 +377,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -390,7 +390,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -403,7 +403,7 @@ ORDER BY PRODUCTS.REFERENCE, CLOSEDCASH.HOST, CLOSEDCASH.DATEEND]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>

@@ -8,7 +8,7 @@
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT TICKETS.PERSON, TICKETS.HOST, SUM(PRODUCTSOUT.UNITS * PRODUCTSOUT.PRICE) AS TOTAL
-FROM TICKETS, PRODUCTSOUT 
+FROM TICKETS, PRODUCTSOUT
 WHERE TICKETS.TICKETID = PRODUCTSOUT.TICKETID
 
 GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
@@ -47,7 +47,7 @@ GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{label.title}]]></textFieldExpression>
 			</textField>
@@ -60,7 +60,7 @@ GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[1])]]></textFieldExpression>
 			</textField>
@@ -73,7 +73,7 @@ GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Dialog" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[com.openbravo.format.Formats.DATE.formatValue((java.util.Date)((Object[])((Object[])$P{ARG})[0])[3])]]></textFieldExpression>
 			</textField>
@@ -128,11 +128,11 @@ GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
 						<seriesExpression><![CDATA[$F{NAME}]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{HOST}]]></categoryExpression>
 						<valueExpression><![CDATA[$F{TOTAL}]]></valueExpression>
-						<itemHyperlink/>
 					</categorySeries>
 				</categoryDataset>
 				<bar3DPlot isShowLabels="true">
 					<plot/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 					<categoryAxisLabelExpression><![CDATA[$R{label.axisx}]]></categoryAxisLabelExpression>
 					<categoryAxisFormat>
 						<axisFormat>
