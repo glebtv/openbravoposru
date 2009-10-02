@@ -1,0 +1,46 @@
+import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.data.loader.Session;
+import java.util.Properties;
+
+    //Подключение к базе данных
+    Session session = new Session(dbURL, dbUser, dbPassword);
+    DataLogicSales logicsale = new DataLogicSales();
+    logicsale.init(session);
+    DataLogicSystem logicsystem = new DataLogicSystem();
+    logicsystem.init(session);
+
+    //Подключение к ресурсу с параметрами POS терминала
+    Properties p = logicsystem.getResourceAsProperties(hostname + "/properties");
+
+    //Получение номера склада установленного текущим для данного POS терминала
+    String loc = p.getProperty("location");
+  
+    //Получение кода товара из выбранной строки чека
+    product = line.getProductID();
+
+    //Получение количества выбранного товара на текущем складе в базе данных Openbravo POS    
+    units = logicsale.findProductStock(loc,product,null);
+
+    //Подсчёт количества товара данного наименования уже помещённого в чек
+    multiply = 0;
+    for (int i= 0; i < ticket.getLinesCount(); i++) {
+         row = ticket.getLine(i);
+         if (row.getProductID() == product) {
+             multiply = multiply + row.getMultiply();
+         }
+    }
+    
+    //Расчёт разницы между товарам имеющемся на складе и товаром запрашиваемым в данном чеки
+    diff = units - line.getMultiply() - multiply;
+
+    //Если полученное значение разницы отрицательно, значит товаром на складе недостаточно и добавление выбранного товара в чек невозможно.
+    //Если значение разницы осталось положительным, то товара на складе достаточно и он может быть добавлен в чек.
+    if (diff < 0.0) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Недостаточное количество " + line.getProductName() + " на складе № " + loc + ".", "Остаток", JOptionPane.WARNING_MESSAGE);
+        return "Cancel";
+    } else {
+        return null;
+    }
+

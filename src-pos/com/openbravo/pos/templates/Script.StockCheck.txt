@@ -1,0 +1,34 @@
+import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.data.loader.Session;
+import java.util.Properties;
+
+    //Подключение к базе данных
+    Session session = new Session(dbURL, dbUser, dbPassword);
+    DataLogicSales logicsale = new DataLogicSales();
+    logicsale.init(session);
+    DataLogicSystem logicsystem = new DataLogicSystem();
+    logicsystem.init(session);
+
+    //Подключение к ресурсу с параметрами POS терминала
+    Properties p = logicsystem.getResourceAsProperties(hostname + "/properties");
+
+    //Получение номера склада установленного текущим для данного POS терминала
+    String loc = p.getProperty("location");
+
+    // Получение порядкового номера позиции выбранной в чеки
+    index = sales.getSelectedIndex();
+    
+    // Получение данных по строке чека согласнно порядкого номера позиции
+    row = ticket.getLine(index);
+
+    //Получение кода товара в выбранной позиции
+    product = row.getProductID();
+
+    //Получение количества выбранного товара на текущем складе в базе данных Openbravo POS
+    units = logicsale.findProductStock(loc,product,null);
+
+    //Вывод диалогового окна с сообщениием об остатке по выбраному товару на текущем складе
+    JOptionPane.showMessageDialog(null, "По " + row.getProductName() + " остаток = " + units +" на складе № " + loc, "Остатки", JOptionPane.PLAIN_MESSAGE);
+

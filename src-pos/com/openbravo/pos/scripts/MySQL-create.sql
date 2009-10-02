@@ -103,25 +103,11 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('27', 'coin.5cent', 1, 
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('28', 'coin.2cent', 1, $FILE{/com/openbravo/pos/templates/coin.2cent.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('29', 'coin.1cent', 1, $FILE{/com/openbravo/pos/templates/coin.1cent.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('30', 'Printer.PartialCash', 0, $FILE{/com/openbravo/pos/templates/Printer.PartialCash.xml});
--- Nord Trading Edition for 2.30
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE000', 'coin.1tenge', 1, $FILE{/com/openbravo/pos/templates/coin.1tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE001', 'coin.2tenge', 1, $FILE{/com/openbravo/pos/templates/coin.2tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE002', 'coin.5tenge', 1, $FILE{/com/openbravo/pos/templates/coin.5tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE003', 'coin.10tenge', 1, $FILE{/com/openbravo/pos/templates/coin.10tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE004', 'coin.20tenge', 1, $FILE{/com/openbravo/pos/templates/coin.20tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE005', 'coin.50tenge', 1, $FILE{/com/openbravo/pos/templates/coin.50tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE006', 'coin.100tenge', 1, $FILE{/com/openbravo/pos/templates/coin.100tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE007', 'banknote.200tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.200tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE008', 'banknote.500tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.500tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE009', 'banknote.1000tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.1000tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE010', 'banknote.2000tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.2000tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE011', 'banknote.5000tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.5000tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE012', 'banknote.10000tenge', 1, $FILE{/com/openbravo/pos/templates/banknote.10000tenge.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE100', 'Support.Link', 0, $FILE{/com/openbravo/pos/templates/Support.Link.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE101', 'Support.Logo', 1, $FILE{/com/openbravo/images/supportby.png});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE200', 'Script.Discounts', 0, $FILE{/com/openbravo/pos/templates/Script.Discounts.txt});
-INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('NTE201', 'Script.StockCurrent', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrent.txt});
--- end
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90001', 'Script.StockCheck', 0, $FILE{/com/openbravo/pos/templates/Script.StockCheck.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90002', 'Script.StockCurrentAdd', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentAdd.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90003', 'Script.StockCurrentSet', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentSet.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90004', 'icon.stock', 1, $FILE{/com/openbravo/pos/templates/applications-other.png});
+
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
@@ -198,10 +184,9 @@ CREATE TABLE TAXES (
     CONSTRAINT TAXES_TAXES_FK FOREIGN KEY (PARENTID) REFERENCES TAXES(ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX TAXES_NAME_INX ON TAXES(NAME);
--- Nord Trading Edition for 2.30
 INSERT INTO TAXES(ID, NAME, CATEGORY, CUSTCATEGORY, PARENTID, RATE, RATECASCADE, RATEORDER) VALUES ('000', 'Без НДС', '000', NULL, NULL, 0, 0, NULL);
-INSERT INTO TAXES(ID, NAME, CATEGORY, CUSTCATEGORY, PARENTID, RATE, RATECASCADE, RATEORDER) VALUES ('001', 'НДС', '001', NULL, NULL, 0.12, 0, NULL);
--- end
+INSERT INTO TAXES(ID, NAME, CATEGORY, CUSTCATEGORY, PARENTID, RATE, RATECASCADE, RATEORDER) VALUES ('001', 'НДС', '001', NULL, NULL, 0.10, 0, NULL);
+
 CREATE TABLE ATTRIBUTE (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
@@ -448,7 +433,6 @@ CREATE TABLE PLACES (
     CONSTRAINT PLACES_FK_1 FOREIGN KEY (FLOOR) REFERENCES FLOORS(ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX PLACES_NAME_INX ON PLACES(NAME);
--- Nord Trading Edition for 2.30
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('1', 'Стол 1', 133, 151, '0');
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('2', 'Стол 2', 532, 151, '0');
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('3', 'Стол 3', 133, 264, '0');
@@ -459,7 +443,7 @@ INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('7', 'Стол 7', 133, 377, '
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('8', 'Стол 8', 266, 377, '0');
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('9', 'Стол 9', 399, 377, '0');
 INSERT INTO PLACES(ID, NAME, X, Y, FLOOR) VALUES ('10', 'Стол 10', 532, 377, '0');
--- end
+
 CREATE TABLE RESERVATIONS (
     ID VARCHAR(255) NOT NULL,
     CREATED DATETIME NOT NULL,

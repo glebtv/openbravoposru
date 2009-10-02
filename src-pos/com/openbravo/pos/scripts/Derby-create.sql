@@ -96,6 +96,10 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('27', 'coin.5cent', 1, 
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('28', 'coin.2cent', 1, $FILE{/com/openbravo/pos/templates/coin.2cent.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('29', 'coin.1cent', 1, $FILE{/com/openbravo/pos/templates/coin.1cent.png});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('30', 'Printer.PartialCash', 0, $FILE{/com/openbravo/pos/templates/Printer.PartialCash.xml});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90001', 'Script.StockCheck', 0, $FILE{/com/openbravo/pos/templates/Script.StockCheck.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90002', 'Script.StockCurrentAdd', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentAdd.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90003', 'Script.StockCurrentSet', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentSet.txt});
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90004', 'icon.stock', 1, $FILE{/com/openbravo/pos/templates/applications-other.png});
 
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR(256) NOT NULL,

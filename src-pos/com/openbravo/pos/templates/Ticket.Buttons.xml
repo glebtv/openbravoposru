@@ -21,7 +21,8 @@
  -->
 <configuration>
     <button key="button.print" titlekey="button.print" template="Printer.TicketPreview"/>
-    <button key="button.opendrawer" titlekey="button.opendrawer" template="Printer.OpenDrawer"/>
+    <!-- <button key="button.opendrawer" titlekey="button.opendrawer" template="Printer.OpenDrawer"/> -->
+    <button key="button.infostock" image="icon.stock" name="button.infostock" code="Script.StockCheck"/>
     <!-- <event key="ticket.change" code="event.change"/> -->
     <!-- <event key="ticket.addline" code="event.addline"/> -->
     <!-- <event key="ticket.removeline" code="event.removeline"/> -->
@@ -29,9 +30,11 @@
     <!-- <event key="ticket.show" code="event.show"/> -->
     <!-- <event key="ticket.total" code="event.total"/> -->
     <!-- <event key="ticket.close" code="event.close"/> -->
+    <event key="ticket.addline" code="Script.StockCurrentSet"/>
+    <event key="ticket.setline" code="Script.StockCurrentAdd"/>
     <img-width value="64"/>
     <img-height value="54"/>
-    <cat-height value="300" />
+    <cat-height value="100" />
     <taxesincluded value="false"/>   
     <!-- <printselected value="true"/> -->    
     <!-- <taxcategoryid value="001"/> -->
