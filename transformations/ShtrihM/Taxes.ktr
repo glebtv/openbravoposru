@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>Taxes</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <directory>&#47;</directory>
+    <parameters>
+    </parameters>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <step_performance_table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+      <size_limit_lines/>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>admin</modified_user>
+  <modified_date>2009&#47;10&#47;12 12:07:01.000</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>Taxes
+---------------------
+TAXES_ID &lt;--&gt; ID
+TAXES_NAME &lt;--&gt; NAME
+TAXES_TAXCAT_ID &lt;--&gt; CATEGORY
+TAXES_RATE &lt;--&gt; RATE
+defaultFalse &lt;--&gt; RATECASCADE</note>
+      <xloc>380</xloc>
+      <yloc>428</yloc>
+      <width>192</width>
+      <heigth>101</heigth>
+    </notepad>
+    <notepad>
+      <note>СИНХРОНИЗАЦИЯ ВИДОВ НАЛОГОВ</note>
+      <xloc>173</xloc>
+      <yloc>26</yloc>
+      <width>204</width>
+      <heigth>23</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>openbravoposDB</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>openbravopossync</database>
+    <port>3306</port>
+    <username>openbravo</username>
+    <password>Encrypted 2be98afc86aa7f28bbb1ca072cc93b9d5</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.characterEncoding</code><attribute>utf8</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.characterSetResults</code><attribute>utf8</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useUnicode</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>[4.2.7] Переименовать значения</from><to>[4.2.8] Внести&#47;Обновить TAXES</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.6] Подготовить данные</from><to>[4.2.7] Переименовать значения</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.4] Убрать символ &quot;*&quot;</from><to>[4.2.5] Объеденить потоки</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.3] Убрать символ &quot;+&quot;</from><to>[4.2.5] Объеденить потоки</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.1] Получить данные о Категориях налогов</from><to>[4.2.3] Убрать символ &quot;+&quot;</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.2] Получить данные о Видах налогов</from><to>[4.2.4] Убрать символ &quot;*&quot;</to><enabled>Y</enabled> </hop>  <hop> <from>[4.2.5] Объеденить потоки</from><to>[4.2.6] Подготовить данные</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>[4.2.1] Получить данные о Категориях налогов</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <passing_through_fields>N</passing_through_fields>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure/>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>N</header>
+    <nr_headerlines>2</nr_headerlines>
+    <footer>N</footer>
+    <nr_footerlines>1</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>2</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>2</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field/>
+    <format>mixed</format>
+    <encoding>windows-1251</encoding>
+    <add_to_result_filenames>Y</add_to_result_filenames>
+    <file>
+      <name>${DIR}&#47;IN&#47;${FILEIN}.spr</name>
+      <filemask/>
+      <file_required>N</file_required>
+      <type>CSV</type>
+      <compression>None</compression>
+    </file>
+    <filters>
+      <filter>
+        <filter_string>Base64: Iw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: IQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: QA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: JQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: 4oSW</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Xg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: KQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: fg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Jg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: KA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Kg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Ww==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Pw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: fA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: JCQk</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: MA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: MQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Mg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Mw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: NA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: NQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Ng==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Nw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: OA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: OQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+    </filters>
+    <fields>
+      <field>
+        <name>Field1</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>2</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field2</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>100</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field3</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>100</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field4</name>
+        <type>Number</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field5</name>
+        <type>Number</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>ru_ru</date_format_locale>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>139</xloc>
+      <yloc>86</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.2] Получить данные о Видах налогов</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <passing_through_fields>N</passing_through_fields>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure/>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>N</header>
+    <nr_headerlines>2</nr_headerlines>
+    <footer>N</footer>
+    <nr_footerlines>1</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>2</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>2</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field/>
+    <format>mixed</format>
+    <encoding>windows-1251</encoding>
+    <add_to_result_filenames>Y</add_to_result_filenames>
+    <file>
+      <name>${DIR}&#47;IN&#47;${FILEIN}.spr</name>
+      <filemask/>
+      <file_required>N</file_required>
+      <type>CSV</type>
+      <compression>None</compression>
+    </file>
+    <filters>
+      <filter>
+        <filter_string>Base64: Iw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: IQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: QA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: JQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: 4oSW</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Xg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: KQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: fg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Jg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: KA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Kw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Ww==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Pw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: fA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: JCQk</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: MA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: MQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Mg==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Mw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: NA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: NQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Ng==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: Nw==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: OA==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+      <filter>
+        <filter_string>Base64: OQ==</filter_string>        <filter_position>0</filter_position>        <filter_is_last_line>N</filter_is_last_line>        <filter_is_positive>N</filter_is_positive>      </filter>
+    </filters>
+    <fields>
+      <field>
+        <name>Field1</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>8</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field2</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>100</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field3</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Field4</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>ru_ru</date_format_locale>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>401</xloc>
+      <yloc>86</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.3] Убрать символ &quot;+&quot;</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>Field1</in_stream_name>
+        <out_stream_name/>
+        <use_regex>no</use_regex>
+        <replace_string>+</replace_string>
+        <replace_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>139</xloc>
+      <yloc>165</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.4] Убрать символ &quot;*&quot;</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>Field1</in_stream_name>
+        <out_stream_name/>
+        <use_regex>no</use_regex>
+        <replace_string>*</replace_string>
+        <replace_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>402</xloc>
+      <yloc>165</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.5] Объеденить потоки</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<join_type>INNER</join_type>
+<step1>[4.2.4] Убрать символ &quot;*&quot;</step1>
+<step2>[4.2.3] Убрать символ &quot;+&quot;</step2>
+    <keys_1>
+      <key>Field4</key>
+    </keys_1>
+    <keys_2>
+      <key>Field1</key>
+    </keys_2>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>259</xloc>
+      <yloc>266</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.6] Подготовить данные</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;Script here
+
+var TAXES_ID = Field1 + Field3 + Field4;
+var TAXES_NAME = Field2_1 + &quot; [&quot; + TAXES_ID + &quot;]&quot;;
+var TAXES_RATE = Field4_1&#47;100;
+var defaultFalse = 0;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>TAXES_ID</name>
+        <rename>TAXES_ID</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>TAXES_NAME</name>
+        <rename>TAXES_NAME</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>TAXES_RATE</name>
+        <rename>TAXES_RATE</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>defaultFalse</name>
+        <rename>defaultFalse</rename>
+        <type>Integer</type>
+        <length>1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>259</xloc>
+      <yloc>344</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.7] Переименовать значения</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>TAXES_ID</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TAXES_NAME</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>defaultFalse</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>Field1</name>
+        <rename>TAXES_TAXCAT_ID</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TAXES_RATE</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+      <meta>        <name>TAXES_RATE</name>
+        <rename>TAXES_RATE</rename>
+        <type>Number</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>#0.000</conversion_mask>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>259</xloc>
+      <yloc>421</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>[4.2.8] Внести&#47;Обновить TAXES</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>openbravoposDB</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>TAXES</table>
+      <key>
+        <name>TAXES_ID</name>
+        <field>ID</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>ID</name>
+        <rename>TAXES_ID</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>NAME</name>
+        <rename>TAXES_NAME</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>CATEGORY</name>
+        <rename>TAXES_TAXCAT_ID</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>RATE</name>
+        <rename>TAXES_RATE</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>RATECASCADE</name>
+        <rename>defaultFalse</rename>
+        <update>N</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>256</xloc>
+      <yloc>494</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>
