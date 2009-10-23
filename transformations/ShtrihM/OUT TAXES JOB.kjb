@@ -98,8 +98,8 @@
       <name>[6.2] Выгрузить Виды налогов</name>
       <description>Transformation</description>
       <type>TRANS</type>
-      <filename>${Internal.Job.Filename.Directory}&#47;OUT Tax.ktr</filename>
-      <transname>OUT Tax</transname>
+      <filename>${Internal.Job.Filename.Directory}&#47;OUT Taxes.ktr</filename>
+      <transname>OUT Taxes</transname>
       <directory>&#47;ShtrihM</directory>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>

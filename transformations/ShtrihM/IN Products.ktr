@@ -100,11 +100,11 @@ PRODUCT_UNITS &lt;--&gt; UNITS</note>
   </notepads>
   <connection>
     <name>openbravoposDB</name>
-    <server>localhost</server>
+    <server/>
     <type>GENERIC</type>
     <access>Native</access>
-    <database>openbravopossync</database>
-    <port>3306</port>
+    <database/>
+    <port>1521</port>
     <username>${db.user}</username>
     <password>${db.password}</password>
     <servername/>
@@ -116,14 +116,14 @@ PRODUCT_UNITS &lt;--&gt; UNITS</note>
       <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
       <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
       <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
     </attributes>
   </connection>
   <order>
-  <hop> <from>[11.26] Внести&#47;Обновить PRODUCTS_CAT</from><to>[11.27] Внести&#47;Обновить STOCKCURRENT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.25] Внести&#47;Обновить PRODUCTS</from><to>[11.26] Внести&#47;Обновить PRODUCTS_CAT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.5] Фильтровать строки</from><to>[11.6] Не товарная позиция</to><enabled>Y</enabled> </hop>  <hop> <from>[11.18] Сортировать строки по PRODUCT_REF</from><to>[11.20] Выбрать уникальные строки по PRODUCT_REF</to><enabled>Y</enabled> </hop>  <hop> <from>[11.5] Фильтровать строки</from><to>[11.7] Переименовать значения</to><enabled>Y</enabled> </hop>  <hop> <from>[11.4] Установить формат полей</from><to>[11.5] Фильтровать строки</to><enabled>Y</enabled> </hop>  <hop> <from>[11.16] Сортировать строки по PRODUCT_CODE</from><to>[11.17] Выбрать уникальные строки по PRODUCT_CODE</to><enabled>Y</enabled> </hop>  <hop> <from>[11.10] Получить данные из TAXCATEGORIES</from><to>[11.12] Сортировать по ID</to><enabled>Y</enabled> </hop>  <hop> <from>[11.12] Сортировать по ID</from><to>[11.13] Объединить с значениями налоговых ставок</to><enabled>Y</enabled> </hop>  <hop> <from>[11.11] Сортировать по PRODUCT_TAX_CAT_ID</from><to>[11.13] Объединить с значениями налоговых ставок</to><enabled>Y</enabled> </hop>  <hop> <from>[11.9] Подготовить данные</from><to>[11.11] Сортировать по PRODUCT_TAX_CAT_ID</to><enabled>Y</enabled> </hop>  <hop> <from>[11.13] Объединить с значениями налоговых ставок</from><to>[11.14] Вычислить стоимость реализации без налога</to><enabled>Y</enabled> </hop>  <hop> <from>[11.3] Убрать &quot; &quot; из ячеек данных</from><to>[11.4] Установить формат полей</to><enabled>Y</enabled> </hop>  <hop> <from>[11.14] Вычислить стоимость реализации без налога</from><to>[11.15] Установить формат поля PRODUCT_PRICESELL</to><enabled>Y</enabled> </hop>  <hop> <from>[11.15] Установить формат поля PRODUCT_PRICESELL</from><to>[11.16] Сортировать строки по PRODUCT_CODE</to><enabled>Y</enabled> </hop>  <hop> <from>[11.17] Выбрать уникальные строки по PRODUCT_CODE</from><to>[11.18] Сортировать строки по PRODUCT_REF</to><enabled>Y</enabled> </hop>  <hop> <from>[11.19] Получить данные из STOCKCURRENT</from><to>[11.21] Сортировать по PRODUCT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.21] Сортировать по PRODUCT</from><to>[11.22] Объединить с значениями остатков</to><enabled>Y</enabled> </hop>  <hop> <from>[11.20] Выбрать уникальные строки по PRODUCT_REF</from><to>[11.22] Объединить с значениями остатков</to><enabled>Y</enabled> </hop>  <hop> <from>[11.22] Объединить с значениями остатков</from><to>[11.23] Если $$$ADD увеличить значение PRODUCT_UNITS на UNITS</to><enabled>Y</enabled> </hop>  <hop> <from>[11.1] Очистить PRODUCTS_CAT</from><to>[11.2] Получить данные о Товарах</to><enabled>Y</enabled> </hop>  <hop> <from>[11.2] Получить данные о Товарах</from><to>[11.3] Убрать &quot; &quot; из ячеек данных</to><enabled>Y</enabled> </hop>  <hop> <from>[11.7] Переименовать значения</from><to>[11.8] Получить значения переменных ${CMD} и ${FILE}</to><enabled>Y</enabled> </hop>  <hop> <from>[11.8] Получить значения переменных ${CMD} и ${FILE}</from><to>[11.9] Подготовить данные</to><enabled>Y</enabled> </hop>  <hop> <from>[11.23] Если $$$ADD увеличить значение PRODUCT_UNITS на UNITS</from><to>[11.24] Удалить лишние поля</to><enabled>Y</enabled> </hop>  <hop> <from>[11.24] Удалить лишние поля</from><to>[11.25] Внести&#47;Обновить PRODUCTS</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>[11.26] Внести&#47;Обновить PRODUCTS_CAT</from><to>[11.27] Внести&#47;Обновить STOCKCURRENT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.25] Внести&#47;Обновить PRODUCTS</from><to>[11.26] Внести&#47;Обновить PRODUCTS_CAT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.5] Фильтровать строки</from><to>[11.6] Не товарная позиция</to><enabled>Y</enabled> </hop>  <hop> <from>[11.18] Сортировать строки по PRODUCT_REF</from><to>[11.20] Выбрать уникальные строки по PRODUCT_REF</to><enabled>Y</enabled> </hop>  <hop> <from>[11.5] Фильтровать строки</from><to>[11.7] Переименовать поля</to><enabled>Y</enabled> </hop>  <hop> <from>[11.4] Установить формат полей</from><to>[11.5] Фильтровать строки</to><enabled>Y</enabled> </hop>  <hop> <from>[11.16] Сортировать строки по PRODUCT_CODE</from><to>[11.17] Выбрать уникальные строки по PRODUCT_CODE</to><enabled>Y</enabled> </hop>  <hop> <from>[11.10] Получить данные из TAXCATEGORIES</from><to>[11.12] Сортировать по ID</to><enabled>Y</enabled> </hop>  <hop> <from>[11.12] Сортировать по ID</from><to>[11.13] Объединить с значениями налоговых ставок</to><enabled>Y</enabled> </hop>  <hop> <from>[11.11] Сортировать по PRODUCT_TAX_CAT_ID</from><to>[11.13] Объединить с значениями налоговых ставок</to><enabled>Y</enabled> </hop>  <hop> <from>[11.9] Подготовить данные</from><to>[11.11] Сортировать по PRODUCT_TAX_CAT_ID</to><enabled>Y</enabled> </hop>  <hop> <from>[11.13] Объединить с значениями налоговых ставок</from><to>[11.14] Вычислить стоимость реализации без налога</to><enabled>Y</enabled> </hop>  <hop> <from>[11.3] Убрать &quot; &quot; из ячеек данных</from><to>[11.4] Установить формат полей</to><enabled>Y</enabled> </hop>  <hop> <from>[11.14] Вычислить стоимость реализации без налога</from><to>[11.15] Установить формат поля PRODUCT_PRICESELL</to><enabled>Y</enabled> </hop>  <hop> <from>[11.15] Установить формат поля PRODUCT_PRICESELL</from><to>[11.16] Сортировать строки по PRODUCT_CODE</to><enabled>Y</enabled> </hop>  <hop> <from>[11.17] Выбрать уникальные строки по PRODUCT_CODE</from><to>[11.18] Сортировать строки по PRODUCT_REF</to><enabled>Y</enabled> </hop>  <hop> <from>[11.19] Получить данные из STOCKCURRENT</from><to>[11.21] Сортировать по PRODUCT</to><enabled>Y</enabled> </hop>  <hop> <from>[11.21] Сортировать по PRODUCT</from><to>[11.22] Объединить с значениями остатков</to><enabled>Y</enabled> </hop>  <hop> <from>[11.20] Выбрать уникальные строки по PRODUCT_REF</from><to>[11.22] Объединить с значениями остатков</to><enabled>Y</enabled> </hop>  <hop> <from>[11.22] Объединить с значениями остатков</from><to>[11.23] Если $$$ADD увеличить значение PRODUCT_UNITS на UNITS</to><enabled>Y</enabled> </hop>  <hop> <from>[11.1] Очистить PRODUCTS_CAT</from><to>[11.2] Получить данные о Товарах</to><enabled>Y</enabled> </hop>  <hop> <from>[11.2] Получить данные о Товарах</from><to>[11.3] Убрать &quot; &quot; из ячеек данных</to><enabled>Y</enabled> </hop>  <hop> <from>[11.7] Переименовать поля</from><to>[11.8] Получить значения переменных ${CMD} и ${FILE}</to><enabled>Y</enabled> </hop>  <hop> <from>[11.8] Получить значения переменных ${CMD} и ${FILE}</from><to>[11.9] Подготовить данные</to><enabled>Y</enabled> </hop>  <hop> <from>[11.23] Если $$$ADD увеличить значение PRODUCT_UNITS на UNITS</from><to>[11.24] Удалить лишние поля</to><enabled>Y</enabled> </hop>  <hop> <from>[11.24] Удалить лишние поля</from><to>[11.25] Внести&#47;Обновить PRODUCTS</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>[11.10] Получить данные из TAXCATEGORIES</name>
     <type>TableInput</type>
@@ -1419,7 +1419,7 @@ Field17.setValue(trim(Field17.getString()));
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>[11.7] Переименовать значения</send_true_to>
+<send_true_to>[11.7] Переименовать поля</send_true_to>
 <send_false_to>[11.6] Не товарная позиция</send_false_to>
     <compare>
 <condition>
@@ -1456,7 +1456,7 @@ Field17.setValue(trim(Field17.getString()));
     </step>
 
   <step>
-    <name>[11.7] Переименовать значения</name>
+    <name>[11.7] Переименовать поля</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>

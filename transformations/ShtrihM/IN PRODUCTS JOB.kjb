@@ -5,7 +5,7 @@
     <extended_description/>
     <job_version>1.00</job_version>
     <job_status>2</job_status>
-  <directory>&#47;ShtrihM</directory>
+  <directory>&#47;</directory>
   <created_user>admin</created_user>
   <created_date>2009&#47;05&#47;25 15:35:53.000</created_date>
   <modified_user>admin</modified_user>
@@ -73,8 +73,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>295</xloc>
-      <yloc>621</yloc>
+      <xloc>296</xloc>
+      <yloc>622</yloc>
       </entry>
     <entry>
       <name>[5] Проверить содержание файла ${FILE}.SPR</name>
@@ -121,19 +121,19 @@
       <type>SPECIAL</type>
       <start>Y</start>
       <dummy>N</dummy>
-      <repeat>Y</repeat>
-      <schedulerType>1</schedulerType>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
       <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>2</intervalMinutes>
-      <hour>12</hour>
+      <intervalMinutes>10</intervalMinutes>
+      <hour>18</hour>
       <minutes>0</minutes>
       <weekDay>1</weekDay>
       <DayOfMonth>1</DayOfMonth>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>295</xloc>
-      <yloc>29</yloc>
+      <xloc>292</xloc>
+      <yloc>35</yloc>
       </entry>
     <entry>
       <name>[6] Выполнить Product Categories</name>
