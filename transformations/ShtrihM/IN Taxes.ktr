@@ -75,11 +75,11 @@ defaultFalse = RATECASCADE</note>
   </notepads>
   <connection>
     <name>openbravoposDB</name>
-    <server>localhost</server>
+    <server/>
     <type>GENERIC</type>
     <access>Native</access>
-    <database>openbravopossync</database>
-    <port>3306</port>
+    <database/>
+    <port>1521</port>
     <username>${db.user}</username>
     <password>${db.password}</password>
     <servername/>
@@ -91,7 +91,7 @@ defaultFalse = RATECASCADE</note>
       <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1521</attribute></attribute>
       <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
       <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>N</attribute></attribute>
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
@@ -114,7 +114,7 @@ defaultFalse = RATECASCADE</note>
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>&#47;&#47;Script here
 
-var TAXES_ID = Field1 + Field3 + Field4;
+var TAXES_ID = Field1 + Field4;
 var TAXES_NAME = Field2_1 + &quot; [&quot; + TAXES_ID + &quot;]&quot;;
 var TAXES_RATE = Field4_1&#47;100;
 var defaultFalse = 0;</jsScript_script>
