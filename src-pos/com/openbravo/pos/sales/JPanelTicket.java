@@ -72,11 +72,9 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
-/**
- *
- * @author adrianromero
- */
 public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFactoryApp, TicketsEditor {
 
     // Variable numerica
@@ -141,6 +139,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_ticketlines = new JTicketLines(dlSystem.getResourceAsXML("Ticket.Line"));
         m_jPanelCentral.add(m_ticketlines, java.awt.BorderLayout.CENTER);
+
+        m_ticketlines.addListSelectionListener(new CatalogSelectionListener());
 
         m_TTP = new TicketParser(m_App.getDeviceTicket(), dlSystem);
 
@@ -415,7 +415,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             // event receipt
             executeEventAndRefresh("ticket.change");
 
-            m_jImage.setImage(null);
         }
     }
 
@@ -529,13 +528,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else {
             // No es un producto que se pese o no hay balanza
             incProduct(1.0, prod);
-        }
-
-        // DISPLAY THE PICTURE OF THE CURRENTLY SCANNED PRODUCT IF IT EXISTS
-        if (prod.getImage() != null) {
-            m_jImage.setImage(prod.getImage());
-        } else {
-            m_jImage.setImage(null);
         }
     }
 
@@ -1147,6 +1139,30 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
+
+    private class CatalogSelectionListener implements ListSelectionListener {
+
+        public void valueChanged(ListSelectionEvent e) {
+
+            if (!e.getValueIsAdjusting()) {
+                int i = m_ticketlines.getSelectedIndex();
+
+                if (i >= 0) {
+                    try {
+                        ProductInfoExt prod = JPanelTicket.this.dlSales.getProductInfo(m_oTicket.getLine(i).getProductID());
+                        if (prod.getImage() != null) {
+                            m_jImage.setImage(prod.getImage());
+                        } else {
+                            m_jImage.setImage(null);
+                        }
+                    } catch (BasicException ex) {
+                        Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1612,39 +1628,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
-
+        
         m_ticketlines.selectionUp();
-
-        TicketLineInfo currentline = new TicketLineInfo(m_oTicket.getLine(m_ticketlines.getSelectedIndex()));
-        try {
-            ProductInfoExt prod = dlSales.getProductInfo(currentline.getProductID());
-            if (prod.getImage() != null) {
-                m_jImage.setImage(prod.getImage());
-            } else {
-                m_jImage.setImage(null);
-            }
-        } catch (BasicException ex) {
-            // remove this line if you have compilation error
-            Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_m_jUpActionPerformed
 
     private void m_jDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDownActionPerformed
 
         m_ticketlines.selectionDown();
-
-        TicketLineInfo currentline = new TicketLineInfo(m_oTicket.getLine(m_ticketlines.getSelectedIndex()));
-        try {
-            ProductInfoExt prod = dlSales.getProductInfo(currentline.getProductID());
-            if (prod.getImage() != null) {
-                m_jImage.setImage(prod.getImage());
-            } else {
-                m_jImage.setImage(null);
-            }
-        } catch (BasicException ex) {
-            // remove this line if you have compilation error
-            Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }//GEN-LAST:event_m_jDownActionPerformed
 

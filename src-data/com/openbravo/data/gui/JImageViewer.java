@@ -220,7 +220,7 @@ public class JImageViewer extends javax.swing.JPanel {
         }
         public void setIcon(Icon ico) {
             this.ico = ico;
-            this.zoom = 1.0;
+            this.zoom = 0.5;
         }
         public void setZoom(double zoom) {
             this.zoom = zoom;
