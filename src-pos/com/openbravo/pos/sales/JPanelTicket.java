@@ -1143,17 +1143,19 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private class CatalogSelectionListener implements ListSelectionListener {
 
         public void valueChanged(ListSelectionEvent e) {
-
             if (!e.getValueIsAdjusting()) {
                 int i = m_ticketlines.getSelectedIndex();
 
                 if (i >= 0) {
                     try {
-                        ProductInfoExt prod = JPanelTicket.this.dlSales.getProductInfo(m_oTicket.getLine(i).getProductID());
-                        if (prod.getImage() != null) {
-                            m_jImage.setImage(prod.getImage());
-                        } else {
-                            m_jImage.setImage(null);
+                        String sProduct = m_oTicket.getLine(i).getProductID();
+                        if (sProduct != null) {
+                            ProductInfoExt prod = JPanelTicket.this.dlSales.getProductInfo(sProduct);
+                            if (prod.getImage() != null) {
+                                m_jImage.setImage(prod.getImage());
+                            } else {
+                                m_jImage.setImage(null);
+                            }
                         }
                     } catch (BasicException ex) {
                         Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
