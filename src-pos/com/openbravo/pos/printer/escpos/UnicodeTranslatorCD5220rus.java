@@ -18,10 +18,10 @@
 
 package com.openbravo.pos.printer.escpos;
 
-public class UnicodeTranslatorRus extends UnicodeTranslator {
+public class UnicodeTranslatorCD5220rus extends UnicodeTranslator {
     
     /** Creates a new instance of UnicodeTranslatorInt */
-    public UnicodeTranslatorRus() {
+    public UnicodeTranslatorCD5220rus() {
     }
     
     public byte[] getCodeTable() {
