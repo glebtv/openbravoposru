@@ -26,7 +26,7 @@ public class UnicodeTranslator866Cyr extends UnicodeTranslator {
     }
 
     public byte[] getCodeTable() {
-        return ESCPOS.CODE_TABLE_13;
+        return ESCPOS.CODE_TABLE_RUS;
     }
 
     public byte transChar(char sChar) {
