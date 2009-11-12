@@ -104,6 +104,9 @@ public class UnicodeTranslator866Cyr extends UnicodeTranslator {
             case '\u044D': return (byte) 0xED;// э
             case '\u044E': return (byte) 0xEE;// ю
             case '\u044F': return (byte) 0xEF;// я
+
+            case '\u00A0': return (byte) 0x7F;// &nbsp
+            case '\u2116': return (byte) 0xFC;// №
             }
         }
     }
