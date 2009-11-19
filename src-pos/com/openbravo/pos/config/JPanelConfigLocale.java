@@ -57,7 +57,26 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
         availablelocales.addAll(Arrays.asList(Locale.getAvailableLocales())); // Available java locales
         addLocale(availablelocales, new Locale("eu", "ES", "")); // Basque
         addLocale(availablelocales, new Locale("gl", "ES", "")); // Gallegan
-        
+
+        // языки стран образовавщихся после распада СССР
+
+        addLocale(availablelocales, new Locale("am", "AM", "")); // армянский (Армения)
+        addLocale(availablelocales, new Locale("az", "AZ", "")); // азербайджанский (Азербайджан)
+        addLocale(availablelocales, new Locale("be", "BY", "")); // белорусский (Белоруссия)
+        addLocale(availablelocales, new Locale("et", "EE", "")); // эстонский (Эстония)
+        addLocale(availablelocales, new Locale("ka", "GE", "")); // грузинский (Грузия)
+        addLocale(availablelocales, new Locale("kk", "KZ", "")); // казахский (Казахстан)
+        addLocale(availablelocales, new Locale("ky", "KG", "")); // киргизский (Киргизия)
+        addLocale(availablelocales, new Locale("lt", "LT", "")); // литовский (Литва)
+        addLocale(availablelocales, new Locale("lv", "LV", "")); // латышский (Латвия)
+        addLocale(availablelocales, new Locale("mo", "MD", "")); // молдавский (Молдавия)
+        addLocale(availablelocales, new Locale("ru", "KZ", "")); // русский (Казахстан)
+        addLocale(availablelocales, new Locale("ru", "RU", "")); // русский (Россия)
+        addLocale(availablelocales, new Locale("tg", "TJ", "")); // таджикский (Таджикистан)
+        addLocale(availablelocales, new Locale("tk", "TM", "")); // туркменский (Туркмения)
+        addLocale(availablelocales, new Locale("uk", "UA", "")); // украинский (Украина)
+        addLocale(availablelocales, new Locale("uz", "UZ", "")); // узбекский (Узбекистан)
+
         Collections.sort(availablelocales, new LocaleComparator());
         
         jcboLocale.addItem(new LocaleInfo (null));
