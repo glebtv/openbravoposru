@@ -227,7 +227,16 @@ public class StockManagement extends JPanel implements JPanelView {
     }
     
     private void stateTransition(char cTrans) {
-        if (cTrans == '\u007f') { 
+
+        // 19 November 2009
+	// Begin Add Local Variable jldy0717
+	    InventoryLine current_stockmgtline;
+	    InventoryLine loop_stockmgtline;
+	    double loop_unitsm;
+	    double current_unitsm;
+        // End Add Local Variable jldy0717
+
+        if (cTrans == '\u007f') {
             m_jcodebar.setText(null);
             NUMBER_STATE = DEFAULT;
         } else if (cTrans == '*') {
@@ -267,6 +276,39 @@ public class StockManagement extends JPanel implements JPanelView {
                 // No podemos grabar, no hay ningun registro.
                 Toolkit.getDefaultToolkit().beep();
             } else {
+
+// 19 November 2009
+// Begin Add Code jldy0717
+
+  int numlinessm = m_invlines.getCount();
+  for (int icounter = 0 ; icounter < numlinessm ; icounter++) {
+
+    current_stockmgtline=m_invlines.getLine(icounter);
+	current_unitsm  = current_stockmgtline.getMultiply();
+
+	if (current_unitsm != 0){
+		for (int jcounter = icounter + 1 ; jcounter < numlinessm ; jcounter++) {
+            loop_stockmgtline = m_invlines.getLine(jcounter);
+			loop_unitsm  = loop_stockmgtline.getMultiply();
+			String current_productidsm = current_stockmgtline.getProductID();
+			String loop_productidsm    = loop_stockmgtline.getProductID();
+			if ( loop_productidsm.equals(current_productidsm) && (loop_unitsm != 0) ) {
+				current_unitsm = current_unitsm + loop_unitsm;
+				loop_stockmgtline.setMultiply(0);
+			}
+		}
+	current_stockmgtline.setMultiply(current_unitsm);
+	}
+}
+  for (int icounter = numlinessm - 1 ; icounter > 0 ; icounter--) {
+	loop_stockmgtline = m_invlines.getLine(icounter);
+	loop_unitsm  = loop_stockmgtline.getMultiply();
+	if (loop_unitsm == 0){
+		m_invlines.deleteLine(icounter);
+	}
+}
+// End Add Code jldy0717
+
                 saveData();
             }
         } else if (Character.isDigit(cTrans)) {
@@ -277,7 +319,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
             if (NUMBER_STATE != DECIMAL) {
                 NUMBER_STATE = ACTIVE;
-            }   
+            }
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
