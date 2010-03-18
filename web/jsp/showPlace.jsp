@@ -45,21 +45,21 @@
      </head>
     <body>
         <div class="logo">
-        <center>
+            <center>
         <img src="../images/logo.gif" alt="Openbravo" class="logo" /><br>
-        
-            <jsp:useBean id="products" type="List<ProductInfoExt>" scope="request" />
-            <jsp:useBean id="place" type="java.lang.String" scope="request" />
-            <jsp:useBean id="placeName" type="java.lang.String" scope="request" />
-            <jsp:useBean id="floorName" type="java.lang.String" scope="request" />
-            <jsp:useBean id="floorId" type="java.lang.String" scope="request" />
-            <jsp:useBean id="lines" type="List<TicketLineInfo>" scope="request" />
-        </center>
+
+                <jsp:useBean id="products" type="List<ProductInfoExt>" scope="request" />
+                <jsp:useBean id="place" type="java.lang.String" scope="request" />
+                <jsp:useBean id="placeName" type="java.lang.String" scope="request" />
+                <jsp:useBean id="floorName" type="java.lang.String" scope="request" />
+                <jsp:useBean id="floorId" type="java.lang.String" scope="request" />
+                <jsp:useBean id="lines" type="List<TicketLineInfo>" scope="request" />
+            </center>
         <a href='../showFloors.do?floorId=${floorId}'><img alt="back" src="../images/back.png" class="back"><%=floorName%> / ${placeName}</a><br>
         </div>
         
         <div>
-        <input name="place" value="Add" type="submit" onclick="window.location='showProducts.do?place=${place}&floorId=${floorId}'" style="width:70px;margin-bottom:15px;margin-left:70%;" class="floor"/>
+        <input name="place" value="<bean:message key="button.add" />" type="submit" onclick="window.location='showProducts.do?place=${place}&floorId=${floorId}'" style="width:70px;margin-bottom:15px;margin-left:70%;" class="floor"/>
         <br>
         </div>
         <span class="middle">
@@ -101,9 +101,9 @@
             </table>
             </center>
         
-            <p class="total" id="atotal">Total: <fmt:formatNumber type="currency" value="${total}" maxFractionDigits="2" minFractionDigits="2" /> </p>
-            <input name="delete" value="Delete" type="submit" onclick="confirmDeleting('${floorId}', '${place}');" style="width:70px;margin:0px 0px 10px 10px;"class="floor" />
-            <input name="place" value="Add" type="submit" onclick="window.location='showProducts.do?place=${place}&floorId=${floorId}'" style="width:70px;margin:0% 0% 10px 43%;" class="floor" />
+            <p class="total" id="atotal"><bean:message key="total" /> <fmt:formatNumber type="currency" value="${total}" maxFractionDigits="2" minFractionDigits="2" /> </p>
+            <input name="delete" value="<bean:message key="button.delete" />" type="submit" onclick="confirmDeleting('${floorId}', '${place}');" style="width:70px;margin:0px 0px 10px 10px;"class="floor" />
+            <input name="place" value="<bean:message key="button.add" />" type="submit" onclick="window.location='showProducts.do?place=${place}&floorId=${floorId}'" style="width:70px;margin:0% 0% 10px 43%;" class="floor" />
 
         </span>
 

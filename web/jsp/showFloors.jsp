@@ -81,7 +81,7 @@
         
         <div class="bottom">
             <form action="logout.do">
-               <center> <input type="submit" id="d" value="Logout" style="width:100px;"></center>              
+               <center> <input type="submit" id="d" value="<bean:message key="button.logout" />" style="width:100px;"></center>
             </form>
         </div>
         </div>

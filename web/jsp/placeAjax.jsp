@@ -33,5 +33,5 @@
 
  </span>
  <span>
-     Total:  <fmt:formatNumber type="currency" value="${total}" maxFractionDigits="2" minFractionDigits="2" />
+     <bean:message key="total" /> <fmt:formatNumber type="currency" value="${total}" maxFractionDigits="2" minFractionDigits="2" />
  </span>
