@@ -26,17 +26,20 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name = "viewport" content = "user-scalable=no, width=device-width">
         <title><bean:message key="welcome.title"/></title>
-        
+        <link rel=StyleSheet href="layout.css" type='text/css' media=screen>
         <html:base/>
     </head>
     <body>
         <center>
-        <img src="images/logo.gif" alt="Openbravo" /><br><br>
+            <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
         </center>
         <logic:messagesPresent >
             <html:messages id="msg">

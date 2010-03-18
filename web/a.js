@@ -56,7 +56,7 @@ var flag;
             try {
                 req.open("GET", url + params, true); //was get
             } catch (e) {
-            alert("Problem Communicating with Server\n"+e);
+            alert("Проблема подключения к серверу\n"+e);
             }
         req.send(null);
         }
@@ -77,7 +77,7 @@ var flag;
                    spanelem = splitTextIntoSpan(req.responseText);
                    updatePlace(spanelem, 'value'+indexGlobal, 'atotal');
                 } else {
-                        alert("Problem with server response:\n " + req.statusText);
+                        alert("Проблема с ответом сервера:\n " + req.statusText);
                 }
       }
   }
@@ -122,7 +122,7 @@ function updatePlace(newTextElements, place, place3){
       try {
         req.open("GET", url, true); //was get
       } catch (e) {
-        alert("Problem Communicating with Server\n"+e);
+        alert("Проблема подключения к серверу\n"+e);
       }
       req.send(null);
     } else if (window.ActiveXObject) { // IE
@@ -147,7 +147,7 @@ function updatePlace(newTextElements, place, place3){
             try {
                 req.open("GET", url, true); //was get
             } catch (e) {
-                alert("Problem Communicating with Server\n"+e);
+                alert("Проблема подключения к серверу\n"+e);
             }
             req.send(null);
         }
@@ -187,7 +187,7 @@ function updatePlace(newTextElements, place, place3){
                         //Use these span elements to update the page
                         replaceExistingWithNewHtml(spanElements, place);
                 } else {
-                        alert("Problem with server response:\n " + req.statusText);
+                        alert("Проблема с ответом сервера:\n " + req.statusText);
                 }
       }
   }
@@ -249,7 +249,7 @@ var mode;
         try {
             req.open("GET", url, true); //was get
         } catch (e) {
-            alert("Problem Communicating with Server\n"+e);
+            alert("Проблема подключения к серверу\n"+e);
         }
         req.send(null);
         }
@@ -264,13 +264,13 @@ var mode;
                         updatePlace(spanelem, 'aux'+indexGlobal, '');
                    }
                 } else {
-                        alert("Problem with server response:\n " + req.statusText);
+                        alert("Проблема с ответом сервера:\n " + req.statusText);
                 }
       }
   }
 
   function showNotifications(index, not) {
-      document.getElementById('notification').innerHTML = not + ' has been added to the receipt';  
+      document.getElementById('notification').innerHTML = not + " был добавлен в чек.";
       if(row.value == null) {
            row.value = 1;
            row.innerHTML = 1;
@@ -284,7 +284,7 @@ var mode;
  }
 
 function confirmDeleting(floor, place) {
-    if(confirm('Are you sure you want to delete the current receipt?'))
+    if(confirm("Вы уверены, что следует удалить открытый чек?"))
         window.location = '../showFloors.do?floorId=' + floor +'&place=' + place;
 }
 
@@ -295,7 +295,7 @@ function refreshListIncementing(plac, line) {
 function getIndexBackByEditing(nr, place){
     var value = parseFloat(document.getElementById('input'+nr).value);
     if(isNaN(value)){
-        alert('Please enter a valid number!');
+        alert("Пожалуйста введите правильные данные!");
         params = place + '&mode=0';
         reloadTheWindowIfRequired();
     } else if (value > 0){
