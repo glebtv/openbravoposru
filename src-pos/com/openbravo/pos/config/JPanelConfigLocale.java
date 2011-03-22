@@ -57,7 +57,7 @@ public class JPanelConfigLocale extends javax.swing.JPanel implements PanelConfi
         availablelocales.addAll(Arrays.asList(Locale.getAvailableLocales())); // Available java locales
         addLocale(availablelocales, new Locale("eu", "ES", "")); // Basque
         addLocale(availablelocales, new Locale("gl", "ES", "")); // Gallegan
-
+        
         // языки стран образовавщихся после распада СССР
 
         addLocale(availablelocales, new Locale("am", "AM", "")); // армянский (Армения)

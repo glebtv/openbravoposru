@@ -30,12 +30,17 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.format.Formats;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ComboBoxValModel;
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.SentenceList;
 import com.openbravo.data.user.EditorRecord;
 import com.openbravo.data.user.DirtyManager;
+import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.sales.TaxesLogic;
+import java.util.Date;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -43,6 +48,15 @@ import java.util.UUID;
  */
 public class ProductsEditor extends JPanel implements EditorRecord {
        
+//    private AppView app;
+
+    private SentenceList product;
+
+    private String s_GenRef;
+    private String s_GenBarcode;
+    private String s_DefBarcode;
+    private String s_DefTaxCat;
+
     private SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
 
@@ -67,6 +81,8 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
         initComponents();
         
+        product = dlSales.getProductList();
+
         // The taxes sentence
         taxsent = dlSales.getTaxList();
              
@@ -117,8 +133,13 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         writeValueEOF();
     }
     
-    public void activate() throws BasicException {
+    public void activate(AppView app) throws BasicException {
         
+        s_GenRef = app.getGenerateProductReference();
+        s_GenBarcode = app.getGenerateProductBarcode();
+        s_DefBarcode = app.getUserBarcode();
+        s_DefTaxCat = app.getDefaultTaxCategory();
+
         // Load the taxes logic
         taxeslogic = new TaxesLogic(taxsent.list());        
         
@@ -134,6 +155,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     }
     
     public void refresh() {
+
     }    
     
     public void writeValueEOF() {
@@ -189,13 +211,68 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         // Los valores
         m_jTitle.setText(AppLocal.getIntString("label.recordnew"));
         m_id = UUID.randomUUID().toString();
+
+        List a;
+
+        try {
+            a = product.list();
+        } catch (BasicException eD) {
+            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotloadlists"), eD);
+            msg.show(this);
+            a = new ArrayList();
+        }
+
+        String GenCode = Integer.toString(a.size() + 1);
+
+        if (s_GenRef.equals("true")) {
+            m_jRef.setText(GenCode);
+        } else {
         m_jRef.setText(null);
+        }
+
+        if (s_GenBarcode.equals("true")) {
+            String UserBarcode = s_DefBarcode;
+
+            for (int i = GenCode.length(); i < 9; i++) {
+                UserBarcode = UserBarcode + "0";
+            }
+
+            UserBarcode = UserBarcode + GenCode;
+
+            int iBCC = 0;
+
+            for (int i = 0; i < 12; i++) {
+                if (i == 1 || i == 3 || i == 5 || i == 7 || i == 9 || i == 11) {
+                    iBCC = iBCC + Integer.parseInt(UserBarcode.substring(i, i + 1)) * 3;
+                } else {
+                    iBCC = iBCC + Integer.parseInt(UserBarcode.substring(i, i + 1));
+                }
+            }
+
+            if (iBCC > 9) {
+                iBCC = 10 - Integer.parseInt(Integer.toString(iBCC).substring(1, 2));
+                if (iBCC == 10) {
+                    iBCC = 0;
+                }
+            } else {
+                iBCC = 10 - Integer.parseInt(Integer.toString(iBCC).substring(0, 1));
+            }
+
+
+
+            UserBarcode = UserBarcode + Integer.toString(iBCC);
+
+            m_jCode.setText(UserBarcode);
+
+        } else {
         m_jCode.setText(null);
+        }
+
         m_jName.setText(null);
         m_jComment.setSelected(false);
         m_jScale.setSelected(false);
         m_CategoryModel.setSelectedKey(null);
-        taxcatmodel.setSelectedKey(null);
+        taxcatmodel.setSelectedKey(s_DefTaxCat);
         attmodel.setSelectedKey(null);
         m_jPriceBuy.setText(null);
         setPriceSell(null);                     
@@ -230,6 +307,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         calculateMargin();
         calculatePriceSellTax();
    }
+
     public void writeValueDelete(Object value) {
         
         reportlock = true;       
@@ -383,7 +461,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
             if (dPriceSell == null) {
                 m_jPriceSellTax.setText(null);
             } else {               
-                double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem());
+                double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem(), new Date());
                 m_jPriceSellTax.setText(Formats.CURRENCY.formatValue(new Double(dPriceSell.doubleValue() * (1.0 + dTaxRate))));
             }            
             reportlock = false;
@@ -419,7 +497,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
             if (dPriceSellTax == null) {
                 setPriceSell(null);
             } else {
-                double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem()); 
+                double dTaxRate = taxeslogic.getTaxRate((TaxCategoryInfo) taxcatmodel.getSelectedItem(), new Date());
                 setPriceSell(new Double(dPriceSellTax.doubleValue() / (1.0 + dTaxRate)));
             }   
                         

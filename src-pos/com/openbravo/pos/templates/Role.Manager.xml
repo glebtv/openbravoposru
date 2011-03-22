@@ -72,8 +72,13 @@
     <class name="/com/openbravo/reports/usersales.bs"/>
     <class name="/com/openbravo/reports/closedproducts.bs"/>
     <class name="/com/openbravo/reports/taxes.bs"/>
+    <class name="/com/openbravo/reports/extproducts.bs"/>
+    <class name="/com/openbravo/reports/salecatalog.bs"/>
     <class name="/com/openbravo/reports/chartsales.bs"/> 
     <class name="/com/openbravo/reports/productsales.bs"/> 
+    <class name="/com/openbravo/reports/piesalescat.bs"/>
+    <class name="/com/openbravo/reports/timeseriesproduct.bs"/>
+    <class name="/com/openbravo/reports/top10sales.bs"/>
     <class name="Menu.ChangePassword"/>
     <class name="button.print"/>
     <class name="button.opendrawer"/>

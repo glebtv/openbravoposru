@@ -26,6 +26,9 @@ import com.openbravo.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import com.openbravo.pos.printer.javapos.DevicePrinterJavaPOS;
 import com.openbravo.pos.printer.printer.DevicePrinterPrinter;
 import com.openbravo.pos.printer.elveskkm.*;
+import com.openbravo.pos.printer.shtrihfr.*;
+//import com.openbravo.pos.printer.prim.*;
+import com.openbravo.pos.printer.aurafr.*;
 import com.openbravo.pos.printer.screen.*;
 
 import com.openbravo.pos.util.StringParser;
@@ -68,9 +71,14 @@ public class DeviceTicket {
         StringParser sf = new StringParser(props.getProperty("machine.fiscalprinter"));
         String sFiscalType = sf.nextToken(':');
         String sFiscalParam1 = sf.nextToken(',');
+        String sFiscalParam2 = sf.nextToken(',');
         try {
             if ("javapos".equals(sFiscalType)) {
                 m_deviceFiscal = new DeviceFiscalPrinterJavaPOS(sFiscalParam1);
+            } else if ("shtrihfr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
+                m_deviceFiscal = new DeviceFiscalPrinterShtrihFR(sFiscalParam2);
+            } else if ("aurafr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
+                m_deviceFiscal = new DeviceFiscalPrinterAuraFR(sFiscalParam2);
             } else {
                 m_deviceFiscal = new DeviceFiscalPrinterNull();
             }
@@ -162,6 +170,10 @@ public class DeviceTicket {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslator866Cyr()));
                 } else if ("samsung1251cyr".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslator1251Cyr()));
+                } else if ("senor866cyr".equals(sPrinterType)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorSenorCyr()));
+                } else if ("citizen866cyr".equals(sPrinterType)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorCitizenCyr()));
                 } else if ("tmu220".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesTMU220(), new UnicodeTranslatorInt()));
                 } else if ("star".equals(sPrinterType)) {
@@ -174,6 +186,12 @@ public class DeviceTicket {
                     addPrinter(sPrinterIndex, new DevicePrinterPlain(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2)));
                 } else if ("elveskkm".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
                     addPrinter(sPrinterIndex, new DevicePrinterElvesKKM(sPrinterParam2));
+                } else if ("shtrihfr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterShtrihFR(sPrinterParam2));
+                } else if ("aurafr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterAuraFR(sPrinterParam2));
+//                } else if ("prim".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
+//                    addPrinter(sPrinterIndex, new DevicePrinterPrim(sPrinterParam2));
                 } else if ("javapos".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterJavaPOS(sPrinterParam1, sPrinterParam2));
                 }

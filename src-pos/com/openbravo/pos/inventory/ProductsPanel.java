@@ -77,7 +77,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         return jproductfilter.getComponent();
     }  
     
-
+        
     public Component getToolbarExtrasScanPal() {
 
         JButton btnScanPal = new JButton();
@@ -88,11 +88,11 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnScanPalActionPerformed(evt);
             }
-        });
-
+        });      
+        
         return btnScanPal;
     }
-
+    
     public Component getToolbarExtrasMercury130() {
 
         JButton btnMercury130 = new JButton();
@@ -107,16 +107,16 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
         return btnMercury130;
     }
-  
+
     private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
   
         JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
-    }
-
+    }  
+    
     private void btnMercury130ActionPerformed(java.awt.event.ActionEvent evt) {
         JDlgUploadProductsMercury130.showMessage(this, app.getDeviceMercury130(), bd);
     }
-    
+
     public String getTitle() {
         return AppLocal.getIntString("Menu.Products");
     } 
@@ -124,7 +124,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     @Override
     public void activate() throws BasicException {
         
-        jeditor.activate(); 
+        jeditor.activate(app);
         jproductfilter.activate();
         
         super.activate();

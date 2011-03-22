@@ -41,6 +41,8 @@
         <meta name = "viewport" content = "user-scalable=no, width=device-width">          
         <title><bean:message key="edit" /></title>
         <link rel=StyleSheet href="../layout.css" type="text/css" media=screen>
+        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="../favicon.ico" type="image/x-icon" />            
         <script type="text/javascript" src="../tableScript.js"></script>
         <script type="text/javascript" src="../a.js"></script>
     </head>
@@ -49,11 +51,10 @@
         <jsp:useBean id="rates" scope="request" type="java.util.List"/>
         <div class="logo">
             <center>
-            <img src="../images/logo.gif" alt="Openbravo" class="logo"/>
-            <br>
+                <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
+                <br>
             </center>
-            <a href="showPlace.do?id=<%=request.getSession().getAttribute("place")%>&floorId=<%=request.getSession().getAttribute("floorId")%>" ><img alt="back" src="../images/back.png" class="back">../<%=placeName%>/Adding Products</a><br>
-        </div>
+               <a href="showPlace.do?id=<%=request.getSession().getAttribute("place")%>&floorId=<%=request.getSession().getAttribute("floorId")%>" ><img alt="back" src="../images/back.png" class="back">../<%=placeName%>/<bean:message key="addproducts" /></a><br></div>
         <br>
         <div class="pad">
             <center>

@@ -38,15 +38,18 @@
     <head>
         <meta http-equiv="Content-Type" content="javascript; charset=UTF-8">
         <meta name = "viewport" content = "user-scalable=no, width=device-width">
-            <title><bean:message key="floors" /></title>
+        <title><bean:message key="floors" /></title>
         <link rel=StyleSheet href="layout.css" type='text/css' media=screen>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />             
         <script type='text/javascript' src='a.js'></script>
         <script type='text/javascript' src='tableScript.js'></script>
     </head>
     <body>
         <jsp:useBean id="floorId" scope="request" type="java.lang.String" />
         <center>
-        <img src="images/logo.gif" alt="Openbravo" class="logo" /><br>
+            <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
+            <br>
         </center>
         <div>
         <center>

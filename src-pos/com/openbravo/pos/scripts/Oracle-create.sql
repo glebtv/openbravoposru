@@ -1,5 +1,5 @@
 --    Openbravo POS is a point of sales application designed for touch screens.
---    Copyright (C) 2007-2009 Openbravo, S.L.
+--    Copyright (C) 2007-2010 Openbravo, S.L.
 --    http://sourceforge.net/projects/openbravopos
 --
 --    This file is part of Openbravo POS.
@@ -18,7 +18,7 @@
 --    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 -- Database initial script for ORACLE
--- v2.30
+-- v2.30.2
 
 CREATE TABLE APPLICATIONS (
     ID VARCHAR2(256) NOT NULL,
@@ -35,10 +35,12 @@ CREATE TABLE ROLES (
     PRIMARY KEY (ID)
 );
 CREATE UNIQUE INDEX ROLES_NAME_INX ON ROLES(NAME);
+
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('0', 'Профиль Администратора', $FILE{/com/openbravo/pos/templates/Role.Administrator.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('1', 'Профиль Менеджера', $FILE{/com/openbravo/pos/templates/Role.Manager.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('2', 'Профиль Оператора', $FILE{/com/openbravo/pos/templates/Role.Employee.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('3', 'Профиль Гостя', $FILE{/com/openbravo/pos/templates/Role.Guest.xml} );
+
 CREATE TABLE PEOPLE (
     ID VARCHAR2(256) NOT NULL,
     NAME VARCHAR2(1024) NOT NULL,
@@ -52,10 +54,12 @@ CREATE TABLE PEOPLE (
 );
 CREATE UNIQUE INDEX PEOPLE_NAME_INX ON PEOPLE(NAME);
 CREATE INDEX PEOPLE_CARD_INX ON PEOPLE(CARD);
+
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('0', 'Администратор', NULL, '0', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('1', 'Менеджер', NULL, '1', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('2', 'Оператор', NULL, '2', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('3', 'Гость', NULL, '3', 1, NULL);
+
 CREATE TABLE RESOURCES (
     ID VARCHAR2(256) NOT NULL,
     NAME VARCHAR2(1024) NOT NULL,
@@ -162,6 +166,7 @@ INSERT INTO TAXCATEGORIES(ID, NAME) VALUES ('001', 'НДС');
 CREATE TABLE TAXES (
     ID VARCHAR2(256) NOT NULL,
     NAME VARCHAR2(1024) NOT NULL,
+    VALIDFROM TIMESTAMP DEFAULT TO_DATE('2001-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') NOT NULL,
     CATEGORY VARCHAR2(256) NOT NULL,
     CUSTCATEGORY VARCHAR2(256),
     PARENTID VARCHAR2(256),

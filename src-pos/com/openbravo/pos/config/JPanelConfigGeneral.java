@@ -48,6 +48,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
     private ParametersConfig printer3printerparams;
 
+//    private ParametersConfig fiscalprinterparams;
+
     /** Creates new form JPanelConfigGeneral */
     public JPanelConfigGeneral() {
 
@@ -95,6 +97,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         printer3printerparams.addDirtyManager(dirty);
         m_jPrinterParams3.add(printer3printerparams.getComponent(), "printer");
 
+        jcboMachineFiscalPrinter.addActionListener(dirty);
+        jcboConnFiscalPrinter.addActionListener(dirty);
+        jcboSerialFiscalPrinter.addActionListener(dirty);
+        m_jtxtJPOSFiscalPrinter.getDocument().addDocumentListener(dirty);
+        m_jtxtJPOSFiscalPrinter.getDocument().addDocumentListener(dirty);
+
         jcboMachineScale.addActionListener(dirty);
         jcboSerialScale.addActionListener(dirty);
 
@@ -141,11 +149,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter.addItem("star");
         jcboMachinePrinter.addItem("samsung1251cyr");
         jcboMachinePrinter.addItem("bixolon866cyr");
+        jcboMachinePrinter.addItem("senor866cyr");
+        jcboMachinePrinter.addItem("citizen866cyr");
         jcboMachinePrinter.addItem("ithaca");
         jcboMachinePrinter.addItem("surepos");
         jcboMachinePrinter.addItem("plain");
         jcboMachinePrinter.addItem("javapos");
         jcboMachinePrinter.addItem("elveskkm");
+        jcboMachinePrinter.addItem("shtrihfr");
+        jcboMachinePrinter.addItem("aurafr");
         jcboMachinePrinter.addItem("Not defined");
 
         jcboConnPrinter.addItem("serial");
@@ -169,11 +181,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter2.addItem("star");
         jcboMachinePrinter2.addItem("samsung1251cyr");
         jcboMachinePrinter2.addItem("bixolon866cyr");
+        jcboMachinePrinter2.addItem("senor866cyr");
+        jcboMachinePrinter2.addItem("citizen866cyr");
         jcboMachinePrinter2.addItem("ithaca");
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
         jcboMachinePrinter2.addItem("javapos");
         jcboMachinePrinter2.addItem("elveskkm");
+        jcboMachinePrinter2.addItem("shtrihfr");
+        jcboMachinePrinter2.addItem("aurafr");
         jcboMachinePrinter2.addItem("Not defined");
 
         jcboConnPrinter2.addItem("serial");
@@ -197,11 +213,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter3.addItem("star");
         jcboMachinePrinter3.addItem("samsung1251cyr");
         jcboMachinePrinter3.addItem("bixolon866cyr");
+        jcboMachinePrinter3.addItem("senor866cyr");
+        jcboMachinePrinter3.addItem("citizen866cyr");
         jcboMachinePrinter3.addItem("ithaca");
         jcboMachinePrinter3.addItem("surepos");
         jcboMachinePrinter3.addItem("plain");
         jcboMachinePrinter3.addItem("javapos");
         jcboMachinePrinter3.addItem("elveskkm");
+        jcboMachinePrinter3.addItem("shtrihfr");
+        jcboMachinePrinter3.addItem("aurafr");
         jcboMachinePrinter3.addItem("Not defined");
 
         jcboConnPrinter3.addItem("serial");
@@ -216,6 +236,24 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter3.addItem("/dev/ttyS1");
         jcboSerialPrinter3.addItem("/dev/ttyS2");
         jcboSerialPrinter3.addItem("/dev/ttyS3");
+
+        // Fiscal printer
+        jcboMachineFiscalPrinter.addItem("javapos");
+        jcboMachineFiscalPrinter.addItem("aurafr");
+        jcboMachineFiscalPrinter.addItem("shtrihfr");
+
+        jcboMachineFiscalPrinter.addItem("Not defined");
+
+        jcboConnFiscalPrinter.addItem("serial");
+
+        jcboSerialFiscalPrinter.addItem("COM1");
+        jcboSerialFiscalPrinter.addItem("COM2");
+        jcboSerialFiscalPrinter.addItem("COM3");
+        jcboSerialFiscalPrinter.addItem("COM4");
+        jcboSerialFiscalPrinter.addItem("/dev/ttyS0");
+        jcboSerialFiscalPrinter.addItem("/dev/ttyS1");
+        jcboSerialFiscalPrinter.addItem("/dev/ttyS2");
+        jcboSerialFiscalPrinter.addItem("/dev/ttyS3");
 
         // Display
         jcboMachineDisplay.addItem("screen");
@@ -306,7 +344,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         StringParser p = new StringParser(config.getProperty("machine.printer"));
         String sparam = unifySerialInterface(p.nextToken(':'));
-        if ("elveskkm".equals(sparam)) {
+        if ("elveskkm".equals(sparam) || "shtrihfr".equals(sparam) || "aurafr".equals(sparam)) {
             jcboMachinePrinter.setSelectedItem(sparam);
             jcboConnPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialPrinter.setSelectedItem(p.nextToken(','));
@@ -329,7 +367,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         p = new StringParser(config.getProperty("machine.printer.2"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("elveskkm".equals(sparam)) {
+        if ("elveskkm".equals(sparam) || "shtrihfr".equals(sparam) || "aurafr".equals(sparam)) {
             jcboMachinePrinter2.setSelectedItem(sparam);
             jcboConnPrinter2.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
@@ -352,7 +390,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         p = new StringParser(config.getProperty("machine.printer.3"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("elveskkm".equals(sparam)) {
+        if ("elveskkm".equals(sparam) || "shtrihfr".equals(sparam) || "aurafr".equals(sparam)) {
             jcboMachinePrinter3.setSelectedItem(sparam);
             jcboConnPrinter3.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
@@ -371,6 +409,22 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             jcboMachinePrinter3.setSelectedItem(sparam);
             jcboConnPrinter3.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
+        }
+
+        p = new StringParser(config.getProperty("machine.fiscalprinter"));
+        sparam = unifySerialInterface(p.nextToken(':'));
+        if ("aurafr".equals(sparam) || "shtrihfr".equals(sparam)) {
+            jcboMachineFiscalPrinter.setSelectedItem(sparam);
+            jcboConnFiscalPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+            jcboSerialFiscalPrinter.setSelectedItem(p.nextToken(','));
+        } else if ("javapos".equals(sparam)) {
+            jcboMachineFiscalPrinter.setSelectedItem(sparam);
+            m_jtxtJPOSFiscalPrinter.setText(p.nextToken(','));
+            m_jtxtJPOSFiscalDrawer.setText(p.nextToken(','));
+        } else {
+            jcboMachineFiscalPrinter.setSelectedItem(sparam);
+            jcboConnFiscalPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+            jcboSerialFiscalPrinter.setSelectedItem(p.nextToken(','));
         }
 
         p = new StringParser(config.getProperty("machine.display"));
@@ -420,7 +474,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         config.setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
 
         String sMachinePrinter = comboValue(jcboMachinePrinter.getSelectedItem());
-        if ("epson".equals(sMachinePrinter) || "tmu220".equals(sMachinePrinter) || "star".equals(sMachinePrinter) || "samsung1251cyr".equals(sMachinePrinter) || "bixolon866cyr".equals(sMachinePrinter) || "ithaca".equals(sMachinePrinter) || "surepos".equals(sMachinePrinter) || "elveskkm".equals(sMachinePrinter)) {            config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
+        if ("epson".equals(sMachinePrinter) || "tmu220".equals(sMachinePrinter) || "star".equals(sMachinePrinter) || "samsung1251cyr".equals(sMachinePrinter) || "bixolon866cyr".equals(sMachinePrinter) || "senor866cyr".equals(sMachinePrinter) || "citizen866cyr".equals(sMachinePrinter) || "ithaca".equals(sMachinePrinter) || "surepos".equals(sMachinePrinter) || "elveskkm".equals(sMachinePrinter) || "shtrihfr".equals(sMachinePrinter) || "aurafr".equals(sMachinePrinter)) {
+            config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter)) {
             config.setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter.getText() + "," + m_jtxtJPOSDrawer.getText());
         } else if ("printer".equals(sMachinePrinter)) {
@@ -430,7 +485,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
 
         String sMachinePrinter2 = comboValue(jcboMachinePrinter2.getSelectedItem());
-        if ("epson".equals(sMachinePrinter2) || "tmu220".equals(sMachinePrinter2) || "star".equals(sMachinePrinter2) || "samsung1251cyr".equals(sMachinePrinter2) || "bixolon866cyr".equals(sMachinePrinter2) || "ithaca".equals(sMachinePrinter2) || "surepos".equals(sMachinePrinter2) || "elveskkm".equals(sMachinePrinter2)) {
+        if ("epson".equals(sMachinePrinter2) || "tmu220".equals(sMachinePrinter2) || "star".equals(sMachinePrinter2) || "samsung1251cyr".equals(sMachinePrinter2) || "bixolon866cyr".equals(sMachinePrinter2) || "senor866cyr".equals(sMachinePrinter2) || "citizen866cyr".equals(sMachinePrinter2) || "ithaca".equals(sMachinePrinter2) || "surepos".equals(sMachinePrinter2) || "elveskkm".equals(sMachinePrinter2) || "shtrihfr".equals(sMachinePrinter2) || "aurafr".equals(sMachinePrinter2)) {
             config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter2)) {
             config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
@@ -442,7 +497,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
 
         String sMachinePrinter3 = comboValue(jcboMachinePrinter3.getSelectedItem());
-        if ("epson".equals(sMachinePrinter3) || "tmu220".equals(sMachinePrinter3) || "star".equals(sMachinePrinter3) || "samsung1251cyr".equals(sMachinePrinter3) || "bixolon866cyr".equals(sMachinePrinter3) || "ithaca".equals(sMachinePrinter3) || "surepos".equals(sMachinePrinter3) || "elveskkm".equals(sMachinePrinter3)) {
+        if ("epson".equals(sMachinePrinter3) || "tmu220".equals(sMachinePrinter3) || "star".equals(sMachinePrinter3) || "samsung1251cyr".equals(sMachinePrinter3) || "bixolon866cyr".equals(sMachinePrinter3) || "senor866cyr".equals(sMachinePrinter3) || "citizen866cyr".equals(sMachinePrinter3) || "ithaca".equals(sMachinePrinter3) || "surepos".equals(sMachinePrinter3) || "elveskkm".equals(sMachinePrinter3) || "shtrihfr".equals(sMachinePrinter3) || "aurafr".equals(sMachinePrinter3)) {
             config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
         } else if ("javapos".equals(sMachinePrinter3)) {
             config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
@@ -450,6 +505,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + printer3printerparams.getParameters());
         } else {
             config.setProperty("machine.printer.3", sMachinePrinter3);
+        }
+
+        String sMachineFiscalPrinter = comboValue(jcboMachineFiscalPrinter.getSelectedItem());
+        if ("aurafr".equals(sMachineFiscalPrinter) || "shtrihfr".equals(sMachineFiscalPrinter)) {
+            config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + comboValue(jcboConnFiscalPrinter.getSelectedItem()) + "," + comboValue(jcboSerialFiscalPrinter.getSelectedItem()));
+        } else if ("javapos".equals(sMachineFiscalPrinter)) {
+            config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + m_jtxtJPOSFiscalPrinter.getText() + "," + m_jtxtJPOSFiscalDrawer.getText());
+        } else {
+            config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter);
         }
 
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
@@ -603,6 +667,20 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jLabel27 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jcboMachinePrinter3 = new javax.swing.JComboBox();
+        jLabel29 = new javax.swing.JLabel();
+        jcboMachineFiscalPrinter = new javax.swing.JComboBox();
+        m_jFiscalPrinterParams = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        jlblConnPrinter4 = new javax.swing.JLabel();
+        jcboConnFiscalPrinter = new javax.swing.JComboBox();
+        jlblPrinterPort6 = new javax.swing.JLabel();
+        jcboSerialFiscalPrinter = new javax.swing.JComboBox();
+        jPanel18 = new javax.swing.JPanel();
+        m_jtxtJPOSFiscalPrinter = new javax.swing.JTextField();
+        m_jtxtJPOSFiscalDrawer = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jcboMachineScale = new javax.swing.JComboBox();
         jLabel26 = new javax.swing.JLabel();
@@ -672,7 +750,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblDisplayPort, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -698,7 +776,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_jtxtJPOSName, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(696, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -741,7 +819,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblPrinterPort, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -773,7 +851,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_jtxtJPOSDrawer, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -820,7 +898,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblPrinterPort2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialPrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -852,7 +930,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_jtxtJPOSDrawer2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -872,6 +950,95 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 jcboMachinePrinter3ActionPerformed(evt);
             }
         });
+
+        jLabel29.setText(AppLocal.getIntString("Label.MachineFiscalPrinter")); // NOI18N
+
+        jcboMachineFiscalPrinter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcboMachineFiscalPrinterActionPerformed(evt);
+            }
+        });
+
+        m_jFiscalPrinterParams.setLayout(new java.awt.CardLayout());
+        m_jFiscalPrinterParams.add(jPanel14, "empty");
+
+        jlblConnPrinter4.setText(AppLocal.getIntString("label.machinedisplayconn")); // NOI18N
+
+        jcboConnFiscalPrinter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcboConnFiscalPrinterActionPerformed(evt);
+            }
+        });
+
+        jlblPrinterPort6.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
+
+        jcboSerialFiscalPrinter.setEditable(true);
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jlblConnPrinter4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboConnFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblPrinterPort6, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboSerialFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(482, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcboConnFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPort6)
+                    .addComponent(jcboSerialFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblConnPrinter4))
+                .addGap(125, 125, 125))
+        );
+
+        m_jFiscalPrinterParams.add(jPanel15, "comm");
+
+        m_jtxtJPOSFiscalPrinter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jtxtJPOSFiscalPrinterActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setText(AppLocal.getIntString("label.javapos.printer")); // NOI18N
+
+        jLabel31.setText(AppLocal.getIntString("label.javapos.drawer")); // NOI18N
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(m_jtxtJPOSFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(m_jtxtJPOSFiscalDrawer, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(462, Short.MAX_VALUE))
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(m_jtxtJPOSFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel31)
+                    .addComponent(m_jtxtJPOSFiscalDrawer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30))
+                .addGap(224, 224, 224))
+        );
+
+        m_jFiscalPrinterParams.add(jPanel18, "javapos");
 
         jLabel25.setText(AppLocal.getIntString("label.scale")); // NOI18N
 
@@ -913,7 +1080,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblPrinterPort3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialPrinter3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -945,7 +1112,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_jtxtJPOSDrawer3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(462, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -976,7 +1143,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(696, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1005,7 +1172,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addComponent(jlblPrinterPort5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcboSerialScanner, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addContainerGap(696, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1030,43 +1197,19 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcboMachineDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jDisplayParams, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
+                        .addComponent(m_jDisplayParams, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcboMachinePrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jPrinterParams1, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
+                        .addComponent(m_jPrinterParams1, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcboMachinePrinter2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jPrinterParams2, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcboMachinePrinter3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jPrinterParams3, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcboMachineScale, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jScaleParams, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcboMachineScanner, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cboPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_jScannerParams, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
+                        .addComponent(m_jPrinterParams2, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1082,7 +1225,39 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcboTicketsBag, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jcboTicketsBag, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jcboMachineFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_jFiscalPrinterParams, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jcboMachinePrinter3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_jPrinterParams3, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcboMachineScale, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_jScaleParams, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jcboMachineScanner, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(m_jScannerParams, javax.swing.GroupLayout.DEFAULT_SIZE, 910, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
@@ -1128,6 +1303,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         .addComponent(jLabel19)
                         .addComponent(jcboMachinePrinter3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(m_jPrinterParams3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jcboMachineFiscalPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel29))
+                    .addComponent(m_jFiscalPrinterParams, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1140,12 +1321,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel26)
                             .addComponent(jcboMachineScanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(cboPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(m_jScannerParams, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1161,8 +1342,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1189,7 +1370,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinter3ActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams3.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter3.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter3.getSelectedItem()) || "star".equals(jcboMachinePrinter3.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter3.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter3.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter3.getSelectedItem()) || "surepos".equals(jcboMachinePrinter3.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter3.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter3.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter3.getSelectedItem()) || "star".equals(jcboMachinePrinter3.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter3.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter3.getSelectedItem()) || "senor866cyr".equals(jcboMachinePrinter3.getSelectedItem()) || " citizen866cyr".equals(jcboMachinePrinter3.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter3.getSelectedItem()) || "surepos".equals(jcboMachinePrinter3.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter3.getSelectedItem()) || "shtrihfr".equals(jcboMachinePrinter3.getSelectedItem()) || "aurafr".equals(jcboMachinePrinter3.getSelectedItem())) {
             cl.show(m_jPrinterParams3, "comm");
         } else if ("javapos".equals(jcboMachinePrinter3.getSelectedItem())) {
             cl.show(m_jPrinterParams3, "javapos");
@@ -1203,7 +1384,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinter2ActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams2.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter2.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter2.getSelectedItem()) || "star".equals(jcboMachinePrinter2.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter2.getSelectedItem()) || "surepos".equals(jcboMachinePrinter2.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter2.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter2.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter2.getSelectedItem()) || "star".equals(jcboMachinePrinter2.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "senor866cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "citizen866cyr".equals(jcboMachinePrinter2.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter2.getSelectedItem()) || "surepos".equals(jcboMachinePrinter2.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter2.getSelectedItem()) || "shtrihfr".equals(jcboMachinePrinter2.getSelectedItem()) || "aurafr".equals(jcboMachinePrinter2.getSelectedItem())) {
             cl.show(m_jPrinterParams2, "comm");
         } else if ("javapos".equals(jcboMachinePrinter2.getSelectedItem())) {
             cl.show(m_jPrinterParams2, "javapos");
@@ -1229,7 +1410,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachinePrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachinePrinterActionPerformed
         CardLayout cl = (CardLayout) (m_jPrinterParams1.getLayout());
 
-        if ("epson".equals(jcboMachinePrinter.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter.getSelectedItem()) || "star".equals(jcboMachinePrinter.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter.getSelectedItem()) || "surepos".equals(jcboMachinePrinter.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter.getSelectedItem())) {
+        if ("epson".equals(jcboMachinePrinter.getSelectedItem()) || "tmu220".equals(jcboMachinePrinter.getSelectedItem()) || "samsung1251cyr".equals(jcboMachinePrinter.getSelectedItem()) || "bixolon866cyr".equals(jcboMachinePrinter.getSelectedItem()) || "senor866cyr".equals(jcboMachinePrinter.getSelectedItem()) || "citizen866cyr".equals(jcboMachinePrinter.getSelectedItem()) || "star".equals(jcboMachinePrinter.getSelectedItem()) || "ithaca".equals(jcboMachinePrinter.getSelectedItem()) || "surepos".equals(jcboMachinePrinter.getSelectedItem()) || "elveskkm".equals(jcboMachinePrinter.getSelectedItem()) || "shtrihfr".equals(jcboMachinePrinter.getSelectedItem()) || "aurafr".equals(jcboMachinePrinter.getSelectedItem())) {
             cl.show(m_jPrinterParams1, "comm");
         } else if ("javapos".equals(jcboMachinePrinter.getSelectedItem())) {
             cl.show(m_jPrinterParams1, "javapos");
@@ -1239,6 +1420,27 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             cl.show(m_jPrinterParams1, "empty");
         }
     }//GEN-LAST:event_jcboMachinePrinterActionPerformed
+
+    private void jcboMachineFiscalPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineFiscalPrinterActionPerformed
+        CardLayout cl = (CardLayout) (m_jFiscalPrinterParams.getLayout());
+
+        if ("aurafr".equals(jcboMachineFiscalPrinter.getSelectedItem()) || "shtrihfr".equals(jcboMachineFiscalPrinter.getSelectedItem())) {
+            cl.show(m_jFiscalPrinterParams, "comm");
+        } else if ("javapos".equals(jcboMachineFiscalPrinter.getSelectedItem())) {
+            cl.show(m_jFiscalPrinterParams, "javapos");
+        } else {
+            cl.show(m_jFiscalPrinterParams, "empty");
+        }
+    }//GEN-LAST:event_jcboMachineFiscalPrinterActionPerformed
+
+    private void m_jtxtJPOSFiscalPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jtxtJPOSFiscalPrinterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_m_jtxtJPOSFiscalPrinterActionPerformed
+
+    private void jcboConnFiscalPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboConnFiscalPrinterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcboConnFiscalPrinterActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cboPrinters;
     private javax.swing.JLabel jLabel1;
@@ -1256,6 +1458,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1264,8 +1469,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel24;
@@ -1277,11 +1485,13 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JComboBox jcboConnDisplay;
+    private javax.swing.JComboBox jcboConnFiscalPrinter;
     private javax.swing.JComboBox jcboConnPrinter;
     private javax.swing.JComboBox jcboConnPrinter2;
     private javax.swing.JComboBox jcboConnPrinter3;
     private javax.swing.JComboBox jcboLAF;
     private javax.swing.JComboBox jcboMachineDisplay;
+    private javax.swing.JComboBox jcboMachineFiscalPrinter;
     private javax.swing.JComboBox jcboMachinePrinter;
     private javax.swing.JComboBox jcboMachinePrinter2;
     private javax.swing.JComboBox jcboMachinePrinter3;
@@ -1289,6 +1499,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JComboBox jcboMachineScanner;
     private javax.swing.JComboBox jcboMachineScreenmode;
     private javax.swing.JComboBox jcboSerialDisplay;
+    private javax.swing.JComboBox jcboSerialFiscalPrinter;
     private javax.swing.JComboBox jcboSerialPrinter;
     private javax.swing.JComboBox jcboSerialPrinter2;
     private javax.swing.JComboBox jcboSerialPrinter3;
@@ -1299,14 +1510,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JLabel jlblConnPrinter;
     private javax.swing.JLabel jlblConnPrinter2;
     private javax.swing.JLabel jlblConnPrinter3;
+    private javax.swing.JLabel jlblConnPrinter4;
     private javax.swing.JLabel jlblDisplayPort;
     private javax.swing.JLabel jlblPrinterPort;
     private javax.swing.JLabel jlblPrinterPort2;
     private javax.swing.JLabel jlblPrinterPort3;
     private javax.swing.JLabel jlblPrinterPort4;
     private javax.swing.JLabel jlblPrinterPort5;
+    private javax.swing.JLabel jlblPrinterPort6;
     private javax.swing.JTextField jtxtMachineHostname;
     private javax.swing.JPanel m_jDisplayParams;
+    private javax.swing.JPanel m_jFiscalPrinterParams;
     private javax.swing.JPanel m_jPrinterParams1;
     private javax.swing.JPanel m_jPrinterParams2;
     private javax.swing.JPanel m_jPrinterParams3;
@@ -1315,6 +1529,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JTextField m_jtxtJPOSDrawer;
     private javax.swing.JTextField m_jtxtJPOSDrawer2;
     private javax.swing.JTextField m_jtxtJPOSDrawer3;
+    private javax.swing.JTextField m_jtxtJPOSFiscalDrawer;
+    private javax.swing.JTextField m_jtxtJPOSFiscalPrinter;
     private javax.swing.JTextField m_jtxtJPOSName;
     private javax.swing.JTextField m_jtxtJPOSPrinter;
     private javax.swing.JTextField m_jtxtJPOSPrinter2;

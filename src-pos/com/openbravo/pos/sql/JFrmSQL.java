@@ -90,7 +90,7 @@ public class JFrmSQL extends javax.swing.JFrame implements AppView {
     public DeviceScanner getDeviceScanner() {
         return null;
     }
-
+    
     public DeviceMercury130 getDeviceMercury130() {
         return null;
     }
@@ -112,6 +112,34 @@ public class JFrmSQL extends javax.swing.JFrame implements AppView {
         return null;
     }
     public String getInventoryLocation() {
+        return null;
+    }
+
+    public String getGenerateProductReference() {
+        return null;
+    }
+
+    public String getGenerateProductBarcode() {
+        return null;
+    }
+
+    public String getUserBarcode() {
+        return null;
+    }
+
+    public String getPriceBarcode() {
+        return null;
+    }
+
+    public String getUnitBarcode() {
+        return null;
+    }
+
+    public String getProductPriceBarcode() {
+        return null;
+    }
+
+    public String getDefaultTaxCategory() {
         return null;
     }
 

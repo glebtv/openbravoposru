@@ -193,7 +193,6 @@ public class UnicodeTranslatorInt extends UnicodeTranslator {
 //            case '\u00fc' : return (byte) 0x81;
 //            case '\u00dc' : return (byte) 0x9A;
 //            default: return (byte) sChar;
-
             }          
         }
     }       

@@ -49,9 +49,17 @@ public class ESCPOS {
     public static final byte[] VISOR_CLEAR = {0x0C};
         
     public static final byte[] CODE_TABLE_00 = {0x1B, 0x74, 0x00};
-    public static final byte[] CODE_TABLE_13 = {0x1B, 0x74, 0x13};
+    public static final byte[] CODE_TABLE_13 = {0x1B, 0x74, 0x13}; 
+    
+    public static final byte[] CODE_TABLE_7 = {0x1B, 0x74, 0x07};
+    public static final byte[] CODE_TABLE_17 = {0x1B, 0x74, 0x17};
 
     public static final byte[] CODE_TABLE_RUS = {0x1B, 0x63, 0x52};
+
+    public static final byte[] CODE_TABLE_KANJI_RUS = {0x1C, 0x2E, 0x1B, 0x74, 0x11};
+
+//    public static final byte[] CODE_TABLE_CHINA_RUS = {0x1C, 0x2E, 0x1B, 0x74, 0x05};
+//    public static final byte[] CODE_TABLE_CHINA_RUS = {0x1B, 0x25, 0x01};
 
     private ESCPOS() {       
     }

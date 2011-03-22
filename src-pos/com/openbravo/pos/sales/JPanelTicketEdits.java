@@ -16,6 +16,7 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package com.openbravo.pos.sales;
 
 import java.awt.Component;
@@ -27,44 +28,44 @@ import com.openbravo.pos.ticket.ProductInfoExt;
 import java.awt.Dimension;
 
 public class JPanelTicketEdits extends JPanelTicket {
-
+    
     private JTicketCatalogLines m_catandlines;
-
+    
     /** Creates a new instance of JPanelTicketRefunds */
     public JPanelTicketEdits() {
     }
-
+    
     public String getTitle() {
         return null;
     }
-
+    
     @Override
-    public void activate() throws BasicException {
+    public void activate() throws BasicException {      
         super.activate();
         if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
-            m_catandlines.loadCatalog();
-        }
+        m_catandlines.loadCatalog();
+    }
     }
 
     public void showCatalog() {
         m_jbtnconfig.setVisible(true);
         m_catandlines.showCatalog();
     }
-
+    
     public void showRefundLines(List aRefundLines) {
         // anado las lineas de refund
         // m_reflines.setLines(aRefundLines);
         m_jbtnconfig.setVisible(false);
         m_catandlines.showRefundLines(aRefundLines);
     }
-
+    
     protected JTicketsBag getJTicketsBag() {
         return new JTicketsBagTicket(m_App, this);
     }
 
     protected Component getSouthComponent() {
 
-        m_catandlines = new JTicketCatalogLines(m_App, this,
+        m_catandlines = new JTicketCatalogLines(m_App, this,                
                 "true".equals(m_jbtnconfig.getProperty("pricevisible")),
                 "true".equals(m_jbtnconfig.getProperty("taxesincluded")),
                 Integer.parseInt(m_jbtnconfig.getProperty("img-width", "64")),
@@ -74,15 +75,15 @@ public class JPanelTicketEdits extends JPanelTicket {
                 Integer.parseInt(m_jbtnconfig.getProperty("cat-height", "245"))));
         m_catandlines.addActionListener(new CatalogListener());
         return m_catandlines;
-    }
+    } 
 
     protected void resetSouthComponent() {
     }
-
+    
     private class CatalogListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             buttonTransition((ProductInfoExt) e.getSource());
-        }
-    }
+        }  
+    }  
 }

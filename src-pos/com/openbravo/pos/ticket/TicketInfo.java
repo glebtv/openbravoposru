@@ -429,6 +429,10 @@ public class TicketInfo implements SerializableRead, Externalizable {
         }
     }
 
+     public String printTicketName() {
+            return getName();
+    }
+
     public String printDate() {
         return Formats.TIMESTAMP.formatValue(m_dDate);
     }

@@ -55,7 +55,7 @@
             <text align ="right" length="10">Цена</text>
             <text align ="right" length="5"></text>
             <text align ="right" length="10">Сумма</text>
-        </line>
+        </line>      
         <line>
             <text>------------------------------------------</text>
         </line>   
@@ -78,6 +78,6 @@
         <line></line>            
         <line>
             <text align="center" length="42">Спасибо за ваш визит.</text>
-        </line>
+        </line>   
     </ticket>
 </output>

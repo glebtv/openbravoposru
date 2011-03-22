@@ -8,7 +8,7 @@
 	<parameter name="ARG" class="java.lang.Object" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT TICKETS.PERSON, TICKETS.HOST, SUM(PRODUCTSOUT.UNITS * PRODUCTSOUT.PRICE) AS TOTAL
-FROM TICKETS, PRODUCTSOUT
+FROM TICKETS, PRODUCTSOUT 
 WHERE TICKETS.TICKETID = PRODUCTSOUT.TICKETID
 
 GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
@@ -128,11 +128,11 @@ GROUP BY TICKETS.HOST, TICKETS.PERSON]]>
 						<seriesExpression><![CDATA[$F{NAME}]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{HOST}]]></categoryExpression>
 						<valueExpression><![CDATA[$F{TOTAL}]]></valueExpression>
+						<itemHyperlink/>
 					</categorySeries>
 				</categoryDataset>
 				<bar3DPlot isShowLabels="true">
 					<plot/>
-					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
 					<categoryAxisLabelExpression><![CDATA[$R{label.axisx}]]></categoryAxisLabelExpression>
 					<categoryAxisFormat>
 						<axisFormat>

@@ -1,5 +1,5 @@
 --    Openbravo POS is a point of sales application designed for touch screens.
---    Copyright (C) 2007-2009 Openbravo, S.L.
+--    Copyright (C) 2007-2010 Openbravo, S.L.
 --    http://sourceforge.net/projects/openbravopos
 --
 --    This file is part of Openbravo POS.
@@ -18,7 +18,7 @@
 --    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 -- Database initial script for HSQLDB
--- v2.30
+-- v2.30.2
 
 CREATE TABLE APPLICATIONS (
     ID VARCHAR NOT NULL,
@@ -156,14 +156,14 @@ CREATE TABLE TAXCATEGORIES (
     PRIMARY KEY (ID)
 );
 CREATE UNIQUE INDEX TAXCAT_NAME_INX ON TAXCATEGORIES(NAME);
--- Nord Trading Edition for 2.30
+
 INSERT INTO TAXCATEGORIES(ID, NAME) VALUES ('000', 'Без НДС');
 INSERT INTO TAXCATEGORIES(ID, NAME) VALUES ('001', 'НДС');
--- end
 
 CREATE TABLE TAXES (
     ID VARCHAR NOT NULL,
     NAME VARCHAR NOT NULL,
+    VALIDFROM TIMESTAMP DEFAULT '2001-01-01 00:00:00' NOT NULL,
     CATEGORY VARCHAR NOT NULL,
     CUSTCATEGORY VARCHAR,
     PARENTID VARCHAR,

@@ -49,6 +49,16 @@ public interface AppView {
     
     public String getInventoryLocation();
     
+    public String getGenerateProductReference();
+    public String getGenerateProductBarcode();
+
+    public String getUserBarcode();
+    public String getPriceBarcode();
+    public String getUnitBarcode();
+    public String getProductPriceBarcode();
+
+    public String getDefaultTaxCategory();
+
     public void waitCursorBegin();
     public void waitCursorEnd();
     

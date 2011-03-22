@@ -38,7 +38,7 @@
              #end
         #end
         <message>Кол-во продаж: ${ticket.printArticlesCount()}</message>
-        #foreach ($paymentline in $ticket.payment)      
+        #foreach ($paymentline in $ticket.payments)
          #if ($paymentline.name == "cash")
             <total paid="${paymentline.getPaid()}">Наличные</total>
          #end

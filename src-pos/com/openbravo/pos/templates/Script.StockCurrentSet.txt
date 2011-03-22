@@ -1,3 +1,25 @@
+//    Исходный код для Openbravo POS, автоматизированной системы продаж для работы
+//    с сенсорным экраном, предоставлен ТОО "Норд-Трейдинг ЛТД", Республика Казахстан,
+//    в период 2008-2010 годов на условиях лицензионного соглашения GNU LGPL.
+//
+//    Исходный код данного файл разработан в рамках проекта Openbravo POS ru
+//    для использования системы Openbravo POS на территории бывшего СССР
+//    <http://code.google.com/p/openbravoposru/>.
+//
+//    Openbravo POS является свободным программным обеспечением. Вы имеете право
+//    любым доступным образом его распространять и/или модифицировать соблюдая
+//    условия изложенные в GNU Lesser General Public License версии 3 и выше.
+//
+//    Данный исходный распространяется как есть, без каких либо гарантий на его
+//    использование в каких либо целях, включая коммерческое применение. Данный
+//    исход код может быть использован для связи с сторонними библиотеками
+//    распространяемыми под другими лицензионными соглашениями. Подробности
+//    смотрите в описании лицензионного соглашение GNU Lesser General Public License.
+//
+//    Ознакомится с условиями изложенными в GNU Lesser General Public License
+//    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
+//    А также на сайте <http://www.gnu.org/licenses/>.
+
 import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.forms.DataLogicSystem;
@@ -16,40 +38,47 @@ import java.util.Properties;
 
     //Получение номера склада установленного текущим для данного POS терминала
     String loc = p.getProperty("location");
-  
+
     //Получение кода товара из выбранной строки чека
     product = line.getProductID();
 
-    //Получение количества выбранного товара на текущем складе в базе данных Openbravo POS    
-    units = logicsale.findProductStock(loc,product,null);
+    //Получить значение характеристики для товара в текущей строке
+    att = line.getProductAttSetInstId();
 
-
-    multiply = 0;
+    //Получение количества выбранного товара на текущем складе в базе данных Openbravo POS
+    units = logicsale.findProductStock(loc,product,att);
 
     //Получение порядкового номера позиции выбранной в чеки
     index = sales.getSelectedIndex();
 
+    multiply = 0;
+
     //Получение отрицательного количества в изменяемой позиции
     if (index != -1) {
-       currentrow = ticket.getLine(index);
-       multiply = multiply - currentrow.getMultiply();
+       multiply = multiply - line.getMultiply();
     }
 
-    //Подсчёт количества товара данного наименования уже помещённого в чек
+    //Подсчёт количества товара данного наименования и характеристик уже помещённого в чек
     for (int i= 0; i < ticket.getLinesCount(); i++) {
          row = ticket.getLine(i);
-         if (row.getProductID() == product) {
-             multiply = multiply + row.getMultiply();
+         if (row.getProductAttSetInstId() != null) {
+            if (row.getProductID().equals(product) && row.getProductAttSetInstId().equals(att)) {
+               multiply = multiply + row.getMultiply();
+            }
+         } else {
+            if (row.getProductID().equals(product) && row.getProductAttSetInstId() == null) {
+               multiply = multiply + row.getMultiply();
+            }
          }
     }
-    
+
     //Расчёт разницы между товарам имеющемся на складе и товаром запрашиваемым в данном чеки
-    diff = units - line.getMultiply() - multiply;
+    diff = units -  line.getMultiply() - multiply;
 
     //Если полученное значение разницы отрицательно, значит товаром на складе недостаточно и добавление выбранного товара в чек невозможно.
     //Если значение разницы осталось положительным, то товара на складе достаточно и он может быть добавлен в чек.
     if (diff < 0.0) {
-        javax.swing.JOptionPane.showMessageDialog(null, "Недостаточное количество " + line.getProductName() + " на складе № " + loc + ".", "Остаток", JOptionPane.WARNING_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(null, "Недостаточное количество " + line.getProductName() + "(" + line.getProductAttSetInstDesc() + ")" + " на складе № " + loc + ".", "Остаток", JOptionPane.WARNING_MESSAGE);
         return "Cancel";
     } else {
         return null;

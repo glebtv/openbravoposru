@@ -1,21 +1,24 @@
-//    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2009 Openbravo, S.L.
-//    http://www.openbravo.com/product/pos
+//    Исходный код для Openbravo POS, автоматизированной системы продаж для работы
+//    с сенсорным экраном, предоставлен ТОО "Норд-Трейдинг ЛТД", Республика Казахстан,
+//    в период 2008-2010 годов на условиях лицензионного соглашения GNU LGPL.
 //
-//    This file is part of Openbravo POS.
+//    Исходный код данного файл разработан в рамках проекта Openbravo POS ru
+//    для использования системы Openbravo POS на территории бывшего СССР
+//    <http://code.google.com/p/openbravoposru/>.
 //
-//    Openbravo POS is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//    Openbravo POS является свободным программным обеспечением. Вы имеете право
+//    любым доступным образом его распространять и/или модифицировать соблюдая
+//    условия изложенные в GNU Lesser General Public License версии 3 и выше.
 //
-//    Openbravo POS is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
+//    Данный исходный распространяется как есть, без каких либо гарантий на его
+//    использование в каких либо целях, включая коммерческое применение. Данный
+//    исход код может быть использован для связи с сторонними библиотеками
+//    распространяемыми под другими лицензионными соглашениями. Подробности
+//    смотрите в описании лицензионного соглашение GNU Lesser General Public License.
 //
-//    You should have received a copy of the GNU General Public License
-//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+//    Ознакомится с условиями изложенными в GNU Lesser General Public License
+//    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
+//    А также на сайте <http://www.gnu.org/licenses/>.
 
 package com.openbravo.pos.printer.escpos;
 

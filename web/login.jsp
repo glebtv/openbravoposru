@@ -35,6 +35,8 @@
         <meta name = "viewport" content = "user-scalable=no, width=device-width">
         <title><bean:message key="welcome.title"/></title>
         <link rel=StyleSheet href="layout.css" type='text/css' media=screen>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />        
         <html:base/>
     </head>
     <body>

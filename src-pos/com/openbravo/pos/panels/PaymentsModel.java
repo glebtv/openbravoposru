@@ -52,6 +52,11 @@ public class PaymentsModel {
     
     private final static String[] SALEHEADERS = {"label.taxcash", "label.totalcash"};
 
+    private Integer m_iProductSalesRows;
+    private Double m_dProductSalesTotalUnits;
+    private Double m_dProductSalesTotal;
+    private java.util.List<ProductSalesLine> m_lproductsales;
+
     private PaymentsModel() {
     }    
     
@@ -68,6 +73,11 @@ public class PaymentsModel {
         p.m_dSalesTaxes = null;
         p.m_lsales = new ArrayList<SalesLine>();
         
+        p.m_iProductSalesRows = new Integer(0);
+        p.m_dProductSalesTotalUnits = new Double(0.0);
+        p.m_dProductSalesTotal = new Double(0.0);
+        p.m_lproductsales = new ArrayList<ProductSalesLine>();
+
         return p;
     }
     
@@ -142,6 +152,42 @@ public class PaymentsModel {
             p.m_dSalesTaxes = (Double) rectaxes[0];
         } 
                 
+        // Product Sales
+        Object[] valproductsales = (Object []) new StaticSentence(app.getSession()
+            , "SELECT COUNT(*), SUM(TICKETLINES.UNITS), SUM((TICKETLINES.PRICE + TICKETLINES.PRICE * TAXES.RATE ) * TICKETLINES.UNITS) " +
+              "FROM TICKETLINES, TICKETS, RECEIPTS, TAXES " +
+              "WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND TICKETLINES.PRODUCT IS NOT NULL AND RECEIPTS.MONEY = ? " +
+              "GROUP BY RECEIPTS.MONEY"
+            , SerializerWriteString.INSTANCE
+            , new SerializerReadBasic(new Datas[] {Datas.INT, Datas.DOUBLE, Datas.DOUBLE}))
+            .find(app.getActiveCashIndex());
+
+        if (valproductsales == null) {
+            p.m_iProductSalesRows = new Integer(0);
+            p.m_dProductSalesTotalUnits = new Double(0.0);
+            p.m_dProductSalesTotal = new Double(0.0);
+        } else {
+            p.m_iProductSalesRows = (Integer) valproductsales[0];
+            p.m_dProductSalesTotalUnits = (Double) valproductsales[1];
+            p.m_dProductSalesTotal= (Double) valproductsales[2];
+        }
+
+        List products = new StaticSentence(app.getSession()
+            , "SELECT PRODUCTS.NAME, SUM(TICKETLINES.UNITS), TICKETLINES.PRICE, TAXES.RATE " +
+              "FROM TICKETLINES, TICKETS, RECEIPTS, PRODUCTS, TAXES " +
+              "WHERE TICKETLINES.PRODUCT = PRODUCTS.ID AND TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND TICKETLINES.TAXID = TAXES.ID AND RECEIPTS.MONEY = ? " +
+              "GROUP BY PRODUCTS.NAME, TICKETLINES.PRICE, TAXES.RATE"
+            , SerializerWriteString.INSTANCE
+            , new SerializerReadClass(PaymentsModel.ProductSalesLine.class)) //new SerializerReadBasic(new Datas[] {Datas.STRING, Datas.DOUBLE}))
+            .list(app.getActiveCashIndex());
+
+        if (products == null) {
+            p.m_lproductsales = new ArrayList();
+        } else {
+            p.m_lproductsales = products;
+        }
+
+
         List<SalesLine> asales = new StaticSentence(app.getSession(),
                 "SELECT TAXCATEGORIES.NAME, SUM(TAXLINES.AMOUNT) " +
                 "FROM RECEIPTS, TAXLINES, TAXES, TAXCATEGORIES WHERE RECEIPTS.ID = TAXLINES.RECEIPT AND TAXLINES.TAXID = TAXES.ID AND TAXES.CATEGORY = TAXCATEGORIES.ID " +
@@ -317,4 +363,86 @@ public class PaymentsModel {
             return m_PaymentValue;
         }        
     }
-}    
+
+    public double getProductSalesRows() {
+        return m_iProductSalesRows.intValue();
+    }
+
+    public String printProductSalesRows() {
+        return Formats.INT.formatValue(m_iProductSalesRows);
+    }
+
+    public double getProductSalesTotalUnits() {
+        return m_dProductSalesTotalUnits.doubleValue();
+    }
+
+    public String printProductSalesTotalUnits() {
+        return Formats.DOUBLE.formatValue(m_dProductSalesTotalUnits);
+    }
+
+    public double getProductSalesTotal() {
+        return m_dProductSalesTotal.doubleValue();
+    }
+
+    public String printProductSalesTotal() {
+        return Formats.CURRENCY.formatValue(m_dProductSalesTotal);
+    }
+
+    public List<ProductSalesLine> getProductSalesLines() {
+        return m_lproductsales;
+    }
+
+    public static class ProductSalesLine implements SerializableRead {
+
+        private String m_ProductName;
+        private Double m_ProductUnits;
+        private Double m_ProductPrice;
+        private Double m_TaxRate;
+        private Double m_ProductPriceTax;
+
+        public void readValues(DataRead dr) throws BasicException {
+            m_ProductName = dr.getString(1);
+            m_ProductUnits = dr.getDouble(2);
+            m_ProductPrice = dr.getDouble(3);
+            m_TaxRate = dr.getDouble(4);
+
+            m_ProductPriceTax = m_ProductPrice + m_ProductPrice*m_TaxRate;
+        }
+
+        public String printProductName() {
+            return StringUtils.encodeXML(m_ProductName);
+        }
+
+        public String printProductUnits() {
+            return Formats.DOUBLE.formatValue(m_ProductUnits);
+        }
+
+        public Double getProductUnits() {
+            return m_ProductUnits;
+        }
+
+        public String printProductPrice() {
+            return Formats.CURRENCY.formatValue(m_ProductPrice);
+        }
+
+        public Double getProductPrice() {
+            return m_ProductPrice;
+        }
+
+        public String printTaxRate() {
+            return Formats.PERCENT.formatValue(m_TaxRate);
+        }
+
+        public Double getTaxRate() {
+            return m_TaxRate;
+        }
+
+        public String printProductPriceTax() {
+            return Formats.CURRENCY.formatValue(m_ProductPriceTax);
+        }
+
+        public String printProductSubValue() {
+            return Formats.CURRENCY.formatValue(m_ProductPriceTax*m_ProductUnits);
+        }
+    }
+}

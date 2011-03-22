@@ -1,20 +1,25 @@
-//    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007 Openbravo, S.L.
-//    http://sourceforge.net/projects/openbravopos
+//    Исходный код для Openbravo POS, автоматизированной системы продаж для работы
+//    с сенсорным экраном, предоставлен ТОО "Норд-Трейдинг ЛТД", Республика Казахстан,
+//    в период 2008-2010 годов на условиях лицензионного соглашения GNU LGPL.
 //
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
+//    Исходный код данного файл разработан в рамках проекта Openbravo POS ru
+//    для использования системы Openbravo POS на территории бывшего СССР
+//    <http://code.google.com/p/openbravoposru/>.
 //
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
+//    Openbravo POS является свободным программным обеспечением. Вы имеете право
+//    любым доступным образом его распространять и/или модифицировать соблюдая
+//    условия изложенные в GNU Lesser General Public License версии 3 и выше.
 //
-//    You should have received a copy of the GNU General Public License
-//    along with this program; if not, write to the Free Software
-//    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//    Данный исходный распространяется как есть, без каких либо гарантий на его
+//    использование в каких либо целях, включая коммерческое применение. Данный
+//    исход код может быть использован для связи с сторонними библиотеками
+//    распространяемыми под другими лицензионными соглашениями. Подробности
+//    смотрите в описании лицензионного соглашение GNU Lesser General Public License.
+//
+//    Ознакомится с условиями изложенными в GNU Lesser General Public License
+//    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
+//    А также на сайте <http://www.gnu.org/licenses/>.
+
 package com.openbravo.pos.printer.elveskkm;
 
 import gnu.io.*;
@@ -49,6 +54,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     private static final byte[] ACK = {0x06};       //Подтверждение получения сообщения
     private static final byte[] STX = {0x02};       //Начало блока данных
     private static final byte[] NAK = {0x15};       //Отрицание получения сообщения
+    private static final byte[] ETX = {0x03};       //Символ конца блока данных
 
     public DeviceElvesKKMComm(String sPortPrinter) {
         m_sPort = sPortPrinter;
@@ -63,7 +69,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     public void sendInitMessage() throws TicketPrinterException {
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(ElvesKKM.INIT);
-        lineout.write(ElvesKKM.ETX);
+        lineout.write(ETX[0]);
         lineout.write(calcCheckSumCRC(lineout.toByteArray()));
         sendMessage(lineout.toByteArray());
     }
@@ -73,11 +79,11 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(ElvesKKM.PRN);
         byte[] MSG = new byte[sText.length()];
-        MSG = UnicodeConverterCP1251(sText);
+        MSG = UnicodeConverter(sText);
         for (int i = 0; i < MSG.length && i < 24; i++) {
             lineout.write(MSG[i]);
         }
-        lineout.write(ElvesKKM.ETX);
+        lineout.write(ETX[0]);
         lineout.write(calcCheckSumCRC(lineout.toByteArray()));
         sendMessage(lineout.toByteArray());
     }
@@ -86,7 +92,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     public void sendBeepMessage() throws TicketPrinterException {
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(ElvesKKM.BEEP);
-        lineout.write(ElvesKKM.ETX);
+        lineout.write(ETX[0]);
         lineout.write(calcCheckSumCRC(lineout.toByteArray()));
         sendMessage(lineout.toByteArray());
     }
@@ -95,7 +101,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     public void sendStampTitleReportMessage() throws TicketPrinterException {
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(ElvesKKM.TITLE);
-        lineout.write(ElvesKKM.ETX);
+        lineout.write(ETX[0]);
         lineout.write(calcCheckSumCRC(lineout.toByteArray()));
         sendMessage(lineout.toByteArray());
     }
@@ -104,7 +110,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     public void sendOpenDrawerMessage() throws TicketPrinterException {
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(ElvesKKM.OPEN_DRAWER);
-        lineout.write(ElvesKKM.ETX);
+        lineout.write(ETX[0]);
         lineout.write(calcCheckSumCRC(lineout.toByteArray()));
         sendMessage(lineout.toByteArray());
     }
@@ -248,8 +254,8 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
         return result;
     }
 
-    //Конвертация текста из UTF8 в CP1251
-    private byte[] UnicodeConverterCP1251(String sText) {
+    //Конвертация текста из UTF8
+    private byte[] UnicodeConverter(String sText) {
         if (sText == null) {
             return new byte[0];
         } else {
@@ -261,7 +267,7 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
         }
     }
 
-    //Конвертация таблицы символов из UTF8 в CP1251
+    //Конвертация таблицы символов из UTF8
     private byte transChar(char sChar) {
         if ((sChar >= 0x0000) && (sChar < 0x0080)) {
             return (byte) sChar;

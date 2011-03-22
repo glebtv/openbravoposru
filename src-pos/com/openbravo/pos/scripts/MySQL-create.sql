@@ -1,5 +1,5 @@
 --    Openbravo POS is a point of sales application designed for touch screens.
---    Copyright (C) 2007-2009 Openbravo, S.L.
+--    Copyright (C) 2007-2010 Openbravo, S.L.
 --    http://sourceforge.net/projects/openbravopos
 --
 --    This file is part of Openbravo POS.
@@ -18,7 +18,7 @@
 --    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
 -- Database initial script for MYSQL
--- v2.30
+-- v2.30.2
 
 CREATE TABLE APPLICATIONS (
     ID VARCHAR(255) NOT NULL,
@@ -35,14 +35,14 @@ CREATE TABLE ROLES (
     PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX ROLES_NAME_INX ON ROLES(NAME);
--- Nord Trading Edition for 2.30
+
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('0', 'Профиль Администратора', $FILE{/com/openbravo/pos/templates/Role.Administrator.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('1', 'Профиль Менеджера', $FILE{/com/openbravo/pos/templates/Role.Manager.xml} );
-INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('2', 'Профиль Товароведа', $FILE{/com/openbravo/pos/templates/Role.Researcher.xml} );
-INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('3', 'Профиль Кладовщика', $FILE{/com/openbravo/pos/templates/Role.Storekeeper.xml} );
+-- INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('2', 'Профиль Товароведа', $FILE{/com/openbravo/pos/templates/Role.Researcher.xml} );
+-- INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('3', 'Профиль Кладовщика', $FILE{/com/openbravo/pos/templates/Role.Storekeeper.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('4', 'Профиль Продавца', $FILE{/com/openbravo/pos/templates/Role.Employee.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('5', 'Профиль Гостя', $FILE{/com/openbravo/pos/templates/Role.Guest.xml} );
--- end
+
 CREATE TABLE PEOPLE (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
@@ -56,14 +56,14 @@ CREATE TABLE PEOPLE (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX PEOPLE_NAME_INX ON PEOPLE(NAME);
 CREATE INDEX PEOPLE_CARD_INX ON PEOPLE(CARD);
--- Nord Trading Edition for 2.30
+
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('0', 'Администратор', NULL, '0', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('1', 'Менеджер', NULL, '1', 1, NULL);
-INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('2', 'Товаровед', NULL, '2', 1, NULL);
-INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('3', 'Кладовщик', NULL, '3', 1, NULL);
+-- INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('2', 'Товаровед', NULL, '2', 1, NULL);
+-- INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('3', 'Кладовщик', NULL, '3', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('4', 'Продавец', NULL, '4', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('5', 'Гость', NULL, '5', 1, NULL);
--- end
+
 CREATE TABLE RESOURCES (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
@@ -156,22 +156,23 @@ CREATE TABLE CATEGORIES (
     CONSTRAINT CATEGORIES_FK_1 FOREIGN KEY (PARENTID) REFERENCES CATEGORIES(ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX CATEGORIES_NAME_INX ON CATEGORIES(NAME);
--- Nord Trading Edition for 2.30
+
 INSERT INTO CATEGORIES(ID, NAME) VALUES ('000', 'Основная категория');
--- end
+
 CREATE TABLE TAXCATEGORIES (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
     PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX TAXCAT_NAME_INX ON TAXCATEGORIES(NAME);
--- Nord Trading Edition for 2.30
+
 INSERT INTO TAXCATEGORIES(ID, NAME) VALUES ('000', 'Без НДС');
 INSERT INTO TAXCATEGORIES(ID, NAME) VALUES ('001', 'НДС');
--- end
+
 CREATE TABLE TAXES (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,
+    VALIDFROM DATETIME DEFAULT '2001-01-01 00:00:00' NOT NULL,
     CATEGORY VARCHAR(255) NOT NULL,
     CUSTCATEGORY VARCHAR(255),
     PARENTID VARCHAR(255),
@@ -287,10 +288,8 @@ CREATE TABLE LOCATIONS (
     PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX LOCATIONS_NAME_INX ON LOCATIONS(NAME);
--- Nord Trading Edition for 2.30
-INSERT INTO LOCATIONS(ID, NAME,ADDRESS) VALUES('0', 'Склад 1', NULL);
-INSERT INTO LOCATIONS(ID, NAME,ADDRESS) VALUES('1', 'Склад 2', NULL);
--- end
+
+INSERT INTO LOCATIONS(ID, NAME,ADDRESS) VALUES('0', 'Основной склад', NULL);
 
 CREATE TABLE STOCKDIARY (
     ID VARCHAR(255) NOT NULL,
@@ -420,9 +419,9 @@ CREATE TABLE FLOORS (
     PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX FLOORS_NAME_INX ON FLOORS(NAME);
--- Nord Trading Edition for 2.30
+
 INSERT INTO FLOORS(ID, NAME, IMAGE) VALUES ('0', 'Главный зал', $FILE{/com/openbravo/pos/templates/restaurantsample.png});
--- end
+
 CREATE TABLE PLACES (
     ID VARCHAR(255) NOT NULL,
     NAME VARCHAR(255) NOT NULL,

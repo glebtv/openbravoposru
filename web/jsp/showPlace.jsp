@@ -38,7 +38,9 @@
     <head>
         <meta http-equiv="Content-Type" content="javascript; charset=UTF-8">
         <meta name = "viewport" content = "user-scalable=no, width=device-width">
-        <LINK REL=StyleSheet HREF="../layout.css" TYPE="text/css" MEDIA=screen>
+        <link rel=StyleSheet HREF="../layout.css" TYPE="text/css" MEDIA=screen>
+        <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="../favicon.ico" type="image/x-icon" />             
         <script type="text/javascript" src='../tableScript.js'></script>
         <script type="text/javascript" src='../a.js'></script>
         <title><bean:message key="tables" /></title>
@@ -46,8 +48,9 @@
     <body>
         <div class="logo">
             <center>
-        <img src="../images/logo.gif" alt="Openbravo" class="logo" /><br>
-
+                <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
+                <br>
+           
                 <jsp:useBean id="products" type="List<ProductInfoExt>" scope="request" />
                 <jsp:useBean id="place" type="java.lang.String" scope="request" />
                 <jsp:useBean id="placeName" type="java.lang.String" scope="request" />

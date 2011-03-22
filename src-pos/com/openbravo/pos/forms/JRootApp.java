@@ -67,6 +67,16 @@ public class JRootApp extends JPanel implements AppView {
     
     private String m_sInventoryLocation;
     
+    private String m_sGenerateProductReference;
+    private String m_sGenerateProductBarcode;
+
+    private String m_sUserBarcode;
+    private String m_sPriceBarcode;
+    private String m_sUnitBarcode;
+    private String m_sProductPriceBarcode;
+
+    private String m_sDefaultTaxCategory;
+
     private StringBuffer inputtext;
    
     private DeviceScale m_Scale;
@@ -193,6 +203,55 @@ public class JRootApp extends JPanel implements AppView {
             m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
         }
         
+        m_sGenerateProductReference = m_propsdb.getProperty("genreference");
+        if (m_sGenerateProductReference == null) {
+            m_sGenerateProductReference = "true";
+            m_propsdb.setProperty("genreference", m_sGenerateProductReference);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sGenerateProductBarcode = m_propsdb.getProperty("genbarcode");
+        if (m_sGenerateProductBarcode == null) {
+            m_sGenerateProductBarcode = "true";
+            m_propsdb.setProperty("genbarcode", m_sGenerateProductBarcode);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sUserBarcode = m_propsdb.getProperty("userbarcode");
+        if (m_sUserBarcode == null) {
+            m_sUserBarcode = "200";
+            m_propsdb.setProperty("userbarcode", m_sUserBarcode);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sPriceBarcode = m_propsdb.getProperty("pricebarcode");
+        if (m_sPriceBarcode == null) {
+            m_sPriceBarcode = "210";
+            m_propsdb.setProperty("pricebarcode", m_sPriceBarcode);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sUnitBarcode = m_propsdb.getProperty("unitbarcode");
+        if (m_sUnitBarcode == null) {
+            m_sUnitBarcode = "220";
+            m_propsdb.setProperty("unitbarcode", m_sUnitBarcode);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sProductPriceBarcode = m_propsdb.getProperty("productpricebarcode");
+        if (m_sProductPriceBarcode == null) {
+            m_sProductPriceBarcode = "250";
+            m_propsdb.setProperty("productpricebarcode", m_sProductPriceBarcode);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
+        m_sDefaultTaxCategory = m_propsdb.getProperty("taxcategoryid");
+        if (m_sDefaultTaxCategory == null) {
+            m_sDefaultTaxCategory = "000";
+            m_propsdb.setProperty("taxcategoryid", m_sDefaultTaxCategory);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }
+
         // Inicializo la impresora...
         m_TP = new DeviceTicket(this, m_props);
         
@@ -205,7 +264,7 @@ public class JRootApp extends JPanel implements AppView {
         
         // Inicializamos la scanpal
         m_Scanner = DeviceScannerFactory.createInstance(m_props);
-
+            
         m_Mercury130 = DeviceMercury130Factory.createInstance(m_props);
 
         // Leemos los recursos basicos
@@ -269,7 +328,7 @@ public class JRootApp extends JPanel implements AppView {
     public DeviceScanner getDeviceScanner() {
         return m_Scanner;
     }
-
+    
     public DeviceMercury130 getDeviceMercury130() {
         return m_Mercury130;
     }
@@ -281,6 +340,36 @@ public class JRootApp extends JPanel implements AppView {
     public String getInventoryLocation() {
         return m_sInventoryLocation;
     }   
+
+    public String getDefaultTaxCategory() {
+        return m_sDefaultTaxCategory;
+    }
+
+    public String getUserBarcode() {
+        return m_sUserBarcode;
+    }
+
+    public String getPriceBarcode() {
+        return m_sPriceBarcode;
+    }
+
+    public String getUnitBarcode() {
+        return m_sUnitBarcode;
+    }
+
+    public String getProductPriceBarcode() {
+        return m_sProductPriceBarcode;
+    }
+
+    public String getGenerateProductReference() {
+        return m_sGenerateProductReference;
+    }
+
+    public String getGenerateProductBarcode() {
+        return m_sGenerateProductBarcode;
+    }
+
+
     public String getActiveCashIndex() {
         return m_sActiveCashIndex;
     }
