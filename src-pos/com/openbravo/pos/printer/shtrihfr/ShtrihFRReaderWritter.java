@@ -33,11 +33,11 @@ public interface ShtrihFRReaderWritter {
      public void sendTicketCutMessage() throws TicketPrinterException;
      public void sendTicketUpMessage() throws TicketPrinterException;     
 //     public void sendStampTitleReportMessage() throws TicketPrinterException;
-     public void sendSaleLine(String sProductName, double dProductPrice, double dSaleUnits, int iProductTax) throws TicketPrinterException;
-     public void sendOpenTicket(int iTicketType) throws TicketPrinterException;
-     public void sendCloseTicket(String sTypePayment, double dTotalPayment, int iTax) throws TicketPrinterException;
+//     public void sendSaleLine(String sProductName, double dProductPrice, double dSaleUnits, int iProductTax) throws TicketPrinterException;
+//     public void sendOpenTicket(int iTicketType) throws TicketPrinterException;
+//     public void sendCloseTicket(String sTypePayment, double dTotalPayment, int iTax) throws TicketPrinterException;
      public void sendOpenDrawerMessage() throws TicketPrinterException;
-     public void printZReport() throws TicketPrinterException;
-     public void printXReport() throws TicketPrinterException;
+//     public void printZReport() throws TicketPrinterException;
+//     public void printXReport() throws TicketPrinterException;
      public void disconnectDevice();
 }

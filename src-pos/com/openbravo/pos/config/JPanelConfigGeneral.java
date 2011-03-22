@@ -240,7 +240,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         // Fiscal printer
         jcboMachineFiscalPrinter.addItem("javapos");
         jcboMachineFiscalPrinter.addItem("aurafr");
-        jcboMachineFiscalPrinter.addItem("shtrihfr");
+//        jcboMachineFiscalPrinter.addItem("shtrihfr");
 
         jcboMachineFiscalPrinter.addItem("Not defined");
 
@@ -413,7 +413,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         p = new StringParser(config.getProperty("machine.fiscalprinter"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("aurafr".equals(sparam) || "shtrihfr".equals(sparam)) {
+        if ("aurafr".equals(sparam) 
+//            || "shtrihfr".equals(sparam)
+            ) {
             jcboMachineFiscalPrinter.setSelectedItem(sparam);
             jcboConnFiscalPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialFiscalPrinter.setSelectedItem(p.nextToken(','));
@@ -508,7 +510,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         }
 
         String sMachineFiscalPrinter = comboValue(jcboMachineFiscalPrinter.getSelectedItem());
-        if ("aurafr".equals(sMachineFiscalPrinter) || "shtrihfr".equals(sMachineFiscalPrinter)) {
+        if ( "aurafr".equals(sMachineFiscalPrinter)
+//                || "shtrihfr".equals(sMachineFiscalPrinter)
+            ) {
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + comboValue(jcboConnFiscalPrinter.getSelectedItem()) + "," + comboValue(jcboSerialFiscalPrinter.getSelectedItem()));
         } else if ("javapos".equals(sMachineFiscalPrinter)) {
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + m_jtxtJPOSFiscalPrinter.getText() + "," + m_jtxtJPOSFiscalDrawer.getText());
@@ -1424,7 +1428,9 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineFiscalPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineFiscalPrinterActionPerformed
         CardLayout cl = (CardLayout) (m_jFiscalPrinterParams.getLayout());
 
-        if ("aurafr".equals(jcboMachineFiscalPrinter.getSelectedItem()) || "shtrihfr".equals(jcboMachineFiscalPrinter.getSelectedItem())) {
+        if ("aurafr".equals(jcboMachineFiscalPrinter.getSelectedItem()) 
+//            || "shtrihfr".equals(jcboMachineFiscalPrinter.getSelectedItem())
+            ) {
             cl.show(m_jFiscalPrinterParams, "comm");
         } else if ("javapos".equals(jcboMachineFiscalPrinter.getSelectedItem())) {
             cl.show(m_jFiscalPrinterParams, "javapos");

@@ -59,7 +59,7 @@ public class DeviceFiscalPrinterShtrihFR implements DeviceFiscalPrinter {
         try {
 //            m_CommOutputFiscal.sendInitMessage();
             m_CommOutputFiscal.sendBeepMessage();
-            m_CommOutputFiscal.sendOpenTicket(0);
+//            m_CommOutputFiscal.sendOpenTicket(0);
         } catch (TicketPrinterException e) {
         }
 
@@ -67,10 +67,10 @@ public class DeviceFiscalPrinterShtrihFR implements DeviceFiscalPrinter {
 
     // Печать строки продажи по товару
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) {
-        try {
-            m_CommOutputFiscal.sendSaleLine(sproduct, dprice, dunits, 0);
-        } catch (TicketPrinterException e) {
-        }
+//        try {
+//            m_CommOutputFiscal.sendSaleLine(sproduct, dprice, dunits, 0);
+//        } catch (TicketPrinterException e) {
+//        }
     }
 
     //Печать текста
@@ -96,26 +96,26 @@ public class DeviceFiscalPrinterShtrihFR implements DeviceFiscalPrinter {
 
     //Печать итоговой оплаты по чеку
     public void printTotal(String sPayment, double dpaid) {
-        try {
-            m_CommOutputFiscal.sendCloseTicket(sPayment, dpaid, 0);
-        } catch (TicketPrinterException e) {
-        }
+//        try {
+//            m_CommOutputFiscal.sendCloseTicket(sPayment, dpaid, 0);
+//        } catch (TicketPrinterException e) {
+//        }
     }
 
     //Печать Z-отчёта
     public void printZReport() {
-        try {
-            m_CommOutputFiscal.printZReport();
-        } catch (TicketPrinterException e) {
-        }
+//        try {
+//            m_CommOutputFiscal.printZReport();
+//        } catch (TicketPrinterException e) {
+//        }
     }
 
     //Печать X-отчёта
     public void printXReport() {
-        try {
-            m_CommOutputFiscal.printXReport();
-        } catch (TicketPrinterException e) {
-        }
+//        try {
+//            m_CommOutputFiscal.printXReport();
+//        } catch (TicketPrinterException e) {
+//        }
     }
 }
 

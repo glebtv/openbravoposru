@@ -227,77 +227,77 @@ public class DeviceShtrihFRComm implements ShtrihFRReaderWritter, SerialPortEven
 
     }
 
-    public void sendOpenTicket(int iTicketType) throws TicketPrinterException {
-        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-        lineout.write((byte) 6);
-        lineout.write(ShtrihFR.OPEN_TICKET);
-        for (int i=0; i<4; i++) lineout.write(PASS[i]);
-        lineout.write((byte) iTicketType);        
-        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
-        sendMessage(lineout.toByteArray(),3);
-    }
+//    public void sendOpenTicket(int iTicketType) throws TicketPrinterException {
+//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
+//        lineout.write((byte) 6);
+//        lineout.write(ShtrihFR.OPEN_TICKET);
+//        for (int i=0; i<4; i++) lineout.write(PASS[i]);
+//        lineout.write((byte) iTicketType);
+//        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
+//        sendMessage(lineout.toByteArray(),3);
+//    }
 
-    public void sendCloseTicket(String sTypePayment, double dTotalPayment, int iTax) throws TicketPrinterException {
-        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-        lineout.write((byte) 71);
-        lineout.write(ShtrihFR.CLOSE_TICKET);
-        for (int i=0; i<4; i++) lineout.write(PASS[i]);
-
-        byte[] PRICEBuf = new byte[24];
-        if (ShtrihFR.FLAG_MDE == 1) {
-            PRICEBuf = m_FR.convertHEX((long) (dTotalPayment * 100));
-        } else {
-            PRICEBuf = m_FR.convertHEX((long) dTotalPayment);
-        }
-        for (int i = 0; i < 5; i++) lineout.write(PRICEBuf[i]);
-
-        for (int i=0; i<5; i++) lineout.write(NULL);
-        for (int i=0; i<5; i++) lineout.write(NULL);
-        for (int i=0; i<5; i++) lineout.write(NULL);
-
-        for (int i=0; i<2; i++) lineout.write(NULL);
-
-        lineout.write(iTax);
-
-        lineout.write(0);
-        lineout.write(0);
-        lineout.write(0);
-
-        byte[] MSG = new byte[40];
-        byte[] MSGBuf = m_FR.UnicodeConverterCP1251(sTypePayment);
-        if (MSGBuf.length <= 40) {
-            for (int i = 0; i < MSGBuf.length; i++) {
-                MSG[i] = MSGBuf[i];
-            }
-        } else {
-            for (int i = 0; i < 40; i++) {
-                MSG[i] = MSGBuf[i];
-            }
-        }
-        for (int i = 0; i < 40; i++) lineout.write(MSG[i]);
-        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
-
-        sendMessage(lineout.toByteArray(), 8);
-
-    }
-
-    public void printZReport() throws TicketPrinterException {
-        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-        lineout.write((byte) 5);
-        lineout.write(ShtrihFR.Z_REPORT);
-        for (int i=0; i<4; i++) lineout.write(PASS[i]);
-        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
-        sendMessage(lineout.toByteArray(),3);
-    }
-
-    public void printXReport() throws TicketPrinterException {
-        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-        lineout.write((byte) 5);
-        lineout.write(ShtrihFR.X_REPORT);
-        for (int i=0; i<4; i++) lineout.write(PASS[i]);
-        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
-        sendMessage(lineout.toByteArray(),3);
-    }
+//    public void sendCloseTicket(String sTypePayment, double dTotalPayment, int iTax) throws TicketPrinterException {
+//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
+//        lineout.write((byte) 71);
+//        lineout.write(ShtrihFR.CLOSE_TICKET);
+//        for (int i=0; i<4; i++) lineout.write(PASS[i]);
+//
+//        byte[] PRICEBuf = new byte[24];
+//        if (ShtrihFR.FLAG_MDE == 1) {
+//            PRICEBuf = m_FR.convertHEX((long) (dTotalPayment * 100));
+//        } else {
+//            PRICEBuf = m_FR.convertHEX((long) dTotalPayment);
+//        }
+//        for (int i = 0; i < 5; i++) lineout.write(PRICEBuf[i]);
+//
+//        for (int i=0; i<5; i++) lineout.write(NULL);
+//        for (int i=0; i<5; i++) lineout.write(NULL);
+//        for (int i=0; i<5; i++) lineout.write(NULL);
+//
+//        for (int i=0; i<2; i++) lineout.write(NULL);
+//
+//        lineout.write(iTax);
+//
+//        lineout.write(0);
+//        lineout.write(0);
+//        lineout.write(0);
+//
+//        byte[] MSG = new byte[40];
+//        byte[] MSGBuf = m_FR.UnicodeConverterCP1251(sTypePayment);
+//        if (MSGBuf.length <= 40) {
+//            for (int i = 0; i < MSGBuf.length; i++) {
+//                MSG[i] = MSGBuf[i];
+//            }
+//        } else {
+//            for (int i = 0; i < 40; i++) {
+//                MSG[i] = MSGBuf[i];
+//            }
+//        }
+//        for (int i = 0; i < 40; i++) lineout.write(MSG[i]);
+//        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
+//
+//        sendMessage(lineout.toByteArray(), 8);
+//
+//    }
+//
+//    public void printZReport() throws TicketPrinterException {
+//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
+//        lineout.write((byte) 5);
+//        lineout.write(ShtrihFR.Z_REPORT);
+//        for (int i=0; i<4; i++) lineout.write(PASS[i]);
+//        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
+//        sendMessage(lineout.toByteArray(),3);
+//    }
+//
+//    public void printXReport() throws TicketPrinterException {
+//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
+//        lineout.write((byte) 5);
+//        lineout.write(ShtrihFR.X_REPORT);
+//        for (int i=0; i<4; i++) lineout.write(PASS[i]);
+//        lineout.write(m_FR.calcCheckSumCRC(lineout.toByteArray()));
+//        sendMessage(lineout.toByteArray(),3);
+//    }
 
 
     //Закрыть соединение
