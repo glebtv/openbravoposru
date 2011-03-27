@@ -33,7 +33,15 @@ public class UnicodeTranslatorCitizenCyr extends UnicodeTranslator {
 //        return ESCPOS.CODE_TABLE_17;
     }
 
-    public byte transChar(char sChar) {
+    public final byte[] convertString(String sConvert) {
+        byte bAux[] = new byte[sConvert.length()];
+        for (int i = 0; i < sConvert.length(); i++) {
+            bAux[i] = transChar(sConvert.charAt(i));
+        }
+        return bAux;
+    }
+
+    private byte transChar(char sChar) {
         if ((sChar >= 0x0000) && (sChar < 0x0080)) {
             return (byte) sChar;
         } else {
