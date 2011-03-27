@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="432"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -173,7 +173,7 @@ ORDER BY CATEGORIES.NAME ASC]]>
 				<piePlot isCircular="true" labelFormat="{1} ({2})" legendLabelFormat="- {0}">
 					<plot/>
 					<itemLabel color="#000000" backgroundColor="#FFFFFF">
-						<font fontName="Dialog" size="12" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+						<font fontName="Dialog" size="12" pdfFontName="FreeSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</itemLabel>
 				</piePlot>
 			</pieChart>
