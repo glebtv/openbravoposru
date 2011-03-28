@@ -48,7 +48,7 @@
     <body>
         <div class="logo">
             <center>
-                <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
+                <a href="http://www.openbravo.com/"><img src="../images/logo.gif" alt="Openbravo" class="logo" /></a>
                 <br>
            
                 <jsp:useBean id="products" type="List<ProductInfoExt>" scope="request" />

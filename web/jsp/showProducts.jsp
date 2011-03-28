@@ -51,7 +51,7 @@
         <jsp:useBean id="rates" scope="request" type="java.util.List"/>
         <div class="logo">
             <center>
-                <a href="http://www.openbravo.com/"><img src="images/logo.gif" alt="Openbravo" class="logo" /></a>
+                <a href="http://www.openbravo.com/"><img src="../images/logo.gif" alt="Openbravo" class="logo" /></a>
                 <br>
             </center>
                <a href="showPlace.do?id=<%=request.getSession().getAttribute("place")%>&floorId=<%=request.getSession().getAttribute("floorId")%>" ><img alt="back" src="../images/back.png" class="back">../<%=placeName%>/<bean:message key="addproducts" /></a><br></div>
