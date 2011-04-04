@@ -270,7 +270,7 @@ var mode;
   }
 
   function showNotifications(index, not) {
-      document.getElementById('notification').innerHTML = not + " был добавлен в чек.";
+      document.getElementById('notification').innerHTML = "Товар \"" + not + "\" был добавлен в чек.";
       if(row.value == null) {
            row.value = 1;
            row.innerHTML = 1;
