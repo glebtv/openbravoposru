@@ -45,6 +45,8 @@ public class DeviceScale {
             m_scale = new ScaleDialog(parent);
         } else if ("tves4149".equals(sScaleType)) { // scale ВР4149-10 & ВР4149-11
             m_scale = new ScaleTves(sScaleParam1);
+        } else if ("massak".equals(sScaleType)) { // scale MK_A
+            m_scale = new ScaleTves(sScaleParam1);
         } else {
             m_scale = null;
         }
