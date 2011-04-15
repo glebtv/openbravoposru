@@ -130,21 +130,16 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
         //Номер товара в диапозоне.
 
         if (m_iProductOrder > 0 || m_iProductOrder <= 20000) {
-            ByteArrayOutputStream message = new ByteArrayOutputStream();
             ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
-//            try {
-//                datamessage.write(m_ScaleVPM.CreatePLUMessage(m_iProductOrder, sCode, dPrice, sName));
-//                byte[] bData = new byte[datamessage.size()];
+            
+            try {
+                datamessage.write(m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName));
+            } catch (IOException ex) {
+            }
 
-//                message.write(datamessage.size());
-//                message.write(datamessage.toByteArray());
-//            } catch (IOException ex) {
-//                Logger.getLogger(DeviceScaleVPMComm.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            writeLine(datamessage.toByteArray());
 
-            writeLine(message.toByteArray());
-
-            message = null;
+            datamessage = null;
 
 //        readCommand(); CMD_TCP_ACK_DFILE || CMD_TCP_BAD_DFILE
         } else {
