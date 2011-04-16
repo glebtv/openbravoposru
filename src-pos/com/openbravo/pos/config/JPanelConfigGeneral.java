@@ -301,6 +301,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         // Scanner and Device with PLUs
         jcboMachineScanner.addItem("scanpal2");
         jcboMachineScanner.addItem("mercury130kz039");
+        jcboMachineScanner.addItem("massakvpm");
         jcboMachineScanner.addItem("Not defined");
 
         jcboSerialScanner.addItem("COM1");
@@ -462,7 +463,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         p = new StringParser(config.getProperty("machine.scanner"));
         sparam = p.nextToken(':');
         jcboMachineScanner.setSelectedItem(sparam);
-        if ("scanpal2".equals(sparam) || "mercury130kz039".equals(sparam)) {
+        if ("scanpal2".equals(sparam) 
+                || "mercury130kz039".equals(sparam)
+                || "massakvpm".equals(sparam)
+                ) {
             jcboSerialScanner.setSelectedItem(p.nextToken(','));
         }
 
@@ -578,7 +582,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         // La bascula
         String sMachineScale = comboValue(jcboMachineScale.getSelectedItem());
-        if ("dialog1".equals(sMachineScale) || "samsungesp".equals(sMachineScale) || "tves4149".equals(sMachineScale)) {
+        if ("dialog1".equals(sMachineScale)
+                || "samsungesp".equals(sMachineScale)
+                || "tves4149".equals(sMachineScale)
+                || "massak".equals(sMachineScale)
+                ) {
             config.setProperty("machine.scale", sMachineScale + ":" + comboValue(jcboSerialScale.getSelectedItem()));
         } else {
             config.setProperty("machine.scale", sMachineScale);
@@ -586,7 +594,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         // Scanner and Device with PLUs
         String sMachineScanner = comboValue(jcboMachineScanner.getSelectedItem());
-        if ("scanpal2".equals(sMachineScanner) || "mercury130kz039".equals(sMachineScanner)) {
+        if ("scanpal2".equals(sMachineScanner) 
+                || "mercury130kz039".equals(sMachineScanner)
+                || "massakvpm".equals(sMachineScanner)
+                ) {
             config.setProperty("machine.scanner", sMachineScanner + ":" + comboValue(jcboSerialScanner.getSelectedItem()));
         } else {
             config.setProperty("machine.scanner", sMachineScanner);
@@ -1401,7 +1412,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineScannerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineScannerActionPerformed
         CardLayout cl = (CardLayout) (m_jScannerParams.getLayout());
 
-        if ("scanpal2".equals(jcboMachineScanner.getSelectedItem()) || "mercury130kz039".equals(jcboMachineScanner.getSelectedItem())) {
+        if ("scanpal2".equals(jcboMachineScanner.getSelectedItem()) 
+                || "mercury130kz039".equals(jcboMachineScanner.getSelectedItem())
+                || "massakvpm".equals(jcboMachineScanner.getSelectedItem())
+                ) {
             cl.show(m_jScannerParams, "comm");
         } else {
             cl.show(m_jScannerParams, "empty");
