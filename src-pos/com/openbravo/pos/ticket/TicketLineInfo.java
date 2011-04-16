@@ -238,6 +238,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public double getPriceTax() {
+//        return RoundUtils.round(price * (1.0 + getTaxRate()));
         return price * (1.0 + getTaxRate());
     }
 

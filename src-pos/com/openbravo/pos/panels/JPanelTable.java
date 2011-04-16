@@ -113,6 +113,12 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
                 toolbar.add(c);
             }
 
+            c = getToolbarExtrasScaleVPM();
+            if (c != null) {
+                c.applyComponentOrientation(getComponentOrientation());
+                toolbar.add(c);
+            }
+
             // La Toolbar
             c = new JLabelDirty(dirty);
             c.applyComponentOrientation(getComponentOrientation());
@@ -134,6 +140,10 @@ public abstract class JPanelTable extends JPanel implements JPanelView, BeanFact
     }
 
     public Component getToolbarExtrasMercury130() {
+        return null;
+    }
+
+    public Component getToolbarExtrasScaleVPM() {
         return null;
     }
 

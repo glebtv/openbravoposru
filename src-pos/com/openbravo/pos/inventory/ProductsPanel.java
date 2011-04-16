@@ -108,6 +108,21 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
         return btnMercury130;
     }
 
+        public Component getToolbarExtrasScaleVPM() {
+
+        JButton btnScaleVPM = new JButton();
+        btnScaleVPM.setText("MassaKVPM");
+        btnScaleVPM.setVisible(app.getDeviceScaleVPM() != null);
+        btnScaleVPM.addActionListener(new java.awt.event.ActionListener() {
+
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScaleVPMActionPerformed(evt);
+            }
+        });
+
+        return btnScaleVPM;
+    }
+
     private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
   
         JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
@@ -115,6 +130,10 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     
     private void btnMercury130ActionPerformed(java.awt.event.ActionEvent evt) {
         JDlgUploadProductsMercury130.showMessage(this, app.getDeviceMercury130(), bd);
+    }
+
+    private void btnScaleVPMActionPerformed(java.awt.event.ActionEvent evt) {
+        JDlgUploadProductsScaleVPM.showMessage(this, app.getDeviceScaleVPM(), bd);
     }
 
     public String getTitle() {

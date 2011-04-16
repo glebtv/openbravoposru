@@ -25,6 +25,7 @@ import com.openbravo.pos.printer.*;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.mercury130.DeviceMercury130;
+import com.openbravo.pos.massakvpm.DeviceScaleVPM;
 
 /**
  *
@@ -36,7 +37,8 @@ public interface AppView {
     public DeviceTicket getDeviceTicket();
     public DeviceScanner getDeviceScanner();
     public DeviceMercury130 getDeviceMercury130();
-      
+    public DeviceScaleVPM getDeviceScaleVPM();
+    
     public Session getSession();
     public AppProperties getProperties();
     public Object getBean(String beanfactory) throws BeanFactoryException;
