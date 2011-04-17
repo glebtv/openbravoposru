@@ -31,6 +31,6 @@ public interface DeviceScaleVPM {
     public void disconnectDevice();
 
     public void startUploadProduct() throws DeviceScaleVPMException;
-    public void sendProduct(String sName, String sCode, Double dPrice) throws DeviceScaleVPMException;
+    public void sendProduct(String sName, String sCode, Double dPrice, int iPLUs) throws DeviceScaleVPMException;
     public void stopUploadProduct() throws DeviceScaleVPMException;
 }

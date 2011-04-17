@@ -143,7 +143,8 @@ public class JDlgUploadProductsScaleVPM extends javax.swing.JDialog {
                 m_scale.sendProduct(
                         (String) myprod[3], // name
                         (String) myprod[2], // barcode
-                        (Double) myprod[7]); // sell price
+                        (Double) myprod[7],
+                        size); // sell price
             }
             m_scale.stopUploadProduct();
             MessageInf msg = new MessageInf(MessageInf.SGN_SUCCESS, AppLocal.getIntString("message.scannerok"));

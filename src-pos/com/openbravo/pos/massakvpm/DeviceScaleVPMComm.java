@@ -36,6 +36,10 @@ import java.util.logging.Logger;
 
 public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListener {
 
+    private static final byte CMD_TCP_DFILE = (byte) 0x82; // Загрузить в весы запись
+    private static final byte CMD_TCP_ACK_DFILE = 0x42; // Запись файла загружена в весы
+    private static final byte CMD_TCP_BAD_DFILE = 0x43; // Запись с неожидаемым номером или типом файла загружена в весы
+
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;
 
@@ -123,33 +127,24 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
 //        writeLine(COMMAND_OFF);
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice) throws DeviceScaleVPMException {
-
-        m_iProductOrder++;
-
-        //Номер товара в диапозоне.
+    public void sendProduct(String sName, String sCode, Double dPrice, int iPLUs) throws DeviceScaleVPMException {
+        
+        m_iProductOrder++; //Номер товара в диапозоне.
 
         if (m_iProductOrder > 0 || m_iProductOrder <= 20000) {
-            ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
-            
             try {
-                datamessage.write(m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName));
+                writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName), m_iProductOrder, iPLUs));
             } catch (IOException ex) {
             }
-
-            writeLine(datamessage.toByteArray());
-
-            datamessage = null;
-
-//        readCommand(); CMD_TCP_ACK_DFILE || CMD_TCP_BAD_DFILE
         } else {
              throw new DeviceScaleVPMException("Количество PLU выходит из диапазона поддерживаемого устройством");
         }
+    readCommand(CMD_TCP_ACK_DFILE);
     }
 
-    private void readCommand(byte[] cmd) throws DeviceScaleVPMException {
+    private void readCommand(byte cmd) throws DeviceScaleVPMException {
         byte[] b = readLine();
-        if (!checkCommand(cmd, b)) {
+        if (!checkCommand(cmd, b[5])) {
             throw new DeviceScaleVPMException("Command not expected");
         }
     }
@@ -190,17 +185,17 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
     }
 
 
-    private boolean checkCommand(byte[] bcommand, byte[] brecieved) {
-        if (bcommand.length == brecieved.length) {
-            for (int i = 0; i < bcommand.length; i++) {
-                if (bcommand[i] != brecieved[i]) {
+    private boolean checkCommand(byte bcommand, byte brecieved) {
+//        if (bcommand.length == brecieved.length) {
+//            for (int i = 0; i < bcommand.length; i++) {
+                if (bcommand != brecieved) {
                     return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+                } else return true;
+//            }
+//            return true;
+//        } else {
+//            return false;
+//        }
     }
 
     public void serialEvent(SerialPortEvent e) {
@@ -219,16 +214,18 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             case SerialPortEvent.DATA_AVAILABLE:
                 try {
                     while (m_in.available() > 0) {
-                        int b = m_in.read();
+                        byte[] b = new byte[6];
+                        m_in.read(b);
                         synchronized(this) {
-                            if (b == 0x0F) {
+                            if (b[5] == CMD_TCP_ACK_DFILE || b[5] == CMD_TCP_BAD_DFILE) {
                                 m_abuffer.write(b);
                                 m_aLines.add(m_abuffer.toByteArray());
                                 m_abuffer.reset();
                                 notifyAll();
-                            } else {
-                                m_abuffer.write(b);
                             }
+//                            } else {
+//                                m_abuffer.write(b);
+//                            }
                         }
                     }
                 } catch (IOException eIO) {}
