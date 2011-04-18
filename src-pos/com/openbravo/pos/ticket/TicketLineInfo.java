@@ -28,6 +28,7 @@ import com.openbravo.format.Formats;
 import com.openbravo.data.loader.SerializableWrite;
 import com.openbravo.basic.BasicException;
 import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.util.RoundUtils;
 import java.util.Properties;
 
 /**
@@ -83,6 +84,7 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         } else {
             pid = product.getID();
             attributes.setProperty("product.name", product.getName());
+            attributes.setProperty("product.code", product.getCode());
             attributes.setProperty("product.com", product.isCom() ? "true" : "false");
             if (product.getAttributeSetID() != null) {
                 attributes.setProperty("product.attsetid", product.getAttributeSetID());
@@ -185,6 +187,10 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return attributes.getProperty("product.name");
     }
 
+    public String getProductCode() {
+        return attributes.getProperty("product.code");
+    }
+
     public String getProductAttSetId() {
         return attributes.getProperty("product.attsetid");
     }
@@ -238,12 +244,13 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public double getPriceTax() {
-//        return RoundUtils.round(price * (1.0 + getTaxRate()));
-        return price * (1.0 + getTaxRate());
+        return RoundUtils.round(price * (1.0 + getTaxRate()));
+//        return price * (1.0 + getTaxRate());
     }
 
     public void setPriceTax(double dValue) {
-        price = dValue / (1.0 + getTaxRate());
+        price = RoundUtils.round(dValue / (1.0 + getTaxRate()));
+//        price = dValue / (1.0 + getTaxRate());
     }
 
     public TaxInfo getTaxInfo() {
@@ -288,6 +295,10 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
 
     public String printName() {
         return StringUtils.encodeXML(attributes.getProperty("product.name"));
+    }
+
+    public String printCode() {
+        return StringUtils.encodeXML(attributes.getProperty("product.code"));
     }
 
     public String printMultiply() {
