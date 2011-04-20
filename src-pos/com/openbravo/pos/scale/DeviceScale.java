@@ -27,11 +27,12 @@ import java.awt.Component;
 public class DeviceScale {
     
     private Scale m_scale;
+    private String sScaleType;
     
     /** Creates a new instance of DeviceScale */
     public DeviceScale(Component parent, AppProperties props) {
         StringParser sd = new StringParser(props.getProperty("machine.scale"));
-        String sScaleType = sd.nextToken(':');
+        sScaleType = sd.nextToken(':');
         String sScaleParam1 = sd.nextToken(',');
         // String sScaleParam2 = sd.nextToken(',');
         
@@ -46,7 +47,7 @@ public class DeviceScale {
         } else if ("tves4149".equals(sScaleType)) { // scale ВР4149-10 & ВР4149-11
             m_scale = new ScaleTves(sScaleParam1);
         } else if ("massak".equals(sScaleType)) { // scale MK_A
-            m_scale = new ScaleTves(sScaleParam1);
+            m_scale = new ScaleMassaK(sScaleParam1);
         } else {
             m_scale = null;
         }
@@ -57,20 +58,26 @@ public class DeviceScale {
     }
     
     public Double readWeight() throws ScaleException {
-        
+
         if (m_scale == null) {
             throw new ScaleException(AppLocal.getIntString("scale.notdefined"));
         } else {
             Double result = m_scale.readWeight();
             if (result == null) {
                 return null; // Canceled by the user / scale
-            } else if (result.doubleValue() < 0.002) {
+            } else if ((result.doubleValue() < 0.002) && "massak".equals(sScaleType) == false) {
                 // invalid result. nothing on the scale
-                throw new ScaleException(AppLocal.getIntString("scale.invalidvalue"));                
+                throw new ScaleException(AppLocal.getIntString("scale.invalidvalue"));
+            } else if ("massak".equals(sScaleType)) {
+                if ((result >= 0.04 && result <= 15000.0) || (result <= -0.04 && result >= -15000.0)) {
+                    return result;
+                } else {
+                    throw new ScaleException(AppLocal.getIntString("scale.invalidvalue"));
+                }
             } else {
                 // valid result
                 return result;
             }
         }
-    }    
+    }
 }

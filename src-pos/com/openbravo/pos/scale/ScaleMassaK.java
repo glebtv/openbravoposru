@@ -35,7 +35,6 @@ public class ScaleMassaK implements Scale, SerialPortEventListener {
     private OutputStream m_out;
     private InputStream m_in;
     private static final int SCALE_READY = 0;
-    private static final int SCALE_READING = 1;
     private double m_dWeightBuffer;
     private int m_iStatusScale;
 
@@ -62,7 +61,7 @@ public class ScaleMassaK implements Scale, SerialPortEventListener {
             
             m_dWeightBuffer = 0.0;
             
-            write(new byte[]{0x48});
+            write(new byte[]{0x45});
 
             flush();
 
@@ -133,60 +132,57 @@ public class ScaleMassaK implements Scale, SerialPortEventListener {
                     while (m_in.available() > 0) {
                         byte[] b = new byte[2];
                         m_in.read(b);
-                        int iSign = 1;
-                        BitSet bits = new BitSet();
 
-                        if (m_iStatusScale == SCALE_READY) {
-                            m_dWeightBuffer = 0.0;
-                            m_iStatusScale = SCALE_READING;
-                        }
+                        m_dWeightBuffer = getWeight(b);
 
-                        for (int j = 0; j < 1 * 8; j++) {
-                            if ((b[1] & (1 << (j % 8))) > 0) {
-                                bits.set(j);
-                            }
-                        }
-
-                        if (bits.get(7) == true) {
-                            byte bBuffer = 0;
-                            iSign = -1;
-                            bits.set(7, false);
-                            for (int j = 0; j < bits.length(); j++) {
-                                if (bits.get(j)) {
-                                    bBuffer |= 1 << (j % 8);
-                                }
-                            }
-                            b[1] = bBuffer;
-                        }
-
-                        for (int i = 1; i >= 0; i--) {
-                            int iBuffer = 0;
-                            if (b[i] < 0) {
-                                iBuffer = b[i] + 256;
-                            } else {
-                                iBuffer = b[i];
-                            }
-                            System.out.println("iBuffer: " + iBuffer);
-                            m_dWeightBuffer = m_dWeightBuffer * 256 + (int) iBuffer;
-                        }
-
-                        m_dWeightBuffer = m_dWeightBuffer * iSign;
-
-                        System.out.println("Weigth: " + m_dWeightBuffer);
-
-                        if (m_dWeightBuffer >= 0.0 && m_dWeightBuffer <= 15050.0) {
-                            synchronized (this) {
-                                m_iStatusScale = SCALE_READY;
-                                notifyAll();
-                            }
-                        } else {
-                            m_dWeightBuffer = 0.0;
+                        synchronized (this) {
                             m_iStatusScale = SCALE_READY;
+                            notifyAll();
                         }
+
                     }
                 } catch (IOException eIO) {
                 }
                 break;
         }
+    }
+
+    private Double getWeight(byte[] bString) {
+
+        int iSign = 1;
+        BitSet bits = new BitSet();
+        Double dWeight = 0.0;
+
+        for (int j = 0; j < 1 * 8; j++) {
+            if ((bString[1] & (1 << (j % 8))) > 0) {
+                bits.set(j);
+            }
+        }
+
+        if (bits.get(7) == true) {
+            byte bBuffer = 0;
+            iSign = -1;
+            bits.set(7, false);
+            for (int j = 0; j < bits.length(); j++) {
+                if (bits.get(j)) {
+                    bBuffer |= 1 << (j % 8);
+                }
+            }
+            bString[1] = bBuffer;
+        }
+
+        for (int i = 1; i >= 0; i--) {
+            int iBuffer = 0;
+            if (bString[i] < 0) {
+                iBuffer = bString[i] + 256;
+            } else {
+                iBuffer = bString[i];
+            }
+            dWeight = dWeight * 256 + (int) iBuffer;
+        }
+
+        dWeight = dWeight * iSign;
+
+        return dWeight;
     }
 }
