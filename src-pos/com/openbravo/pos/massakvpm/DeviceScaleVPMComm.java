@@ -70,7 +70,7 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             m_in = m_CommPortPrinter.getInputStream();
             m_CommPortPrinter.addEventListener(this);
             m_CommPortPrinter.notifyOnDataAvailable(true);
-            m_CommPortPrinter.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_EVEN);
+            m_CommPortPrinter.setSerialPortParams(57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         } catch (NoSuchPortException e) {
             e.printStackTrace();
         } catch (PortInUseException e) {
