@@ -75,8 +75,8 @@ public class DeviceTicket {
         try {
             if ("javapos".equals(sFiscalType)) {
                 m_deviceFiscal = new DeviceFiscalPrinterJavaPOS(sFiscalParam1);
-//            } else if ("shtrihfr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
-//                m_deviceFiscal = new DeviceFiscalPrinterShtrihFR(sFiscalParam2);
+            } else if ("shtrihfr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
+                m_deviceFiscal = new DeviceFiscalPrinterShtrihFR(sFiscalParam2);
             } else if ("aurafr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
                 m_deviceFiscal = new DeviceFiscalPrinterAuraFR(sFiscalParam2);
             } else {

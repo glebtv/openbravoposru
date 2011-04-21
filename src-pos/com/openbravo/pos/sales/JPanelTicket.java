@@ -36,6 +36,7 @@ import com.openbravo.pos.payment.JPaymentSelect;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ListKeyed;
 import com.openbravo.data.loader.SentenceList;
+import com.openbravo.data.loader.Session;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.customers.CustomerInfoExt;
 import com.openbravo.pos.customers.DataLogicCustomers;
@@ -120,6 +121,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private Boolean bTypeDiscount;
 
+    private static Logger logger = Logger.getLogger("com.openbravo.pos.sales.JPanelTicket");
+
     /** Creates new form JTicketView */
     public JPanelTicket() {
 
@@ -165,7 +168,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else {
             m_jDiscountPanel.setVisible(false);
         }
-    
+
         // El modelo de impuestos
         senttax = dlSales.getTaxList();
         senttaxcategories = dlSales.getTaxCategoriesList();
@@ -397,14 +400,14 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
                 if (i >= 0) {
                     m_oTicket.insertLine(i, oLine);
-                    m_ticketlines.insertTicketLine(i, oLine); // Pintamos la linea en la vista...                 
+                    m_ticketlines.insertTicketLine(i, oLine); // Pintamos la linea en la vista...
                 } else {
                     Toolkit.getDefaultToolkit().beep();
                 }
             } else {
-                // Producto normal, entonces al finalnewline.getMultiply() 
+                // Producto normal, entonces al finalnewline.getMultiply()
                 m_oTicket.addLine(oLine);
-                m_ticketlines.addTicketLine(oLine); // Pintamos la linea en la vista... 
+                m_ticketlines.addTicketLine(oLine); // Pintamos la linea en la vista...
             }
 
             visorTicketLine(oLine);
@@ -435,9 +438,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 }
             }
 
-            visorTicketLine(null); // borro el visor 
-            printPartialTotals(); // pinto los totales parciales...                           
-            stateToZero(); // Pongo a cero    
+            visorTicketLine(null); // borro el visor
+            printPartialTotals(); // pinto los totales parciales...
+            stateToZero(); // Pongo a cero
 
             // event receipt
             executeEventAndRefresh("ticket.change");
@@ -884,8 +887,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 if (executeEvent(ticket, ticketext, "ticket.total") == null) {
 
                     // Muestro el total
-                    printTicket("Printer.TicketTotal", ticket, ticketext);
-
+                    try {
+                        printTicket("Printer.TicketTotal", ticket, ticketext);
+                    } catch (TicketPrinterException e) {
+                    } catch (TicketFiscalPrinterException e) {
+                    }
 
                     // Select the Payments information
                     JPaymentSelect paymentdialog = ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL
@@ -897,7 +903,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
                     if (paymentdialog.showDialog(ticket.getTotal(), ticket.getCustomer())) {
 
-                        // assign the payments selected and calculate taxes.         
+                        // assign the payments selected and calculate taxes.
                         ticket.setPayments(paymentdialog.getSelectedPayments());
 
                         // Asigno los valores definitivos del ticket...
@@ -906,24 +912,62 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         ticket.setDate(new Date()); // Le pongo la fecha de cobro
 
                         if (executeEvent(ticket, ticketext, "ticket.save") == null) {
-                            // Save the receipt and assign a receipt number
+                            Session s = m_App.getSession();
                             try {
-                                dlSales.saveTicket(ticket, m_App.getInventoryLocation());
-                            } catch (BasicException eData) {
-                                MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
-                                msg.show(this);
+                                // Start transaction
+                                if (!s.isTransaction()) {
+                                    s.begin();
+                                }
+
+                                // Process close ticket
+                                try {
+                                    // Save the receipt and assign a receipt number
+                                    dlSales.saveTicket(ticket, m_App.getInventoryLocation());
+
+                                    // Execute ticket.close event
+                                    executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
+
+                                    // Print receipt
+                                    printTicket(paymentdialog.isPrintSelected()
+                                            ? "Printer.Ticket"
+                                            : "Printer.Ticket2", ticket, ticketext);
+
+                                    s.commit();
+                                    resultok = true;
+
+                                } catch (BasicException eData) {
+                                    MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
+                                    msg.show(this);
+
+                                } catch (TicketPrinterException e) {
+                                    logger.finer("TicketPrinterException occured, commiting changes");
+                                    s.commit();
+                                    resultok = true;
+
+                                } catch (TicketFiscalPrinterException e) {
+                                    logger.finer("TicketFiscalPrinterException occured, rollback changes");
+                                    s.rollback();
+                                    resultok = false;
+
+                                } catch (Exception e) {
+                                    // XXX: Additional checks. Did executeEvent() goes throw some exceptions? Or is process it correctly?
+                                    logger.log(Level.SEVERE, "Error occured while executing ticket.close event, rollback transaction", e);
+                                    s.rollback();
+                                    resultok = false;
+                                }
+
+                            } catch (java.sql.SQLException e) {
+                                logger.log(Level.SEVERE, "SQL error accured while process closing ticket", e);
+                                try {
+                                    s.rollback();
+                                } catch (java.sql.SQLException rollbackException) {
+                                }
+                                resultok = false;
                             }
-
-                            executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
-
-                            // Print receipt.
-                            printTicket(paymentdialog.isPrintSelected()
-                                    ? "Printer.Ticket"
-                                    : "Printer.Ticket2", ticket, ticketext);
-                            resultok = true;
                         }
                     }
                 }
+
             } catch (TaxesException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotcalculatetaxes"));
                 msg.show(this);
@@ -941,7 +985,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         return resultok;
     }
 
-    private void printTicket(String sresourcename, TicketInfo ticket, Object ticketext) {
+    private void printTicket(String sresourcename, TicketInfo ticket, Object ticketext)
+                                                    throws TicketPrinterException, TicketFiscalPrinterException {
 
         String sresource = dlSystem.getResourceAsXML(sresourcename);
         if (sresource == null) {
@@ -961,6 +1006,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } catch (TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(JPanelTicket.this);
+                throw e;
+            } catch (TicketFiscalPrinterException e) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e.getMessage());
+                msg.show(JPanelTicket.this);
+                throw e;
             }
         }
     }
@@ -1022,6 +1072,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } catch (TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintline"), e);
                 msg.show(JPanelTicket.this);
+            } catch (TicketFiscalPrinterException e) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintline"), e);
+                msg.show(JPanelTicket.this);
             }
         }
     }
@@ -1053,7 +1106,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    public void printTicket(String resource) {
+    public void printTicket(String resource) throws TicketPrinterException, TicketFiscalPrinterException {
         printTicket(resource, m_oTicket, m_oTicketExt);
     }
 
@@ -1193,7 +1246,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             JPanelTicket.this.printReport(resourcefile, ticket, ticketext);
         }
 
-        public void printTicket(String sresourcename) {
+        public void printTicket(String sresourcename) throws TicketPrinterException, TicketFiscalPrinterException {
             JPanelTicket.this.printTicket(sresourcename, ticket, ticketext);
         }
 
@@ -1800,15 +1853,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (i < 0) {
             Toolkit.getDefaultToolkit().beep(); // No hay ninguna seleccionada
         } else {
-            removeTicketLine(i); // elimino la linea           
+            removeTicketLine(i); // elimino la linea
         }
 
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
-        
+
         m_ticketlines.selectionUp();
-        
+
     }//GEN-LAST:event_m_jUpActionPerformed
 
     private void m_jDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDownActionPerformed
@@ -1855,7 +1908,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             ticket2.setCustomer(m_oTicket.getCustomer());
 
             if (splitdialog.showDialog(ticket1, ticket2, m_oTicketExt)) {
-                if (closeTicket(ticket2, m_oTicketExt)) { // already checked  that number of lines > 0                            
+                if (closeTicket(ticket2, m_oTicketExt)) { // already checked  that number of lines > 0
                     setActiveTicket(ticket1, m_oTicketExt);// set result ticket
                 }
             }

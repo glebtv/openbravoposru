@@ -36,6 +36,7 @@ import com.openbravo.pos.forms.*;
 import com.openbravo.pos.catalog.JCatalog;
 import com.openbravo.pos.printer.TicketParser;
 import com.openbravo.pos.printer.TicketPrinterException;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
 import com.openbravo.pos.sales.JProductAttEdit;
 import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.scanpal2.DeviceScannerException;
@@ -47,7 +48,7 @@ import com.openbravo.pos.ticket.ProductInfoExt;
  * @author adrianromero
  */
 public class StockManagement extends JPanel implements JPanelView {
-    
+
     private AppView m_App;
     private DataLogicSystem m_dlSystem;
     private DataLogicSales m_dlSales;
@@ -55,37 +56,37 @@ public class StockManagement extends JPanel implements JPanelView {
 
     private CatalogSelector m_cat;
     private ComboBoxValModel m_ReasonModel;
-    
+
     private SentenceList m_sentlocations;
-    private ComboBoxValModel m_LocationsModel;   
-    private ComboBoxValModel m_LocationsModelDes;     
-    
+    private ComboBoxValModel m_LocationsModel;
+    private ComboBoxValModel m_LocationsModelDes;
+
     private JInventoryLines m_invlines;
-    
+
     private int NUMBER_STATE = 0;
     private int MULTIPLY = 0;
     private static int DEFAULT = 0;
     private static int ACTIVE = 1;
     private static int DECIMAL = 2;
-    
+
     /** Creates new form StockManagement */
     public StockManagement(AppView app) {
-        
+
         m_App = app;
         m_dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
         m_dlSales = (DataLogicSales) m_App.getBean("com.openbravo.pos.forms.DataLogicSales");
         m_TTP = new TicketParser(m_App.getDeviceTicket(), m_dlSystem);
 
         initComponents();
-        
+
         btnDownloadProducts.setEnabled(m_App.getDeviceScanner() != null);
 
-        
+
         // El modelo de locales
         m_sentlocations = m_dlSales.getLocationsList();
-        m_LocationsModel =  new ComboBoxValModel();        
+        m_LocationsModel =  new ComboBoxValModel();
         m_LocationsModelDes = new ComboBoxValModel();
-        
+
         m_ReasonModel = new ComboBoxValModel();
         m_ReasonModel.add(MovementReason.IN_PURCHASE);
         m_ReasonModel.add(MovementReason.IN_REFUND);
@@ -93,58 +94,58 @@ public class StockManagement extends JPanel implements JPanelView {
         m_ReasonModel.add(MovementReason.OUT_SALE);
         m_ReasonModel.add(MovementReason.OUT_REFUND);
         m_ReasonModel.add(MovementReason.OUT_BREAK);
-        m_ReasonModel.add(MovementReason.OUT_MOVEMENT);        
-        m_ReasonModel.add(MovementReason.OUT_CROSSING);        
-        
+        m_ReasonModel.add(MovementReason.OUT_MOVEMENT);
+        m_ReasonModel.add(MovementReason.OUT_CROSSING);
+
         m_jreason.setModel(m_ReasonModel);
-        
+
         m_cat = new JCatalog(m_dlSales);
         m_cat.getComponent().setPreferredSize(new Dimension(0, 245));
         m_cat.addActionListener(new CatalogListener());
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
-        
+
         // Las lineas de inventario
         m_invlines = new JInventoryLines();
         jPanel5.add(m_invlines, BorderLayout.CENTER);
     }
-     
+
     public String getTitle() {
         return AppLocal.getIntString("Menu.StockMovement");
-    }         
-    
+    }
+
     public JComponent getComponent() {
         return this;
     }
 
     public void activate() throws BasicException {
         m_cat.loadCatalog();
-        
+
         java.util.List l = m_sentlocations.list();
         m_LocationsModel = new ComboBoxValModel(l);
         m_jLocation.setModel(m_LocationsModel); // para que lo refresque
         m_LocationsModelDes = new ComboBoxValModel(l);
         m_jLocationDes.setModel(m_LocationsModelDes); // para que lo refresque
-        
+
         stateToInsert();
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 jTextField1.requestFocus();
             }
-        });        
-    }   
-    
-    
+        });
+    }
+
+
     public void stateToInsert() {
         // Inicializamos las cajas de texto
         m_jdate.setText(Formats.TIMESTAMP.formatValue(DateUtils.getTodayMinutes()));
-        m_ReasonModel.setSelectedItem(MovementReason.IN_PURCHASE); 
-        m_LocationsModel.setSelectedKey(m_App.getInventoryLocation());     
-        m_LocationsModelDes.setSelectedKey(m_App.getInventoryLocation());         
+        m_ReasonModel.setSelectedItem(MovementReason.IN_PURCHASE);
+        m_LocationsModel.setSelectedKey(m_App.getInventoryLocation());
+        m_LocationsModelDes.setSelectedKey(m_App.getInventoryLocation());
         m_invlines.clear();
         m_jcodebar.setText(null);
     }
-    
+
     public boolean deactivate() {
 
         if (m_invlines.getCount() > 0) {
@@ -159,50 +160,50 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         } else {
             return true;
-        }        
-    }    
+        }
+    }
 
     private void addLine(ProductInfoExt oProduct, double dpor, double dprice) {
         m_invlines.addLine(new InventoryLine(oProduct, dpor, dprice));
     }
-    
+
     private void deleteLine(int index) {
         if (index < 0){
             Toolkit.getDefaultToolkit().beep(); // No hay ninguna seleccionada
         } else {
-            m_invlines.deleteLine(index);          
-        }        
+            m_invlines.deleteLine(index);
+        }
     }
-    
+
     private void incProduct(ProductInfoExt product, double units) {
         // precondicion: prod != null
 
         MovementReason reason = (MovementReason) m_ReasonModel.getSelectedItem();
-        addLine(product, units, reason.isInput() 
+        addLine(product, units, reason.isInput()
                 ? product.getPriceBuy()
                 : product.getPriceSell());
     }
-    
+
     private void incProductByCode(String sCode) {
         incProductByCode(sCode, 1.0);
     }
     private void incProductByCode(String sCode, double dQuantity) {
     // precondicion: sCode != null
-        
+
         try {
             ProductInfoExt oProduct = m_dlSales.getProductInfoByCode(sCode);
-            if (oProduct == null) {                  
-                Toolkit.getDefaultToolkit().beep();                   
+            if (oProduct == null) {
+                Toolkit.getDefaultToolkit().beep();
             } else {
                 // Se anade directamente una unidad con el precio y todo
                 incProduct(oProduct, dQuantity);
             }
-        } catch (BasicException eData) {       
+        } catch (BasicException eData) {
             MessageInf msg = new MessageInf(eData);
-            msg.show(this);            
+            msg.show(this);
         }
     }
-    
+
     private void addUnits(double dUnits) {
         int i  = m_invlines.getSelectedRow();
         if (i >= 0 ) {
@@ -210,22 +211,22 @@ public class StockManagement extends JPanel implements JPanelView {
             double dunits = inv.getMultiply() + dUnits;
             if (dunits <= 0.0) {
                 deleteLine(i);
-            } else {            
+            } else {
                 inv.setMultiply(inv.getMultiply() + dUnits);
                 m_invlines.setLine(i, inv);
             }
         }
     }
-    
+
     private void setUnits(double dUnits) {
         int i  = m_invlines.getSelectedRow();
         if (i >= 0 ) {
-            InventoryLine inv = m_invlines.getLine(i);         
+            InventoryLine inv = m_invlines.getLine(i);
             inv.setMultiply(dUnits);
             m_invlines.setLine(i, inv);
         }
     }
-    
+
     private void stateTransition(char cTrans) {
 
         // 19 November 2009
@@ -236,7 +237,7 @@ public class StockManagement extends JPanel implements JPanelView {
 	    double current_unitsm;
         // End Add Local Variable jldy0717
 
-        if (cTrans == '\u007f') { 
+        if (cTrans == '\u007f') {
             m_jcodebar.setText(null);
             NUMBER_STATE = DEFAULT;
         } else if (cTrans == '*') {
@@ -321,12 +322,12 @@ public class StockManagement extends JPanel implements JPanelView {
             }
             if (NUMBER_STATE != DECIMAL) {
                 NUMBER_STATE = ACTIVE;
-            }   
+            }
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
     }
-    
+
     private void saveData() {
         try {
 
@@ -344,8 +345,8 @@ public class StockManagement extends JPanel implements JPanelView {
                         d, MovementReason.IN_MOVEMENT,
                         (LocationInfo) m_LocationsModelDes.getSelectedItem(),
                         m_invlines.getLines()
-                    ));                
-            } else {  
+                    ));
+            } else {
                 // Es un movimiento
                 saveData(new InventoryRecord(
                         d, reason,
@@ -353,19 +354,19 @@ public class StockManagement extends JPanel implements JPanelView {
                         m_invlines.getLines()
                     ));
             }
-            
-            stateToInsert();  
+
+            stateToInsert();
         } catch (BasicException eData) {
             MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotsaveinventorydata"), eData);
             msg.show(this);
-        }             
+        }
     }
-        
+
     private void saveData(InventoryRecord rec) throws BasicException {
-        
+
         // A grabar.
         SentenceExec sent = m_dlSales.getStockDiaryInsert();
-        
+
         for (int i = 0; i < m_invlines.getCount(); i++) {
             InventoryLine inv = rec.getLines().get(i);
 
@@ -382,9 +383,9 @@ public class StockManagement extends JPanel implements JPanelView {
         }
 
         // si se ha grabado se imprime, si no, no.
-        printTicket(rec);   
+        printTicket(rec);
     }
-    
+
     private void printTicket(InventoryRecord invrec) {
 
         String sresource = m_dlSystem.getResourceAsXML("Printer.Inventory");
@@ -402,11 +403,14 @@ public class StockManagement extends JPanel implements JPanelView {
             } catch (TicketPrinterException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
                 msg.show(this);
+            } catch (TicketFiscalPrinterException e) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotprintticket"), e);
+                msg.show(this);
             }
         }
     }
-  
-    
+
+
     private class CatalogListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String sQty = m_jcodebar.getText();
@@ -417,9 +421,9 @@ public class StockManagement extends JPanel implements JPanelView {
             } else {
                 incProduct( (ProductInfoExt) e.getSource(),1.0);
             }
-        }  
-    }  
-  
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -642,56 +646,56 @@ public class StockManagement extends JPanel implements JPanelView {
         try {
             s.connectDevice();
             s.startDownloadProduct();
-            
+
             ProductDownloaded p = s.recieveProduct();
             while (p != null) {
                 incProductByCode(p.getCode(), p.getQuantity());
                 p = s.recieveProduct();
             }
             // MessageInf msg = new MessageInf(MessageInf.SGN_SUCCESS, "Se ha subido con exito la lista de productos al ScanPal.");
-            // msg.show(this);            
+            // msg.show(this);
         } catch (DeviceScannerException e) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.scannerfail2"), e);
-            msg.show(this);            
+            msg.show(this);
         } finally {
             s.disconnectDevice();
-        }        
-        
+        }
+
     }//GEN-LAST:event_btnDownloadProductsActionPerformed
 
     private void m_jreasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jreasonActionPerformed
 
-        m_jLocationDes.setEnabled(m_ReasonModel.getSelectedItem() == MovementReason.OUT_CROSSING); 
-        
+        m_jLocationDes.setEnabled(m_ReasonModel.getSelectedItem() == MovementReason.OUT_CROSSING);
+
     }//GEN-LAST:event_m_jreasonActionPerformed
 
     private void m_jDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDownActionPerformed
-        
+
         m_invlines.goDown();
-        
+
     }//GEN-LAST:event_m_jDownActionPerformed
 
     private void m_jUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jUpActionPerformed
 
         m_invlines.goUp();
-        
+
     }//GEN-LAST:event_m_jUpActionPerformed
 
     private void m_jDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDeleteActionPerformed
-        
+
         deleteLine(m_invlines.getSelectedRow());
 
     }//GEN-LAST:event_m_jDeleteActionPerformed
 
     private void m_jEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEnterActionPerformed
-        
+
         incProductByCode(m_jcodebar.getText());
         m_jcodebar.setText(null);
-        
+
     }//GEN-LAST:event_m_jEnterActionPerformed
 
     private void m_jbtndateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jbtndateActionPerformed
-        
+
         Date date;
         try {
             date = (Date) Formats.TIMESTAMP.parseValue(m_jdate.getText());
@@ -705,9 +709,9 @@ public class StockManagement extends JPanel implements JPanelView {
     }//GEN-LAST:event_m_jbtndateActionPerformed
 
     private void jNumberKeysKeyPerformed(com.openbravo.beans.JNumberEvent evt) {//GEN-FIRST:event_jNumberKeysKeyPerformed
-        
+
         stateTransition(evt.getKey());
-        
+
     }//GEN-LAST:event_jNumberKeysKeyPerformed
 
 private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
@@ -774,5 +778,5 @@ private void jEditAttributesActionPerformed(java.awt.event.ActionEvent evt) {//G
     private javax.swing.JTextField m_jdate;
     private javax.swing.JComboBox m_jreason;
     // End of variables declaration//GEN-END:variables
-    
+
 }

@@ -105,4 +105,8 @@ public class DevicePrinterElvesKKM implements DevicePrinter {
         }
         m_CommOutputPrinter.disconnectDevice();
     }
+
+    // Отрезание бумаги
+    public void cutPaper(boolean complete) {
+    }
 }

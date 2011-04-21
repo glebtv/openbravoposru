@@ -22,30 +22,34 @@
 
 package com.openbravo.pos.printer.shtrihfr;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
-import com.openbravo.pos.printer.*;
-import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.printer.DevicePrinter;
+import com.openbravo.pos.printer.TicketPrinterException;
 
-public class DevicePrinterShtrihFR implements DevicePrinter {
+import com.openbravo.pos.printer.shtrihfr.DeviceShtrihFR;
 
-    private ShtrihFRReaderWritter m_CommOutputPrinter;
-    private String m_sName;
+import com.shtrih.fiscalprinter.*;
+
+
+/**
+ * @author: Gennady Kovalev <gik@bigur.ru>
+ */
+
+public class DevicePrinterShtrihFR extends DeviceShtrihFR implements DevicePrinter {
+
+    private String sLine;
 
     // Creates new TicketPrinter
-    public DevicePrinterShtrihFR(String sDevicePrinterPort) throws TicketPrinterException {
-
-        m_sName = AppLocal.getIntString("Printer.Serial");
-        m_CommOutputPrinter = new DeviceShtrihFRComm(sDevicePrinterPort);
-//        m_CommOutputPrinter.getTypePrinter();
-//        m_CommOutputPrinter.sendInitMessage();
-        m_CommOutputPrinter.sendBeepMessage();
-        m_CommOutputPrinter.disconnectDevice();
+    public DevicePrinterShtrihFR(String sDevicePrinterPort) {
+        super(sDevicePrinterPort);
     }
 
     public String getPrinterName() {
-        return m_sName;
+        return m_sSerialDevice;
     }
 
     public String getPrinterDescription() {
@@ -56,59 +60,135 @@ public class DevicePrinterShtrihFR implements DevicePrinter {
         return null;
     }
 
+    // Сброс принтера
     public void reset() {
     }
 
-    //Начало печати чека
+    // Начало печати чека
     public void beginReceipt() {
-        try {
-//            m_CommOutputPrinter.sendInitMessage();
-            m_CommOutputPrinter.sendBeepMessage();
-            m_CommOutputPrinter.sendPrintImageMessage();
-        } catch (TicketPrinterException e) {
-        }
+        logger.finer("Begin printing receipt started");
+        logger.finer("Begin printing receipt ended");
     }
 
     public void printImage(BufferedImage image) {
+        logger.finer("Printing image started");
+        logger.finer("Printing image ended");
     }
 
     public void printBarCode(String type, String position, String code) {
+        logger.finer("Printing bar code started");
+        logger.finer("Printing bar code ended");
     }
 
     public void beginLine(int iTextSize) {
+        logger.finer("Printing line started, text size is: " + iTextSize);
+        sLine = "";
+        logger.finer("Printing line ended");
     }
 
-    //Печать текста
+    // Печать текста
     public void printText(int iStyle, String sText) {
-        try {
-            m_CommOutputPrinter.sendTextMessage(sText);
-        } catch (TicketPrinterException e) {
-        }
+        logger.finer("Printing text started, style is " + iStyle + ", text is: " + sText);
+        sLine += sText;
+        logger.finer("Printing text ended");
     }
 
     public void endLine() {
+        logger.finer("End of line started");
+
+        try {
+            int iFiscalPassword = getFiscalPassword();
+            int iStation = SMFP_STATION_RECJRN;
+
+            if (sLine.length() > MAX_TEXT_LENGHT) {
+                sLine = sLine.substring(0, MAX_TEXT_LENGHT);
+            }
+            logger.finer("Send line to device: " + sLine);
+
+            PrinterCommand command = new PrintString(iFiscalPassword, iStation, sLine);
+
+            Infinity:
+            for (;;) {
+                executeCommand(command);
+
+                switch (command.getResultCode()) {
+
+                    // Command complete successfully
+                    case 0:
+                        break Infinity;
+
+                    // Printing previous command, waiting
+                    case 0x50:
+                        waitCommandComplete();
+                        break;
+
+                    // Other errors, generate exception
+                    default:
+                        String message = PrinterError.getFullText(command.getResultCode());
+                        throw new Exception(message);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error occurs while printing message", e);
+            closePort();
+        }
+
+        logger.finer("End of line ended");
     }
 
-    //Окончание печати чека
+    // Окончание печати чека
     public void endReceipt() {
-        try {
-//            m_CommOutputPrinter.sendStampTitleReportMessage();
-            m_CommOutputPrinter.sendTicketUpMessage();
-            m_CommOutputPrinter.sendTicketCutMessage();
-            m_CommOutputPrinter.sendBeepMessage();
-        } catch (TicketPrinterException e) {
-        }
-        m_CommOutputPrinter.disconnectDevice();
+        logger.finer("End of receipt started");
+        logger.finer("End of receipt ended");
     }
 
-    //Открытие денежного ящика
+    // Открытие денежного ящика
     public void openDrawer() {
+        logger.finer("Open drawer started");
+        logger.finer("Open drawer ended");
+    }
+
+    // Отрезание бумаги
+    public void cutPaper(boolean complete) {
+        logger.finer("Cutting paper started");
+
         try {
-            m_CommOutputPrinter.sendInitMessage();
-            m_CommOutputPrinter.sendOpenDrawerMessage();
-        } catch (TicketPrinterException e) {
+            int iFiscalPassword = getFiscalPassword();
+
+            int iCutType = 1;
+            if (complete) {
+                iCutType = 0;
+            }
+
+            PrinterCommand command = new CutPaper(iFiscalPassword, iCutType);
+
+            Infinity:
+            for (;;) {
+                executeCommand(command);
+
+                switch (command.getResultCode()) {
+
+                    // Command complete successfully
+                    case 0:
+                        break Infinity;
+
+                    // Printing previous command, waiting
+                    case 0x50:
+                        waitCommandComplete();
+                        break;
+
+                    // Other errors, generate exception
+                    default:
+                        String message = PrinterError.getFullText(command.getResultCode());
+                        throw new Exception(message);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error occurs while cutting paper", e);
+            closePort();
         }
-        m_CommOutputPrinter.disconnectDevice();
+        logger.finer("Cutting paper ended");
     }
 }
-

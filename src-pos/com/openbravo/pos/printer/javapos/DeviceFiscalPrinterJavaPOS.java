@@ -27,41 +27,41 @@ import com.openbravo.pos.printer.TicketPrinterException;
 import com.openbravo.pos.util.RoundUtils;
 
 public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements DeviceFiscalPrinter  {
-    
+
     private String m_sName;
-    
+
     private FiscalPrinter m_fiscal;
-    
+
     /** Creates new form DeviceFiscalPrinterJavaPOSPanel */
     public DeviceFiscalPrinterJavaPOS(String sDeviceFiscalPrinterName) throws TicketPrinterException {
         m_sName = sDeviceFiscalPrinterName;
-        
-        
+
+
         m_fiscal = new FiscalPrinter();
-        try {       
+        try {
             m_fiscal.open(m_sName);
             m_fiscal.claim(10000);
             m_fiscal.setDeviceEnabled(true);
             // m_printer.setMapMode(POSPrinterConst.PTR_MM_METRIC);  // unit = 1/100 mm - i.e. 1 cm = 10 mm = 10 * 100 units
 
             m_fiscal.setCheckTotal(false);
-            
+
         } catch (JposException e) {
             throw new TicketPrinterException(e.getMessage(), e);
         }
-        
+
         initComponents();
-        
-        
+
+
     }
- 
+
     public String getFiscalName() {
         return m_sName;
     }
     public JComponent getFiscalComponent() {
         return this;
     }
-    
+
     public void beginReceipt() {
         try {
             m_fiscal.beginFiscalReceipt(true);
@@ -72,59 +72,62 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         try {
             m_fiscal.endFiscalReceipt(false);
         } catch (JposException e) {
-        }        
+        }
     }
-    
+
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) {
         try {
             m_fiscal.printRecItem(sproduct, roundFiscal(dprice * dunits), (int)(dunits * 1000), taxinfo, roundFiscal(dprice), "");
         } catch (JposException e) {
-        }             
+        }
     }
-    
+
     public void printMessage(String smessage) {
         try {
             m_fiscal.printRecMessage(smessage);
         } catch (JposException e) {
-        } 
+        }
     }
-    
+
     public void printTotal(String sPayment, double dpaid) {
         try {
             // el primer valor es el total calculado por la aplicacion.
             // al poner 0 no se debe chequear: CAPCHECKTOTAL = false.
             m_fiscal.printRecTotal(0, roundFiscal(dpaid), sPayment);
         } catch (JposException e) {
-        }          
+        }
     }
-    
+
+    public void cutPaper(boolean complete) {
+    }
+
     public void printZReport() {
         try {
             m_fiscal.printZReport();
         } catch (JposException e) {
-        }          
+        }
     }
-    
+
     public void printXReport() {
         try {
             m_fiscal.printXReport();
         } catch (JposException e) {
-        }     
+        }
     }
-    
+
     public void finalize() throws Throwable {
-    
+
         m_fiscal.setDeviceEnabled(false);
         m_fiscal.release();
         m_fiscal.close();
-        
-        super.finalize();       
-    } 
-    
+
+        super.finalize();
+    }
+
     private int roundFiscal(double value) {
         return (int) Math.floor(RoundUtils.round(value) * 10000.0 + 0.5);
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -235,10 +238,10 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         printXReport();
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -254,5 +257,5 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
-    
+
 }

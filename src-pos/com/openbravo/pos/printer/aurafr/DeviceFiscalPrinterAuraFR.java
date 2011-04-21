@@ -116,6 +116,10 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
         }
     }
 
+    //Отрезание бумаги
+    public void cutPaper(boolean complete) {
+    }
+
     //Печать X-отчёта
     public void printXReport() {
         try {

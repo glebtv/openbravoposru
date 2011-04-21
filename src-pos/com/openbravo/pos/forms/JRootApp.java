@@ -494,7 +494,7 @@ public class JRootApp extends JPanel implements AppView {
 
     
     private void printerStart() {
-        
+
         String sresource = m_dlSystem.getResourceAsXML("Printer.Start");
         if (sresource == null) {
             m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
@@ -503,8 +503,10 @@ public class JRootApp extends JPanel implements AppView {
                 m_TTP.printTicket(sresource);
             } catch (TicketPrinterException eTP) {
                 m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
+            } catch (TicketFiscalPrinterException eTP) {
+                m_TP.getDeviceDisplay().writeVisor(AppLocal.APP_NAME, AppLocal.APP_VERSION);
             }
-        }        
+        }
     }
     
     private void listPeople() {

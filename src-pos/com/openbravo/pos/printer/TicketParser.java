@@ -32,57 +32,59 @@ import javax.xml.parsers.SAXParser;
 import com.openbravo.pos.forms.DataLogicSystem;
 
 public class TicketParser extends DefaultHandler {
-    
+
     private static SAXParser m_sp = null;
-    
+
     private DeviceTicket m_printer;
     private DataLogicSystem m_system;
-    
+
     private StringBuffer text;
-    
+
     private String bctype;
     private String bcposition;
     private int m_iTextAlign;
     private int m_iTextLength;
     private int m_iTextStyle;
-    
+
     private StringBuffer m_sVisorLine;
     private int m_iVisorAnimation;
     private String m_sVisorLine1;
     private String m_sVisorLine2;
-    
+
     private double m_dValue1;
     private double m_dValue2;
     private int attribute3;
-    
+
     private int m_iOutputType;
     private static final int OUTPUT_NONE = 0;
     private static final int OUTPUT_DISPLAY = 1;
     private static final int OUTPUT_TICKET = 2;
     private static final int OUTPUT_FISCAL = 3;
     private DevicePrinter m_oOutputPrinter;
-    
-    
+
+
     /** Creates a new instance of TicketParser */
     public TicketParser(DeviceTicket printer, DataLogicSystem system) {
         m_printer = printer;
         m_system = system;
     }
-    
-    public void printTicket(String sIn) throws TicketPrinterException {
+
+    public void printTicket(String sIn) throws TicketPrinterException, TicketFiscalPrinterException {
         printTicket(new StringReader(sIn));
     }
-    
-    public void printTicket(Reader in) throws TicketPrinterException  {
-        
+
+    public void printTicket(Reader in) throws TicketPrinterException, TicketFiscalPrinterException  {
+
         try {
-            
+
             if (m_sp == null) {
                 SAXParserFactory spf = SAXParserFactory.newInstance();
                 m_sp = spf.newSAXParser();
             }
             m_sp.parse(new InputSource(in), this);
-                        
+
+        } catch (TicketFiscalPrinterException eFiscal) {
+            throw eFiscal;
         } catch (ParserConfigurationException ePC) {
             throw new TicketPrinterException(LocalRes.getIntString("exception.parserconfig") , ePC);
         } catch (SAXException eSAX) {
@@ -90,8 +92,8 @@ public class TicketParser extends DefaultHandler {
         } catch (IOException eIO) {
             throw new TicketPrinterException(LocalRes.getIntString("exception.iofile") , eIO);
         }
-    }    
-    
+    }
+
     @Override
     public void startDocument() throws SAXException {
         // inicalizo las variables pertinentes
@@ -109,16 +111,16 @@ public class TicketParser extends DefaultHandler {
     @Override
     public void endDocument() throws SAXException {
     }
-    
+
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-        
+
         switch (m_iOutputType) {
         case OUTPUT_NONE:
             if ("opendrawer".equals(qName)) {
                 m_printer.getDevicePrinter(readString(attributes.getValue("printer"), "1")).openDrawer();
             } else if ("play".equals(qName)) {
-                 text = new StringBuffer();    
+                 text = new StringBuffer();
             } else if ("ticket".equals(qName)) {
                 m_iOutputType = OUTPUT_TICKET;
                 m_oOutputPrinter = m_printer.getDevicePrinter(readString(attributes.getValue("printer"), "1"));
@@ -138,7 +140,7 @@ public class TicketParser extends DefaultHandler {
                     m_iVisorAnimation = DeviceDisplayBase.ANIMATION_NULL;
                 }
                 m_sVisorLine1 = null;
-                m_sVisorLine2 = null;                
+                m_sVisorLine2 = null;
                 m_oOutputPrinter = null;
             } else if ("fiscalreceipt".equals(qName)) {
                 m_iOutputType = OUTPUT_FISCAL;
@@ -147,11 +149,13 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().printZReport();
             } else if ("fiscalxreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printXReport();
+            } else if ("cutpaper".equals(qName)) {
+                m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
             break;
         case OUTPUT_TICKET:
             if ("image".equals(qName)){
-                text = new StringBuffer();           
+                text = new StringBuffer();
             } else if ("barcode".equals(qName)) {
                 text = new StringBuffer();
                 bctype = attributes.getValue("type");
@@ -171,6 +175,8 @@ public class TicketParser extends DefaultHandler {
                     m_iTextAlign = DevicePrinter.ALIGN_LEFT;
                 }
                 m_iTextLength = parseInt(attributes.getValue("length"), 0);
+            } else if ("cutpaper".equals(qName)) {
+                m_oOutputPrinter.cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
             break;
         case OUTPUT_DISPLAY:
@@ -195,35 +201,37 @@ public class TicketParser extends DefaultHandler {
             break;
         case OUTPUT_FISCAL:
             if ("line".equals(qName)) {
-                text = new StringBuffer();   
+                text = new StringBuffer();
                 m_dValue1 = parseDouble(attributes.getValue("price"));
                 m_dValue2 = parseDouble(attributes.getValue("units"), 1.0);
                 attribute3 = parseInt(attributes.getValue("tax"));
-                
+
             } else if ("message".equals(qName)) {
-                text = new StringBuffer();               
+                text = new StringBuffer();
             } else if ("total".equals(qName)) {
-                text = new StringBuffer();    
+                text = new StringBuffer();
                 m_dValue1 = parseDouble(attributes.getValue("paid"));
+            } else if ("cutpaper".equals(qName)) {
+                m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
             break;
         }
-    } 
-    
+    }
+
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
         switch (m_iOutputType) {
         case OUTPUT_NONE:
             if ("play".equals(qName)) {
-                try { 
+                try {
                     AudioClip oAudio = Applet.newAudioClip(getClass().getClassLoader().getResource(text.toString()));
-                    oAudio.play();        
+                    oAudio.play();
                 } catch (Exception fnfe) {
                     //throw new ResourceNotFoundException( fnfe.getMessage() );
                 }
                 text = null;
-            } 
+            }
             break;
         case OUTPUT_TICKET:
             if ("image".equals(qName)){
@@ -240,7 +248,7 @@ public class TicketParser extends DefaultHandler {
             } else if ("barcode".equals(qName)) {
                 m_oOutputPrinter.printBarCode(
                         bctype,
-                        bcposition,    
+                        bcposition,
                         text.toString());
                 text = null;
             } else if ("text".equals(qName)) {
@@ -300,8 +308,8 @@ public class TicketParser extends DefaultHandler {
                 }
                 text = null;
             } else if ("display".equals(qName)) {
-                m_printer.getDeviceDisplay().writeVisor(m_iVisorAnimation, m_sVisorLine1, m_sVisorLine2);        
-                m_iVisorAnimation = DeviceDisplayBase.ANIMATION_NULL;                
+                m_printer.getDeviceDisplay().writeVisor(m_iVisorAnimation, m_sVisorLine1, m_sVisorLine2);
+                m_iVisorAnimation = DeviceDisplayBase.ANIMATION_NULL;
                 m_sVisorLine1 = null;
                 m_sVisorLine2 = null;
                 m_iOutputType = OUTPUT_NONE;
@@ -314,25 +322,25 @@ public class TicketParser extends DefaultHandler {
                 m_iOutputType = OUTPUT_NONE;
             } else if ("line".equals(qName)) {
                 m_printer.getFiscalPrinter().printLine(text.toString(), m_dValue1, m_dValue2, attribute3);
-                text = null;               
+                text = null;
             } else if ("message".equals(qName)) {
                 m_printer.getFiscalPrinter().printMessage(text.toString());
-                text = null;               
+                text = null;
             } else if ("total".equals(qName)) {
                 m_printer.getFiscalPrinter().printTotal(text.toString(), m_dValue1);
-                text = null;               
+                text = null;
             }
             break;
-        }          
+        }
     }
-    
+
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (text != null) {
             text.append(ch, start, length);
         }
     }
-    
+
     private int parseInt(String sValue, int iDefault) {
         try {
             return Integer.parseInt(sValue);
@@ -340,11 +348,11 @@ public class TicketParser extends DefaultHandler {
             return iDefault;
         }
     }
-    
+
     private int parseInt(String sValue) {
         return parseInt(sValue, 0);
     }
-    
+
     private double parseDouble(String sValue, double ddefault) {
         try {
             return Double.parseDouble(sValue);
@@ -352,16 +360,24 @@ public class TicketParser extends DefaultHandler {
             return ddefault;
         }
     }
-    
+
     private double parseDouble(String sValue) {
         return parseDouble(sValue, 0.0);
     }
-    
+
     private String readString(String sValue, String sDefault) {
         if (sValue == null || sValue.equals("")) {
             return sDefault;
         } else {
             return sValue;
+        }
+    }
+
+    private boolean readBoolean(String sValue, boolean bDefault) {
+        if (sValue == null || sValue.equals("")) {
+            return bDefault;
+        } else {
+            return Boolean.parseBoolean(sValue);
         }
     }
 }

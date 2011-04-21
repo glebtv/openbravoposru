@@ -22,20 +22,20 @@ package com.openbravo.pos.printer;
 import javax.swing.JComponent;
 
 public class DeviceFiscalPrinterNull implements DeviceFiscalPrinter {
-    
+
     /** Creates a new instance of DeviceFiscalPrinterNull */
     public DeviceFiscalPrinterNull() {
     }
     public DeviceFiscalPrinterNull(String desc) {
     }
- 
+
     public String getFiscalName() {
         return null;
     }
     public JComponent getFiscalComponent() {
         return null;
     }
-    
+
     public void beginReceipt() {
     }
     public void endReceipt() {
@@ -46,7 +46,10 @@ public class DeviceFiscalPrinterNull implements DeviceFiscalPrinter {
     }
     public void printTotal(String sPayment, double dpaid) {
     }
-    
+
+    public void cutPaper(boolean complete) {
+    }
+
     public void printZReport() {
     }
     public void printXReport() {

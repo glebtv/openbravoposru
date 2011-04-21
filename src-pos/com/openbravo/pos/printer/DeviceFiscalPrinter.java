@@ -22,16 +22,18 @@ package com.openbravo.pos.printer;
 import javax.swing.JComponent;
 
 public interface DeviceFiscalPrinter {
- 
+
     public String getFiscalName();
     public JComponent getFiscalComponent();
-    
-    public void beginReceipt();
-    public void endReceipt();
-    public void printLine(String sproduct, double dprice, double dunits, int taxinfo);
-    public void printMessage(String smessage);
-    public void printTotal(String sPayment, double dpaid);
-    
-    public void printZReport();
-    public void printXReport();
+
+    public void beginReceipt() throws TicketFiscalPrinterException;
+    public void endReceipt() throws TicketFiscalPrinterException;
+    public void printLine(String sproduct, double dprice, double dunits, int taxinfo) throws TicketFiscalPrinterException;
+    public void printMessage(String smessage) throws TicketFiscalPrinterException;
+    public void printTotal(String sPayment, double dpaid) throws TicketFiscalPrinterException;
+
+    public void cutPaper(boolean complete) throws TicketFiscalPrinterException;
+
+    public void printZReport() throws TicketFiscalPrinterException;
+    public void printXReport() throws TicketFiscalPrinterException;
 }
