@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 //import com.openbravo.pos.forms.AppLocal;
 
-import com.shtrih.fiscalprinter.*;
+import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 
 
 /**

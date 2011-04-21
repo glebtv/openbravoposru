@@ -38,7 +38,7 @@ import com.openbravo.pos.printer.TicketFiscalPrinterException;
 
 import com.openbravo.pos.printer.shtrihfr.DeviceShtrihFR;
 
-import com.shtrih.fiscalprinter.*;
+import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 
 
 /**

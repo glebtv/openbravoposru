@@ -147,11 +147,14 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().beginReceipt();
             } else if ("fiscalzreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printZReport();
+                m_printer.getFiscalPrinter().cutPaper(true);
             } else if ("fiscalxreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printXReport();
-            } else if ("cutpaper".equals(qName)) {
-                m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
+                m_printer.getFiscalPrinter().cutPaper(true);
             }
+//            } else if ("cutpaper".equals(qName)) {
+//                m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
+//            }
             break;
         case OUTPUT_TICKET:
             if ("image".equals(qName)){
