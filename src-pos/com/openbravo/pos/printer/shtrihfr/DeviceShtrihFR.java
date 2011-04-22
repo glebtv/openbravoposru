@@ -47,7 +47,7 @@ public class DeviceShtrihFR implements PrinterConst {
 
     // Constants
     protected static final int MAX_TEXT_LENGHT = 40;
-    private static final int SLEEP_THRESHOLD = 500;
+    private static final int SLEEP_THRESHOLD = 2000;
     private static final int SLEEP_MAX_STEPS = 10;
     private static final int iBaudRate = 115200;
     private static final int iFiscalTimeout = 100;
