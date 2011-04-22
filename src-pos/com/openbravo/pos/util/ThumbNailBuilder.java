@@ -25,31 +25,31 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 public class ThumbNailBuilder {
-    
+
     private Image m_imgdefault;
     private int m_width;
     private int m_height;
-    
-    /** Creates a new instance of ThumbNailBuilder */    
+
+    /** Creates a new instance of ThumbNailBuilder */
     public ThumbNailBuilder(int width, int height) {
         init(width, height, null);
     }
-    
+
     public ThumbNailBuilder(int width, int height, Image imgdef) {
         init(width, height, imgdef);
-      
+
     }
-    
+
     public ThumbNailBuilder(int width, int height, String img) {
-        
+
         Image defimg;
         try {
-            init(width, height, ImageIO.read(getClass().getClassLoader().getResourceAsStream(img)));               
+            init(width, height, ImageIO.read(getClass().getClassLoader().getResourceAsStream(img)));
         } catch (Exception fnfe) {
             init(width, height, null);
-        }                 
-    }    
-    
+        }
+    }
+
     private void init(int width, int height, Image imgdef) {
         m_width = width;
         m_height = height;
@@ -57,35 +57,36 @@ public class ThumbNailBuilder {
             m_imgdefault = null;
         } else {
             m_imgdefault = createThumbNail(imgdef);
-        } 
+        }
     }
-    
+
     public Image getThumbNail(Image img) {
-   
+
         if (img == null) {
             return m_imgdefault;
         } else {
             return createThumbNail(img);
-        }     
-    }      
-    
+        }
+    }
+
     public Image getThumbNailText(Image img, String text) {
-                
+
         img = getThumbNail(img);
-        
+
         BufferedImage imgtext = new BufferedImage(img.getWidth(null), img.getHeight(null),  BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = imgtext.createGraphics();
-                
-        // The text        
+
+        // The text
         JLabel label = new JLabel();
         label.setOpaque(false);
-        label.setText(text);
-        //label.setText("<html><center>Line1<br>Line2");
+        //label.setText(text);
+        label.setText("<html><p>" + text + "</p></html>");
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);            
+        label.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         Dimension d = label.getPreferredSize();
-        label.setBounds(0, 0, imgtext.getWidth(), d.height);  
-        
+        //label.setBounds(0, 0, imgtext.getWidth(), d.height);
+        label.setBounds(0, 0, imgtext.getWidth(), imgtext.getHeight());
+
         // The background
         Color c1 = new Color(0xff, 0xff, 0xff, 0x40);
         Color c2 = new Color(0xff, 0xff, 0xff, 0xd0);
@@ -93,26 +94,26 @@ public class ThumbNailBuilder {
 //        Point2D center = new Point2D.Float(imgtext.getWidth() / 2, label.getHeight());
 //        float radius = imgtext.getWidth() / 3;
 //        float[] dist = {0.1f, 1.0f};
-//        Color[] colors = {c2, c1};        
+//        Color[] colors = {c2, c1};
 //        Paint gpaint = new RadialGradientPaint(center, radius, dist, colors);
         Paint gpaint = new GradientPaint(new Point(0,0), c1, new Point(label.getWidth() / 2, 0), c2, true);
-        
+
         g2d.drawImage(img, 0, 0, null);
         g2d.translate(0, imgtext.getHeight() - label.getHeight());
-        g2d.setPaint(gpaint);            
-        g2d.fillRect(0 , 0, imgtext.getWidth(), label.getHeight());    
+        g2d.setPaint(gpaint);
+        g2d.fillRect(0 , 0, imgtext.getWidth(), label.getHeight());
         label.paint(g2d);
-            
+
         g2d.dispose();
-        
-        return imgtext;    
+
+        return imgtext;
     }
-    
+
     private Image createThumbNail(Image img) {
 //            MaskFilter filter = new MaskFilter(Color.WHITE);
 //            ImageProducer prod = new FilteredImageSource(img.getSource(), filter);
 //            img = Toolkit.getDefaultToolkit().createImage(prod);
-            
+
         int targetw;
         int targeth;
 
@@ -174,7 +175,7 @@ public class ThumbNailBuilder {
                                    0, 0, targetw, targeth, null);
             g2d.dispose();
             previmg = midimg;
-        } 
-        return previmg;           
-    }    
+        }
+        return previmg;
+    }
 }
