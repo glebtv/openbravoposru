@@ -140,12 +140,47 @@ public class DevicePrinterShtrihFR extends DeviceShtrihFR implements DevicePrint
     // Окончание печати чека
     public void endReceipt() {
         logger.finer("End of receipt started");
+        closePort();
         logger.finer("End of receipt ended");
     }
 
     // Открытие денежного ящика
     public void openDrawer() {
         logger.finer("Open drawer started");
+        try {
+            int iFiscalPassword = getFiscalPassword();
+
+            int iDrawerNumber = 0;
+
+            PrinterCommand command = new OpenCashDrawer(iFiscalPassword, iDrawerNumber);
+
+            Infinity:
+            for (;;) {
+                executeCommand(command);
+
+                switch (command.getResultCode()) {
+
+                    // Command complete successfully
+                    case 0:
+                        break Infinity;
+
+                    // Printing previous command, waiting
+                    case 0x50:
+                        waitCommandComplete();
+                        break;
+
+                    // Other errors, generate exception
+                    default:
+                        String message = PrinterError.getFullText(command.getResultCode());
+                        throw new Exception(message);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error occurs while cutting paper", e);
+            closePort();
+        }
+
         logger.finer("Open drawer ended");
     }
 
