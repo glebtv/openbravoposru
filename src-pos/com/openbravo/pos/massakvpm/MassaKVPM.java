@@ -28,7 +28,7 @@ import com.openbravo.pos.util.ByteArrayUtils;
 import java.io.UnsupportedEncodingException;
 
 /**
- * @author Andrey Svininykh svininykh@gmail.com
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 
 public class MassaKVPM {
@@ -119,6 +119,9 @@ public class MassaKVPM {
         switch (sdata) {
 
             // ru - Russian for 1251 (Cyrillic) code page
+            // А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я
+            // а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+            
             case '\u0410': return (byte) 0xC0;// A
             case '\u0411': return (byte) 0xC1;// Б
             case '\u0412': return (byte) 0xC2;// В
@@ -185,6 +188,35 @@ public class MassaKVPM {
             case '\u044D': return (byte) 0xFD;// ы
             case '\u044E': return (byte) 0xFE;// ю
             case '\u044F': return (byte) 0xFF;// я
+
+            // kk - Kazakh - Ә ә Ғ ғ Қ қ Ң ң Ө ө Ұ ұ Ү ү Һ һ І i
+
+            case '\u04D8': return (byte) 0xA3;// Ә
+            case '\u04D9': return (byte) 0xBC;// ә
+            case '\u0492': return (byte) 0xAA;// Ғ
+            case '\u0493': return (byte) 0xBA;// ғ
+            case '\u049A': return (byte) 0x8D;// Қ
+            case '\u049B': return (byte) 0x9D;// қ
+            case '\u04A2': return (byte) 0xBD;// Ң
+            case '\u04A3': return (byte) 0xBE;// ң
+            case '\u04E8': return (byte) 0xA5;// Ө
+            case '\u04E9': return (byte) 0xB4;// ө
+            case '\u04B0': return (byte) 0xA1;// Ұ
+            case '\u04B1': return (byte) 0xA2;// ұ
+            case '\u04AE': return (byte) 0xAF;// Ү
+            case '\u04AF': return (byte) 0xBF;// ү
+            case '\u04BA': return (byte) 0x8E;// Һ
+            case '\u04BB': return (byte) 0x9E;// һ
+            case '\u0406': return (byte) 0xB2;// І
+            case '\u0456': return (byte) 0xB3;// i
+
+            // ua - Ukrainian - Є є Ї ї Ґ ґ
+//            case '\u0404': return (byte) 0xAA;// Є
+//            case '\u0454': return (byte) 0xBA;// є
+//            case '\u0407': return (byte) 0xAF;// Ї
+//            case '\u0457': return (byte) 0xBF;// ї
+//            case '\u0490': return (byte) 0xA5;// Ґ
+//            case '\u0491': return (byte) 0xB4;// ґ
 
             default: return (byte) 0x3F; // ? Not valid character.
         }
