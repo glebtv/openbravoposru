@@ -40,27 +40,27 @@ public class PeopleView extends JPanel implements EditorRecord {
 
     private Object m_oId;
     private String m_sPassword;
-    
+
     private DirtyManager m_Dirty;
-    
+
     private SentenceList m_sentrole;
-    private ComboBoxValModel m_RoleModel;  
-    
+    private ComboBoxValModel m_RoleModel;
+
     /** Creates new form PeopleEditor */
     public PeopleView(DataLogicAdmin dlAdmin, DirtyManager dirty) {
         initComponents();
-                
+
         // El modelo de roles
         m_sentrole = dlAdmin.getRolesList();
         m_RoleModel = new ComboBoxValModel();
-        
+
         m_Dirty = dirty;
         m_jName.getDocument().addDocumentListener(dirty);
         m_jRole.addActionListener(dirty);
         m_jVisible.addActionListener(dirty);
         m_jImage.addPropertyChangeListener("image", dirty);
 
-        
+
         writeValueEOF();
     }
 
@@ -81,7 +81,7 @@ public class PeopleView extends JPanel implements EditorRecord {
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
     }
-    
+
     public void writeValueInsert() {
         m_oId = null;
         m_jName.setText(null);
@@ -99,7 +99,7 @@ public class PeopleView extends JPanel implements EditorRecord {
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
     }
-    
+
     public void writeValueDelete(Object value) {
         Object[] people = (Object[]) value;
         m_oId = people[0];
@@ -113,12 +113,12 @@ public class PeopleView extends JPanel implements EditorRecord {
         m_jRole.setEnabled(false);
         m_jVisible.setEnabled(false);
         jcard.setEnabled(false);
-        m_jImage.setEnabled(false);        
+        m_jImage.setEnabled(false);
         jButton1.setEnabled(false);
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
-    }    
-    
+    }
+
     public void writeValueEdit(Object value) {
         Object[] people = (Object[]) value;
         m_oId = people[0];
@@ -137,7 +137,7 @@ public class PeopleView extends JPanel implements EditorRecord {
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
     }
-    
+
     public Object createValue() throws BasicException {
         Object[] people = new Object[7];
         people[0] = m_oId == null ? UUID.randomUUID().toString() : m_oId;
@@ -148,21 +148,21 @@ public class PeopleView extends JPanel implements EditorRecord {
         people[5] = Formats.STRING.parseValue(jcard.getText());
         people[6] = m_jImage.getImage();
         return people;
-    }    
-    
+    }
+
     public Component getComponent() {
         return this;
-    }    
-    
+    }
+
     public void activate() throws BasicException {
-        
+
         m_RoleModel = new ComboBoxValModel(m_sentrole.list());
         m_jRole.setModel(m_RoleModel);
     }
-    
+
     public void refresh() {
     }
-     
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -209,7 +209,7 @@ public class PeopleView extends JPanel implements EditorRecord {
 
         jLabel2.setText(AppLocal.getIntString("label.role")); // NOI18N
 
-        jcard.setEditable(false);
+        //jcard.setEditable(false);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/color_line16.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -300,25 +300,25 @@ public class PeopleView extends JPanel implements EditorRecord {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        
-        if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.cardnew"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
+
+
+        if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.cardnew"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
             jcard.setText("c" + StringUtils.getCardNumber());
             m_Dirty.setDirty(true);
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.cardremove"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {  
+        if (JOptionPane.showConfirmDialog(this, AppLocal.getIntString("message.cardremove"), AppLocal.getIntString("title.editor"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
             jcard.setText(null);
             m_Dirty.setDirty(true);
         }
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -334,5 +334,5 @@ public class PeopleView extends JPanel implements EditorRecord {
     private javax.swing.JComboBox m_jRole;
     private javax.swing.JCheckBox m_jVisible;
     // End of variables declaration//GEN-END:variables
-    
+
 }
