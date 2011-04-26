@@ -86,6 +86,7 @@ public class MassaKVPM {
     }
 
     public static byte[] CreateDATAMessage(byte bCommand, byte[] bData, int iCurrentRow, int iRows) throws IOException {
+//        System.out.println(iCurrentRow+" of " + iRows);
         ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
         datamessage.write(HEADER); // Заголовочная последовательность
         datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(8 + bData.length))); // Длина тела сообщения
@@ -95,6 +96,15 @@ public class MassaKVPM {
         datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(iCurrentRow))); // Номер текущей записи
         datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(bData.length))); // Длина записи
         datamessage.write(bData); // Данные
+        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)))); //CRC
+        return datamessage.toByteArray();
+    }
+
+    public static byte[] CreateUDPMessage(byte bCommand) throws IOException {
+        ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
+        datamessage.write(HEADER); // Заголовочная последовательность
+        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(1))); // Длина тела сообщения
+        datamessage.write(bCommand); // Управляющая команда
         datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)))); //CRC
         return datamessage.toByteArray();
     }

@@ -23,7 +23,7 @@
 package com.openbravo.pos.massakvpm;
 
 /**
- * @author Andrey Svininykh svininykh@gmail.com
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 
 public interface DeviceScaleVPM {
@@ -31,6 +31,6 @@ public interface DeviceScaleVPM {
     public void disconnectDevice();
 
     public void startUploadProduct() throws DeviceScaleVPMException;
-    public void sendProduct(String sName, String sCode, Double dPrice, int iPLUs) throws DeviceScaleVPMException;
+    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DeviceScaleVPMException;
     public void stopUploadProduct() throws DeviceScaleVPMException;
 }

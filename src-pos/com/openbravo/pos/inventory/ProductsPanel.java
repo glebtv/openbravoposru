@@ -133,7 +133,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     }
 
     private void btnScaleVPMActionPerformed(java.awt.event.ActionEvent evt) {
-        JDlgUploadProductsScaleVPM.showMessage(this, app.getDeviceScaleVPM(), bd);
+        JDlgUploadProductsScaleVPM.showMessage(this, app.getDeviceScaleVPM(), bd, app.getUnitBarcode());
     }
 
     public String getTitle() {

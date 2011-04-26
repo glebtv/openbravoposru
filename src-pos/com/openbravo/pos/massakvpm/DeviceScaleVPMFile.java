@@ -23,7 +23,7 @@
 package com.openbravo.pos.massakvpm;
 
 /**
- * @author Andrey Svininykh svininykh@gmail.com
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 
 import java.io.*;

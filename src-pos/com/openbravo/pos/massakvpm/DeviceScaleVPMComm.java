@@ -23,9 +23,11 @@
 package com.openbravo.pos.massakvpm;
 
 /**
- * @author Andrey Svininykh svininykh@gmail.com
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 
+//import com.openbravo.pos.forms.AppView;
+import com.openbravo.pos.util.ByteArrayUtils;
 import gnu.io.*;
 import java.io.*;
 import java.util.LinkedList;
@@ -36,25 +38,35 @@ import java.util.logging.Logger;
 
 public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListener {
 
+    protected static Logger logger = Logger.getLogger("com.openbravo.pos.massakvpm");
+    
     private static final byte CMD_TCP_DFILE = (byte) 0x82; // Загрузить в весы запись
+    private static final byte CMD_UDP_POLL =  (byte) 0x00; // Запрос о наличии подключенных весов
+    private static final byte CMD_UDP_RES_ID = (byte) 0x01; // Ответ с информацией о весах
     private static final byte CMD_TCP_ACK_DFILE = 0x42; // Запись файла загружена в весы
     private static final byte CMD_TCP_BAD_DFILE = 0x43; // Запись с неожидаемым номером или типом файла загружена в весы
+
+
 
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;
 
-    private String m_sPort;
+    private String m_sDevice, m_sPort;
     private OutputStream m_out;
     private InputStream m_in;
 
     private Queue<byte[]> m_aLines;
     private ByteArrayOutputStream m_abuffer;
 
-    private int m_iProductOrder;
+//    private int m_iProductOrder;
+
+    private int m_iCounter;
+    private int m_iInMesSize;
 
     private MassaKVPM m_ScaleVPM;
 
-    public DeviceScaleVPMComm(String sPort) {
+    public DeviceScaleVPMComm(String sDevice, String sPort) {
+        m_sDevice = sDevice;
         m_sPort = sPort;
         m_PortIdPrinter = null;
         m_CommPortPrinter = null;
@@ -86,7 +98,7 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             m_CommPortPrinter = null;
             m_out = null;
             m_in = null;
-            throw new DeviceScaleVPMException(e);
+//            throw new DeviceScaleVPMException(e);
         }
 
         synchronized (this) {
@@ -116,37 +128,37 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
     }
 
     public void startUploadProduct() throws DeviceScaleVPMException {
-//        writeLine();           // CMD_UDP_POLL
-//        readCommand();         // CMD_UDP_RES_ID
-        // CMD_TCP_RESET_FILES
-        // CMD_TCP_ACK_RESET_FILES
-        m_iProductOrder = 0;
+        m_iCounter = 0;
+        m_iInMesSize = 0;
+        try {
+            writeLine(m_ScaleVPM.CreateUDPMessage(CMD_UDP_POLL));
+        } catch (IOException ex) {
+    }
+        readCommand(CMD_UDP_RES_ID);
     }
 
     public void stopUploadProduct() throws DeviceScaleVPMException {
-//        writeLine(COMMAND_OFF);
+
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice, int iPLUs) throws DeviceScaleVPMException {
+    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DeviceScaleVPMException {
+        m_iCounter = 0;
+        m_iInMesSize = 0;
+        if (iTotalPLUs > 20000) {
+            throw new DeviceScaleVPMException("PLUs exceed an accessible range");            
+        }
         
-        m_iProductOrder++; //Номер товара в диапозоне.
+        if (!sCode.substring(0,3).equals(sBarcode) || sCode.length() != 7) { // Сделано исходя из сушествующей логике работы с весовыми этикетками.
+            sName = "";
+            sCode = "0000000";
+            dPrice = 0.0;
+        }
 
-        if (m_iProductOrder > 0 || m_iProductOrder <= 20000) {
             try {
-                writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName), m_iProductOrder, iPLUs));
+            writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName), iCurrentPLU, iTotalPLUs));
             } catch (IOException ex) {
             }
-        } else {
-             throw new DeviceScaleVPMException("Количество PLU выходит из диапазона поддерживаемого устройством");
-        }
     readCommand(CMD_TCP_ACK_DFILE);
-    }
-
-    private void readCommand(byte cmd) throws DeviceScaleVPMException {
-        byte[] b = readLine();
-        if (!checkCommand(cmd, b[5])) {
-            throw new DeviceScaleVPMException("Command not expected");
-        }
     }
 
     private void writeLine(byte[] aline) throws DeviceScaleVPMException {
@@ -155,12 +167,21 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
         } else {
             synchronized (this) {
                 try {
+                    logger.info("Device: " + m_sDevice + " Message size: " + aline.length + " Send line:" + ByteArrayUtils.getHexString(aline));
                     m_out.write(aline);
                     m_out.flush();
                 } catch (IOException e) {
                     throw new DeviceScaleVPMException(e);
                 }
             }
+        }
+    }
+
+    private void readCommand(byte cmd) throws DeviceScaleVPMException {
+        byte[] b = readLine();
+        logger.info("Device: " + m_sDevice + " Message size: " + b.length + " Read line:" + ByteArrayUtils.getHexString(b));
+        if (!checkCommand(cmd, b[5])) {
+            throw new DeviceScaleVPMException("Command not expected");
         }
     }
 
@@ -214,21 +235,28 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             case SerialPortEvent.DATA_AVAILABLE:
                 try {
                     while (m_in.available() > 0) {
-                        byte[] b = new byte[6];
-                        m_in.read(b);
-                        synchronized(this) {
-                            if (b[5] == CMD_TCP_ACK_DFILE || b[5] == CMD_TCP_BAD_DFILE) {
+                        int b = m_in.read();
+                        m_iCounter++;
+//                        System.out.println("iCounter = " + m_iCounter);
+                        synchronized (this) {
+                            if (m_iCounter >= 8 && m_iCounter == m_iInMesSize) {
                                 m_abuffer.write(b);
                                 m_aLines.add(m_abuffer.toByteArray());
                                 m_abuffer.reset();
                                 notifyAll();
+                            } else {
+                                m_abuffer.write(b);
+//                                System.out.println("m_iMessageInSize = " + m_iMessageInSize);
+                                if (m_iCounter == 4) {
+                                    m_iInMesSize = m_iCounter + b + 3;
+                                } else if (m_iCounter == 5) {
+                                    m_iInMesSize = m_iInMesSize + b * 256;
                             }
-//                            } else {
-//                                m_abuffer.write(b);
-//                            }
                         }
                     }
-                } catch (IOException eIO) {}
+                    }
+                } catch (IOException eIO) {
+                }
                 break;
         }
     }

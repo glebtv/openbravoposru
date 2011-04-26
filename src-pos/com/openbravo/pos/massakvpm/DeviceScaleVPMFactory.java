@@ -26,7 +26,7 @@ import com.openbravo.pos.forms.AppProperties;
 import com.openbravo.pos.util.StringParser;
 
 /**
- * @author Andrey Svininykh svininykh@gmail.com
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 
 public class DeviceScaleVPMFactory {
@@ -36,11 +36,11 @@ public class DeviceScaleVPMFactory {
     public static DeviceScaleVPM createInstance(AppProperties props) {
 
         StringParser sd = new StringParser(props.getProperty("machine.scanner"));
-        String sPassiveCRType = sd.nextToken(':');
-        String sPassiveCRParam1 = sd.nextToken(',');
+        String sScaleType = sd.nextToken(':');
+        String sScaleType1 = sd.nextToken(',');
 
-        if ("massakvpm".equals(sPassiveCRType)) {
-            return new DeviceScaleVPMComm(sPassiveCRParam1);
+        if ("massakvpm".equals(sScaleType)) {
+            return new DeviceScaleVPMComm(sScaleType, sScaleType1);
         } else {
             return null;
         }
