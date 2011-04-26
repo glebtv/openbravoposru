@@ -131,9 +131,7 @@ public class DeviceShtrihFR implements PrinterConst {
                     logger.finer("Wait for complete command ended");
                     return;
                 case ECR_ADVANCEDMODE_AFTER:
-                    // XXX: continue printing
-                    logger.severe("Continue printing stub");
-                    Thread.sleep(SLEEP_THRESHOLD);
+                    continuePrinting();
                     break;
                 case ECR_ADVANCEDMODE_REPORT:
                 case ECR_ADVANCEDMODE_PRINT:
@@ -152,27 +150,12 @@ public class DeviceShtrihFR implements PrinterConst {
 
         PrinterCommand command = new ContinuePrint(iFiscalPassword);
 
-        Infinity:
-        for (;;) {
-            executeCommand(command);
+        executeCommand(command);
 
-            switch (command.getResultCode()) {
-
-                // Command complete successfully
-                case 0:
-                    break Infinity;
-
-                // Printing previous command, waiting
-                case 0x50:
-                    waitCommandComplete();
-                    break;
-
-                // Other errors, generate exception
-                default:
-                    String message = PrinterError.getFullText(command.getResultCode());
-                    closePort();
-                    throw new Exception(message);
-            }
+        if (command.getResultCode() != 0) {
+            String message = PrinterError.getFullText(command.getResultCode());
+            closePort();
+            throw new Exception(message);
         }
         logger.finer("Continue printing ended");
     }
