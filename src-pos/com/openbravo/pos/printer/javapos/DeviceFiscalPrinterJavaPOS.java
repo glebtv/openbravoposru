@@ -62,7 +62,7 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         return this;
     }
 
-    public void beginReceipt() {
+    public void beginReceipt(String sCashier) {
         try {
             m_fiscal.beginFiscalReceipt(true);
         } catch (JposException e) {

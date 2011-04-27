@@ -144,7 +144,7 @@ public class TicketParser extends DefaultHandler {
                 m_oOutputPrinter = null;
             } else if ("fiscalreceipt".equals(qName)) {
                 m_iOutputType = OUTPUT_FISCAL;
-                m_printer.getFiscalPrinter().beginReceipt();
+                m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("cashier"), "Администратор"));
             } else if ("fiscalzreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printZReport();
                 m_printer.getFiscalPrinter().cutPaper(true);

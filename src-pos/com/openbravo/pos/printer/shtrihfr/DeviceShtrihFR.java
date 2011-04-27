@@ -26,7 +26,8 @@ package com.openbravo.pos.printer.shtrihfr;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.JPrincipalApp;
 
 import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 
@@ -49,6 +50,7 @@ public class DeviceShtrihFR implements PrinterConst {
     protected static final int MAX_TEXT_LENGHT = 40;
     private static final int SLEEP_THRESHOLD = 500;
     private static final int SLEEP_MAX_STEPS = 60;
+    private static final String sCharsetName = "CP1251";
     private static final int iBaudRate = 115200;
     private static final int iFiscalTimeout = 100;
     private static final int iAdminPassword = 30;
@@ -71,6 +73,11 @@ public class DeviceShtrihFR implements PrinterConst {
     //
     // Helper methods
     //
+
+    // Get admin's fiscal password of current user
+    protected int getAdminFiscalPassword() {
+        return iAdminPassword;
+    }
 
     // Get fiscal password of current user
     protected int getFiscalPassword() {
@@ -158,6 +165,40 @@ public class DeviceShtrihFR implements PrinterConst {
             throw new Exception(message);
         }
         logger.finer("Continue printing ended");
+    }
+
+    // Set cashier name
+    protected void setCashierName(String sName) throws Exception {
+        logger.finer("Set cashier name started");
+        int iOperatorPassword = getFiscalPassword();
+
+        // Try to find operator's number
+        ShortPrinterStatus status = getPrinterStatusShort();
+        int iOperatorNumber = 30; // XXX: !!!
+
+        // Write table
+        writeTable(2, iOperatorNumber, 2, sName);
+
+        logger.finer("Set cashier name ended");
+    }
+
+    protected void writeTable(int iTableNumber, int iRowNumber, int iFieldNumber, String sFieldValue) throws Exception {
+        logger.finer("Write table started: " +
+                "table " + iTableNumber + ", " +
+                "row " + iRowNumber + ", " +
+                "field " + iFieldNumber + ", " +
+                "value '" + sFieldValue + "'");
+
+        int iAdminPassword = getAdminFiscalPassword();
+        ReadFieldInfo fieldInfo = new ReadFieldInfo(iAdminPassword, iTableNumber, iFieldNumber);
+        executeCommand(fieldInfo);
+
+        byte[] bFieldValue = fieldInfo.fieldToBytes(sFieldValue, sCharsetName);
+
+        PrinterCommand command = new WriteTable(iAdminPassword, iTableNumber, iRowNumber, iFieldNumber, bFieldValue);
+        executeCommand(command);
+
+        logger.finer("Write table ended");
     }
 
 }

@@ -60,7 +60,7 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
     }
 
     //Начало печати чека
-    public void beginReceipt() {
+    public void beginReceipt(String sCashier) {
         try {
             m_CommOutputFiscal.connectDevice();
 //            m_CommOutputFiscal.sendInitMessage();
