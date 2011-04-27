@@ -174,7 +174,7 @@ public class DeviceShtrihFR implements PrinterConst {
 
         // Try to find operator's number
         ShortPrinterStatus status = getPrinterStatusShort();
-        int iOperatorNumber = 30; // XXX: !!!
+        int iOperatorNumber = status.operatorNumber;
 
         // Write table
         writeTable(2, iOperatorNumber, 2, sName);
