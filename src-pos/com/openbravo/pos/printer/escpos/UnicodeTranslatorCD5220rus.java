@@ -109,9 +109,9 @@ public class UnicodeTranslatorCD5220rus extends UnicodeTranslator {
             case '\u0447': return (byte) 0xE7;// ч
             case '\u0448': return (byte) 0xE8;// ш
             case '\u0449': return (byte) 0xE9;// щ
-            case '\u044A': return (byte) 0xEC;// ъ
+            case '\u044A': return (byte) 0xEA;// ъ
             case '\u044B': return (byte) 0xEB;// ы
-            case '\u044C': return (byte) 0xEA;// ь
+            case '\u044C': return (byte) 0xEC;// ь
             case '\u044D': return (byte) 0xED;// э
             case '\u044E': return (byte) 0xEE;// ю
             case '\u044F': return (byte) 0xEF;// я
