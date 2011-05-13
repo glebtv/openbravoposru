@@ -20,15 +20,30 @@
     along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <output>
+    #foreach ($paymentline in $ticket.payments) 
+     #if ($paymentline.name == "cash")  
     <display>
         <line>
-            <text align="left" length="10">Итого.</text>
-            <text align="right" length="10">${ticket.printTotal()}</text>
-        </line>
+            <text align="left" length="10">Оплачено</text>
+            <text align ="right" length="10">${paymentline.printPaid()}</text>
+        </line>  
         <line>
-           <text align="center" length="20">Спасибо.</text>
+            <text align="left" length="10">Сдача</text>
+            <text align ="right" length="10">${paymentline.printChange()}</text>
         </line>
     </display>
+     #else
+    <display>
+        <line>
+            <text align="left" length="10">Итого</text>
+            <text align ="right" length="10">${paymentline.printTotal()}</text>
+        </line>  
+        <line>
+            <text align ="center" length="20">Спасибо за покупку.</text>
+        </line>
+    </display>
+     #end  
+    #end
     <ticket>
         <image>Printer.Ticket.Logo</image>
         <line></line>

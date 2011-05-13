@@ -21,14 +21,24 @@
  -->
 <output>
     <display>
-        <line>
-            <text align="left" length="10">Итого.</text>
-            <text align="right" length="10">${ticket.printTotal()}</text>
-        </line>
-        <line>
-            <text align="center" length="20">Спасибо.</text>
-        </line>
+        <line1>
+            <text align="left" length="10">Итого</text>
+            <text align ="right" length="10">${ticket.printTotal()}</text>
+        </line1>  
+    #foreach ($paymentline in $ticket.payments) 
+     #if ($paymentline.name == "cash")  
+        <line2>
+            <text align="left" length="10">Сдача</text>
+            <text align ="right" length="10">${paymentline.printChange()}</text>
+        </line2>
+     #else
+        <line2>
+            <text align ="center" length="20">Спасибо за покупку.</text>
+        </line2>
+     #end
+    #end 
     </display>
+    
     #foreach ($paymentline in $ticket.payments)      
      #if ($paymentline.name == "cash")
     <opendrawer/>
@@ -37,4 +47,5 @@
     <opendrawer/>
      #end  
     #end
+    
 </output>
