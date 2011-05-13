@@ -50,7 +50,15 @@ public class TicketParser extends DefaultHandler {
     private int m_iVisorAnimation;
     private String m_sVisorLine1;
     private String m_sVisorLine2;
-
+    
+    private String m_sLabelCodePage;
+    private String m_sLabelFontPoint;    
+    private String m_sLabelX;
+    private String m_sLabelY;
+    private String m_sLabelWidth;
+    private String m_sLabelHeight;
+    private String m_sLabelRotation;    
+    
     private double m_dValue1;
     private double m_dValue2;
     private int attribute3;
@@ -60,8 +68,9 @@ public class TicketParser extends DefaultHandler {
     private static final int OUTPUT_DISPLAY = 1;
     private static final int OUTPUT_TICKET = 2;
     private static final int OUTPUT_FISCAL = 3;
+    private static final int OUTPUT_LABEL = 4;    
     private DevicePrinter m_oOutputPrinter;
-
+    private DeviceLabelPrinter m_oOutputLabelPrinter;
 
     /** Creates a new instance of TicketParser */
     public TicketParser(DeviceTicket printer, DataLogicSystem system) {
@@ -106,6 +115,7 @@ public class TicketParser extends DefaultHandler {
         m_sVisorLine2 = null;
         m_iOutputType = OUTPUT_NONE;
         m_oOutputPrinter = null;
+        m_oOutputLabelPrinter = null;
     }
 
     @Override
@@ -145,6 +155,11 @@ public class TicketParser extends DefaultHandler {
             } else if ("fiscalreceipt".equals(qName)) {
                 m_iOutputType = OUTPUT_FISCAL;
                 m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("cashier"), "Администратор"));
+            } else if ("label".equals(qName)) {
+                m_iOutputType = OUTPUT_LABEL;
+                m_oOutputLabelPrinter = m_printer.getDeviceLabel();
+                m_sLabelCodePage = readString(attributes.getValue("codepage"), "ASCII");
+                m_oOutputLabelPrinter.beginLabel(m_sLabelCodePage, readString(attributes.getValue("width"), "58"),readString(attributes.getValue("height"), "95"),readString(attributes.getValue("gap"), "3"));
             } else if ("fiscalzreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printZReport();
                 m_printer.getFiscalPrinter().cutPaper(true);
@@ -218,6 +233,33 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
             break;
+        case OUTPUT_LABEL:
+            if ("text".equals(qName)){
+                m_sLabelFontPoint = readString(attributes.getValue("fontpoint"),"10");                
+                m_sLabelX = readString(attributes.getValue("x"),"4");
+                m_sLabelY = readString(attributes.getValue("y"),"4");
+                m_sLabelRotation = readString(attributes.getValue("rotation"),"0");                
+                text = new StringBuffer();                
+            } else if ("barcode".equals(qName)) {
+                bctype = readString(attributes.getValue("type"),"EAN13");
+                m_sLabelX = readString(attributes.getValue("x"),"4");
+                m_sLabelY = readString(attributes.getValue("y"),"14");                
+                m_sLabelHeight = readString(attributes.getValue("height"),"50");                
+                m_sLabelRotation = readString(attributes.getValue("rotation"),"0");                
+                text = new StringBuffer();
+            } else if ("line".equals(qName)){
+                m_sLabelX = readString(attributes.getValue("x"),"4");
+                m_sLabelY = readString(attributes.getValue("y"),"64");                
+                m_sLabelWidth = readString(attributes.getValue("width"),"50");
+                m_sLabelHeight = readString(attributes.getValue("height"),"8");                
+                m_oOutputLabelPrinter.drawLineBox(m_sLabelX,m_sLabelY,m_sLabelWidth,m_sLabelHeight);
+            } else if ("rectangle".equals(qName)){
+                m_sLabelX = readString(attributes.getValue("x"),"4");
+                m_sLabelY = readString(attributes.getValue("y"),"72");                
+                m_sLabelWidth = readString(attributes.getValue("width"),"50");
+                m_sLabelHeight = readString(attributes.getValue("height"),"20");                
+                m_oOutputLabelPrinter.drawRectangleBox(m_sLabelX,m_sLabelY,m_sLabelWidth,m_sLabelHeight);
+            }                        
         }
     }
 
@@ -334,6 +376,18 @@ public class TicketParser extends DefaultHandler {
                 text = null;
             }
             break;
+        case OUTPUT_LABEL:
+            if ("label".equals(qName)) {                
+                m_oOutputLabelPrinter.endLabel();
+                m_iOutputType = OUTPUT_NONE;
+            } else if ("barcode".equals(qName)) {
+                m_oOutputLabelPrinter.printBarcodeBox(bctype,m_sLabelX,m_sLabelY,m_sLabelHeight,m_sLabelRotation,text.toString());
+                text = null;
+            } else if ("text".equals(qName)) {
+                m_oOutputLabelPrinter.printTextBox(m_sLabelCodePage, m_sLabelFontPoint, m_sLabelX,m_sLabelY,m_sLabelRotation,text.toString());
+                text = null;
+            }
+            
         }
     }
 
