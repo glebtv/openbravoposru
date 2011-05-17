@@ -259,6 +259,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialFiscalPrinter.addItem("/dev/ttyS3");
         
         // Label printer
+        jcboMachineLabelPrinter.addItem("screen");        
         jcboMachineLabelPrinter.addItem("godexezpl");
         jcboMachineLabelPrinter.addItem("Not defined");
 

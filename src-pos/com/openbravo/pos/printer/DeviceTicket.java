@@ -96,7 +96,9 @@ public class DeviceTicket {
         String sLabelParam1 = sl.nextToken(',');
         String sLabelParam2 = sl.nextToken(',');
         try {
-            if ("godexezpl".equals(sLabelType)) {
+            if ("screen".equals(sLabelType)) {
+                m_deviceLabel = new DeviceLabelPanel();
+            } else if ("godexezpl".equals(sLabelType)) {
                 m_deviceLabel = new DeviceLabelPrinterEZPL(pwl.getLabelPrinterWritter(sLabelParam1, sLabelParam2));
             } else {
                 m_deviceLabel = new DeviceLabelPrinterNull();

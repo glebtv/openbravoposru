@@ -48,7 +48,9 @@ public class DeviceLabelPrinterNull implements DeviceLabelPrinter {
     public String getLabelPrinterDescription() {
         return m_sDescription;
     }   
-    
+    public javax.swing.JComponent getLabelPrinterComponent() {
+        return null;
+    }
     public void reset() {
     }
 

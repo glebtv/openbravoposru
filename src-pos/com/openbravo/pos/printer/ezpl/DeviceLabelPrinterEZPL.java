@@ -27,6 +27,7 @@ package com.openbravo.pos.printer.ezpl;
 import java.io.UnsupportedEncodingException;
 import com.openbravo.pos.printer.*;
 import com.openbravo.pos.forms.AppLocal;
+import javax.swing.JComponent;
 
 public class DeviceLabelPrinterEZPL implements DeviceLabelPrinter {
 
@@ -59,6 +60,10 @@ public class DeviceLabelPrinterEZPL implements DeviceLabelPrinter {
     }
 
     public String getLabelPrinterDescription() {
+        return null;
+    }
+    
+    public JComponent getLabelPrinterComponent() {
         return null;
     }
 

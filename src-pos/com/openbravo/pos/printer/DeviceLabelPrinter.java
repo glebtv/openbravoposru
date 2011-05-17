@@ -22,6 +22,8 @@
 
 package com.openbravo.pos.printer;
 
+import javax.swing.JComponent;
+
 /**
  * @author Andrey Svininykh <svininykh@gmail.com>
  */
@@ -29,6 +31,7 @@ public interface DeviceLabelPrinter {
  
     public String getLabelPrinterName();
     public String getLabelPrinterDescription();
+    public JComponent getLabelPrinterComponent();    
     public void reset();
     public void beginLabel(String sCodePage, String sWidth, String sHeight, String sGap);
     public void printTextBox(String sCharset, String sFontPoint, String sLabelX, String sLabelY, String sRotation, String sText);
