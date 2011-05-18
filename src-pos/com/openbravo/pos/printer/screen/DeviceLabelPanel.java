@@ -1,24 +1,6 @@
-//    Openbravo POS is a point of sales application designed for touch screens.
-//    Copyright (C) 2007-2009 Openbravo, S.L.
-//    http://www.openbravo.com/product/pos
-//
-//    This file is part of Openbravo POS.
-//
-//    Openbravo POS is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    Openbravo POS is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+
 package com.openbravo.pos.printer.screen;
 
-import java.awt.*;
 import javax.swing.*;
 //import java.awt.image.BufferedImage;
 import com.openbravo.pos.printer.*;
@@ -29,8 +11,10 @@ import com.openbravo.pos.printer.label.BasicLabelForScreen;
 public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelPrinter {
 
     private String m_sName;
-    private JLabelContainer m_jTicketContainer;
-    private BasicLabel m_ticketcurrent;
+    private String sGapLabel;
+    private JLabelContainer m_jLabelContainer;
+    private BasicLabel m_labelcurrent;
+    
 
     /** Creates new form JPrinterScreen2 */
     public DeviceLabelPanel() {
@@ -38,10 +22,10 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 
         m_sName = AppLocal.getIntString("PrinterLabel.Screen");
 
-        m_ticketcurrent = null;
+        m_labelcurrent = null;
 
-        m_jTicketContainer = new JLabelContainer();
-        m_jScrollView.setViewportView(m_jTicketContainer);
+        m_jLabelContainer = new JLabelContainer();
+        m_jScrollView.setViewportView(m_jLabelContainer);
     }
 
     public String getLabelPrinterName() {
@@ -57,17 +41,18 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void reset() {
-        m_ticketcurrent = null;
-        m_jTicketContainer.removeAllTickets();
-        m_jTicketContainer.repaint();
+        m_labelcurrent = null;
+        m_jLabelContainer.removeAllLabels();
+        m_jLabelContainer.repaint();
     }
 
     public void beginLabel(String sCodePage, String sWidth, String sHeight, String sGap) {
-        m_ticketcurrent = new BasicLabelForScreen();
+        sGapLabel = sGap;
+        m_labelcurrent = new BasicLabelForScreen();
     }
 
     public void printBarcodeBox(String sTypeBarcode, String sLabelX, String sLabelY, String sHeight, String sRotation, String sCode) {
-        m_ticketcurrent.printBarCode(sTypeBarcode, "bottom", sCode);
+        m_labelcurrent.printBarCode(sTypeBarcode, "bottom", sCode);
     }
 
     public void drawLineBox(String sLabelX, String sLabelY, String sWidth, String sHeight) {
@@ -77,14 +62,14 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void printTextBox(String sCharset, String sFontPoint, String sLabelX, String sLabelY, String sRotation, String sText) {
-        m_ticketcurrent.beginLine(10);        
-        m_ticketcurrent.printText(1, sText);
-        m_ticketcurrent.endLine();        
+        m_labelcurrent.beginLine(10);        
+        m_labelcurrent.printText(1, sText);
+        m_labelcurrent.endLine();        
     }
 
     public void endLabel() {
-        m_jTicketContainer.addTicket(new JLabel(m_ticketcurrent));
-        m_ticketcurrent = null;
+        m_jLabelContainer.addLabel(new JLabel(m_labelcurrent), sGapLabel);
+        m_labelcurrent = null;
     }
 
 //    public void openDrawer() {

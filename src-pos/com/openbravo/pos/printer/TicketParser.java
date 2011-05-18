@@ -381,10 +381,10 @@ public class TicketParser extends DefaultHandler {
                 m_oOutputLabelPrinter.endLabel();
                 m_iOutputType = OUTPUT_NONE;
             } else if ("barcode".equals(qName)) {
-                m_oOutputLabelPrinter.printBarcodeBox(bctype,m_sLabelX,m_sLabelY,m_sLabelHeight,m_sLabelRotation,text.toString());
+                m_oOutputLabelPrinter.printBarcodeBox(bctype,m_sLabelX,m_sLabelY,m_sLabelHeight,m_sLabelRotation,readString(text.toString(), "0000000000000"));
                 text = null;
             } else if ("text".equals(qName)) {
-                m_oOutputLabelPrinter.printTextBox(m_sLabelCodePage, m_sLabelFontPoint, m_sLabelX,m_sLabelY,m_sLabelRotation,text.toString());
+                m_oOutputLabelPrinter.printTextBox(m_sLabelCodePage, m_sLabelFontPoint, m_sLabelX,m_sLabelY,m_sLabelRotation,readString(text.toString(), ""));
                 text = null;
             }
             
