@@ -23,14 +23,14 @@ import javax.swing.*;
 //import java.awt.image.BufferedImage;
 import com.openbravo.pos.printer.*;
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.printer.ticket.BasicTicket;
-import com.openbravo.pos.printer.ticket.BasicTicketForScreen;
+import com.openbravo.pos.printer.label.BasicLabel;
+import com.openbravo.pos.printer.label.BasicLabelForScreen;
 
 public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelPrinter {
 
     private String m_sName;
-    private JTicketContainer m_jTicketContainer;
-    private BasicTicket m_ticketcurrent;
+    private JLabelContainer m_jTicketContainer;
+    private BasicLabel m_ticketcurrent;
 
     /** Creates new form JPrinterScreen2 */
     public DeviceLabelPanel() {
@@ -40,7 +40,7 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 
         m_ticketcurrent = null;
 
-        m_jTicketContainer = new JTicketContainer();
+        m_jTicketContainer = new JLabelContainer();
         m_jScrollView.setViewportView(m_jTicketContainer);
     }
 
@@ -63,11 +63,11 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void beginLabel(String sCodePage, String sWidth, String sHeight, String sGap) {
-        m_ticketcurrent = new BasicTicketForScreen();
+        m_ticketcurrent = new BasicLabelForScreen();
     }
 
     public void printBarcodeBox(String sTypeBarcode, String sLabelX, String sLabelY, String sHeight, String sRotation, String sCode) {
-        m_ticketcurrent.printBarCode(sTypeBarcode, sLabelY, sCode);
+        m_ticketcurrent.printBarCode(sTypeBarcode, "bottom", sCode);
     }
 
     public void drawLineBox(String sLabelX, String sLabelY, String sWidth, String sHeight) {
@@ -77,12 +77,13 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void printTextBox(String sCharset, String sFontPoint, String sLabelX, String sLabelY, String sRotation, String sText) {
-        int iStyle = 1;
-        m_ticketcurrent.printText(iStyle, sText);
+        m_ticketcurrent.beginLine(10);        
+        m_ticketcurrent.printText(1, sText);
+        m_ticketcurrent.endLine();        
     }
 
     public void endLabel() {
-        m_jTicketContainer.addTicket(new JTicket(m_ticketcurrent));
+        m_jTicketContainer.addTicket(new JLabel(m_ticketcurrent));
         m_ticketcurrent = null;
     }
 
