@@ -38,7 +38,7 @@ public abstract class BasicLabel implements PrintLabelItem {
             currenty += pi.getHeight();
         }
     }
-
+    
     public java.util.List<PrintLabelItem> getCommands() {
         return m_aCommands;
     }
@@ -50,11 +50,17 @@ public abstract class BasicLabel implements PrintLabelItem {
         m_iBodyHeight += pi.getHeight();
     }
 
-    public void printBarCode(String type, String position, String code) {
+    public void printBarCode(String type,  String sLabelX, String sLabelY, String sHeight, String position, String code) {
 
-        PrintLabelItem pi = new PrintLabelItemBarcode(type, position, code, getImageScale());
+        PrintLabelItem pi = new PrintLabelItemBarcode(type, sLabelX, sLabelY, sHeight, position, code, getImageScale());
         m_aCommands.add(pi);
         m_iBodyHeight += pi.getHeight();
+    }
+    
+    public void printRectangle(String sX, String sY, String sW, String sH){
+        PrintLabelItem pi = new PrintLabelItemRectangle(sX, sY, sW, sH);
+        m_aCommands.add(pi);
+        m_iBodyHeight += pi.getHeight();        
     }
 
     public void beginLine(int iTextSize) {

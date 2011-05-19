@@ -7,16 +7,20 @@ import java.util.Map;
 
 class JLabel extends javax.swing.JPanel {
     
-    private static final int H_GAP = 8;
-    private static final int V_GAP = 8;
-    private static final int COLUMNS = 42;
-    private static final int LINEWIDTH = COLUMNS * 7;    
+    private static final int H_GAP = 0;
+    private static final int V_GAP = 0;
+//    private static final int COLUMNS = 42;
+//    private static final int LINEWIDTH = COLUMNS * 7;  
+    
+    private int iW;
+    private int iH;   
     
     private BasicLabel basict;
     private Map desktophints;
    
-    public JLabel(BasicLabel t) {
-        
+    public JLabel(BasicLabel t, String sWidth, String sHeight) {
+        iW = Integer.parseInt(sWidth) * 4;
+        iH = Integer.parseInt(sHeight) * 4;
         basict = t;
         desktophints = (Map) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
         initComponents();
@@ -37,14 +41,14 @@ class JLabel extends javax.swing.JPanel {
         g2d.fillRect(i.left, i.top, getWidth() - i.left - i.right, getHeight() - i.top - i.bottom);
         
         g.setColor(getForeground());
-        basict.draw(g2d, i.left + H_GAP, i.top + V_GAP, LINEWIDTH);   
+        basict.draw(g2d, i.left + H_GAP, i.top + V_GAP, iW);   
     }  
     
       
     public Dimension getPreferredSize() {
         Insets ins = getInsets();
-        return new Dimension((int) (LINEWIDTH + 2 * H_GAP) + ins.left + ins.right
-                           , (int) (basict.getHeight() + 2 * V_GAP) + ins.top + ins.bottom);
+        return new Dimension((int) (iW + 2 * H_GAP) + ins.left + ins.right
+                           , (int) (iH + 2 * V_GAP) + ins.top + ins.bottom);
     }
 
     public Dimension getMaximumSize() {

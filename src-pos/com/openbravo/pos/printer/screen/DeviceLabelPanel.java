@@ -12,6 +12,8 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 
     private String m_sName;
     private String sGapLabel;
+    private String sWidthLabel;    
+    private String sHeightLabel;        
     private JLabelContainer m_jLabelContainer;
     private BasicLabel m_labelcurrent;
     
@@ -48,17 +50,20 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 
     public void beginLabel(String sCodePage, String sWidth, String sHeight, String sGap) {
         sGapLabel = sGap;
+        sWidthLabel = sWidth;
+        sHeightLabel = sHeight;        
         m_labelcurrent = new BasicLabelForScreen();
     }
 
     public void printBarcodeBox(String sTypeBarcode, String sLabelX, String sLabelY, String sHeight, String sRotation, String sCode) {
-        m_labelcurrent.printBarCode(sTypeBarcode, "bottom", sCode);
+        m_labelcurrent.printBarCode(sTypeBarcode, sLabelX, sLabelY, sHeight, "bottom", sCode);
     }
 
     public void drawLineBox(String sLabelX, String sLabelY, String sWidth, String sHeight) {
     }
 
     public void drawRectangleBox(String sLabelX, String sLabelY, String sWidth, String sHeight) {
+     m_labelcurrent.printRectangle(sLabelX, sLabelY, sWidth, sHeight);
     }
 
     public void printTextBox(String sCharset, String sFontPoint, String sLabelX, String sLabelY, String sRotation, String sText) {
@@ -68,7 +73,7 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void endLabel() {
-        m_jLabelContainer.addLabel(new JLabel(m_labelcurrent), sGapLabel);
+        m_jLabelContainer.addLabel(new JLabel(m_labelcurrent,sWidthLabel,sHeightLabel), sGapLabel);
         m_labelcurrent = null;
     }
 

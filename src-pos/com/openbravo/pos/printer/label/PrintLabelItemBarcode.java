@@ -21,7 +21,7 @@ public class PrintLabelItemBarcode implements PrintLabelItem {
     protected double scale;
 
     /** Creates a new instance of PrinterItemBarcode */
-    public PrintLabelItemBarcode(String type, String position, String code, double scale) {
+    public PrintLabelItemBarcode(String type, String sLabelX, String sLabelY, String sHeight, String position, String code, double scale) {
 
         m_sCode = code;
         this.scale = scale;
@@ -34,7 +34,7 @@ public class PrintLabelItemBarcode implements PrintLabelItem {
 
         if (m_barcode != null) {
             m_barcode.setModuleWidth(1.0);
-            m_barcode.setBarHeight(40.0);
+            m_barcode.setBarHeight(Double.parseDouble(sHeight));
             m_barcode.setFontSize(10.0);
             m_barcode.setQuietZone(10.0);
             m_barcode.doQuietZone(true);

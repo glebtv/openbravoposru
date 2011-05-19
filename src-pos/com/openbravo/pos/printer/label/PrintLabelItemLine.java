@@ -1,6 +1,7 @@
 
 package com.openbravo.pos.printer.label;
 
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class PrintLabelItemLine implements PrintLabelItem {
 
         public StyledText(int style, String text) {
             this.style = style;
-            this.text = text;
+            this.text = text;            
         }
         public int style;
         public String text;
