@@ -1,6 +1,7 @@
 package com.openbravo.pos.printer.screen;
 
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
 class JLabelContainer extends javax.swing.JPanel {
 
@@ -50,7 +51,7 @@ class JLabelContainer extends javax.swing.JPanel {
             Dimension dc = comp.getPreferredSize();
 
             comp.setBounds(x, y, dc.width, dc.height);
-//            y += V_GAP_SCREEN + dc.height;            
+//            y += dc.height;            
             y += dc.height + iGap; // Задаёт размер отступа между этикетками
         }
     }

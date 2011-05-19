@@ -10,13 +10,12 @@ import java.util.ArrayList;
 public abstract class BasicLabel implements PrintLabelItem {
 
     protected java.util.List<PrintLabelItem> m_aCommands;
-    protected PrintLabelItemLine pil;
+//    protected PrintLabelItemLine pil;
     protected int m_iBodyHeight;
 
-    /** Creates a new instance of AbstractTicket */
     public BasicLabel() {
         m_aCommands = new ArrayList<PrintLabelItem>();
-        pil = null;
+//        pil = null;
         m_iBodyHeight = 0;
     }
 
@@ -26,16 +25,16 @@ public abstract class BasicLabel implements PrintLabelItem {
 
     protected abstract double getImageScale();
 
-    public int getHeight() {
-        return m_iBodyHeight;
-    }
+//    public int getHeight() {
+//        return m_iBodyHeight;
+//    }
 
     public void draw(Graphics2D g2d, int x, int y, int width) {
 
         int currenty = y;
         for (PrintLabelItem pi : m_aCommands) {
             pi.draw(g2d, x, currenty, width);
-            currenty += pi.getHeight();
+//            currenty += pi.getHeight();
         }
     }
     
@@ -47,37 +46,25 @@ public abstract class BasicLabel implements PrintLabelItem {
 
         PrintLabelItem pi = new PrintLabelItemImage(image, getImageScale());
         m_aCommands.add(pi);
-        m_iBodyHeight += pi.getHeight();
+//        m_iBodyHeight += pi.getHeight();
     }
 
     public void printBarCode(String type,  String sLabelX, String sLabelY, String sHeight, String position, String code) {
 
         PrintLabelItem pi = new PrintLabelItemBarcode(type, sLabelX, sLabelY, sHeight, position, code, getImageScale());
         m_aCommands.add(pi);
-        m_iBodyHeight += pi.getHeight();
+//        m_iBodyHeight += pi.getHeight();
     }
     
     public void printRectangle(String sX, String sY, String sW, String sH){
         PrintLabelItem pi = new PrintLabelItemRectangle(sX, sY, sW, sH);
         m_aCommands.add(pi);
-        m_iBodyHeight += pi.getHeight();        
+//        m_iBodyHeight += pi.getHeight();        
     }
 
-    public void beginLine(int iTextSize) {
-        pil = new PrintLabelItemLine(iTextSize, getBaseFont(), getFontHeight());
-    }
-
-    public void printText(int iStyle, String sText) {
-        if (pil != null) {
-            pil.addText(iStyle, sText);
-        }
-    }
-
-    public void endLine() {
-        if (pil != null) {
-            m_aCommands.add(pil);
-            m_iBodyHeight += pil.getHeight();
-            pil = null;
-        }
+    public void printText(String sFontPoint, String sLabelX, String sLabelY, String sText) {
+        PrintLabelItem pi = new PrintLabelItemText(sFontPoint, sLabelX, sLabelY, sText);
+        m_aCommands.add(pi);
+//        m_iBodyHeight += pi.getHeight();        
     }
 }

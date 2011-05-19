@@ -1,4 +1,3 @@
-
 package com.openbravo.pos.printer.screen;
 
 import javax.swing.*;
@@ -12,11 +11,10 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 
     private String m_sName;
     private String sGapLabel;
-    private String sWidthLabel;    
-    private String sHeightLabel;        
+    private String sWidthLabel;
+    private String sHeightLabel;
     private JLabelContainer m_jLabelContainer;
     private BasicLabel m_labelcurrent;
-    
 
     /** Creates new form JPrinterScreen2 */
     public DeviceLabelPanel() {
@@ -51,7 +49,7 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     public void beginLabel(String sCodePage, String sWidth, String sHeight, String sGap) {
         sGapLabel = sGap;
         sWidthLabel = sWidth;
-        sHeightLabel = sHeight;        
+        sHeightLabel = sHeight;
         m_labelcurrent = new BasicLabelForScreen();
     }
 
@@ -63,17 +61,18 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
     }
 
     public void drawRectangleBox(String sLabelX, String sLabelY, String sWidth, String sHeight) {
-     m_labelcurrent.printRectangle(sLabelX, sLabelY, sWidth, sHeight);
+        m_labelcurrent.printRectangle(sLabelX, sLabelY, sWidth, sHeight);
     }
 
     public void printTextBox(String sCharset, String sFontPoint, String sLabelX, String sLabelY, String sRotation, String sText) {
-        m_labelcurrent.beginLine(10);        
-        m_labelcurrent.printText(1, sText);
-        m_labelcurrent.endLine();        
+        m_labelcurrent.printText(sFontPoint, sLabelX, sLabelY, sText);
+//        m_labelcurrent.beginLine(10);        
+//        m_labelcurrent.printText(1, sText);
+//        m_labelcurrent.endLine();        
     }
 
     public void endLabel() {
-        m_jLabelContainer.addLabel(new JLabel(m_labelcurrent,sWidthLabel,sHeightLabel), sGapLabel);
+        m_jLabelContainer.addLabel(new JLabel(m_labelcurrent, sWidthLabel, sHeightLabel), sGapLabel);
         m_labelcurrent = null;
     }
 
@@ -81,7 +80,6 @@ public class DeviceLabelPanel extends javax.swing.JPanel implements DeviceLabelP
 //        // Una simulacion
 //        Toolkit.getDefaultToolkit().beep();
 //    }
-    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

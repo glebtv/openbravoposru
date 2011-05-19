@@ -7,8 +7,8 @@ import java.util.Map;
 
 class JLabel extends javax.swing.JPanel {
     
-    private static final int H_GAP = 0;
-    private static final int V_GAP = 0;
+    private static final int H_GAP = 10;
+    private static final int V_GAP = 10;
 //    private static final int COLUMNS = 42;
 //    private static final int LINEWIDTH = COLUMNS * 7;  
     
@@ -36,19 +36,24 @@ class JLabel extends javax.swing.JPanel {
         }
         
         Insets i = getInsets();
-        g2d.setPaint(new GradientPaint(getWidth() - i.left - i.right - 100, getHeight() - i.top - i.bottom - 100, getBackground()
+        g2d.setPaint(new GradientPaint(getWidth() - i.left - i.right - 50, getHeight() - i.top - i.bottom - 100, getBackground()
                                      , getWidth() - i.left - i.right, getHeight() - i.top - i.bottom, new Color(0xf0f0f0), true));
-        g2d.fillRect(i.left, i.top, getWidth() - i.left - i.right, getHeight() - i.top - i.bottom);
+//        g2d.fillRoundRect(i.left, i.top, getWidth() - i.left - i.right, getHeight() - i.top - i.bottom, 0, 2);
+        g2d.fillRoundRect(i.left + H_GAP, i.top + V_GAP, getWidth() - i.left - i.right - V_GAP * 2, getHeight() - i.top - i.bottom - H_GAP * 2, 10, 10);        
+//        g2d.setStroke(new BasicStroke(10));
+        //new Color(0xfaffd2)
         
         g.setColor(getForeground());
-        basict.draw(g2d, i.left + H_GAP, i.top + V_GAP, iW);   
+        basict.draw(g2d, i.left , i.top , iW);   
     }  
     
       
     public Dimension getPreferredSize() {
         Insets ins = getInsets();
-        return new Dimension((int) (iW + 2 * H_GAP) + ins.left + ins.right
-                           , (int) (iH + 2 * V_GAP) + ins.top + ins.bottom);
+//        return new Dimension((int) (iW + 2 * H_GAP) + ins.left + ins.right
+//                           , (int) (iH + 2 * V_GAP) + ins.top + ins.bottom);
+        return new Dimension((int) iW + ins.left + ins.right
+                           , (int) iH + ins.top + ins.bottom);
     }
 
     public Dimension getMaximumSize() {

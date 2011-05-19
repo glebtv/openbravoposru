@@ -19,8 +19,8 @@ public class PrintLabelItemImage implements PrintLabelItem {
         g.drawImage(image, x + (width - (int)(image.getWidth() * scale)) / 2, y, (int)(image.getWidth() * scale), (int)(image.getHeight() * scale), null);
     }
 
-    @Override
-    public int getHeight() {
-        return (int) (image.getHeight() * scale);
-    }
+//    @Override
+//    public int getHeight() {
+//        return (int) (image.getHeight() * scale);
+//    }
 }

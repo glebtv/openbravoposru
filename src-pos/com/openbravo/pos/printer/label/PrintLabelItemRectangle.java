@@ -11,20 +11,20 @@ public class PrintLabelItemRectangle implements PrintLabelItem {
     protected int sH;
 
     public PrintLabelItemRectangle(String sLabelX, String sLabelY, String sWidth, String sHeight) {
-        this.sX = Integer.parseInt(sLabelX) * 4;
-        this.sY = Integer.parseInt(sLabelY) * 4;
-        this.sW = Integer.parseInt(sWidth) * 4;
-        this.sH = Integer.parseInt(sHeight) * 4;        
+        this.sX = Integer.parseInt(sLabelX);
+        this.sY = Integer.parseInt(sLabelY);
+        this.sW = Integer.parseInt(sWidth);
+        this.sH = Integer.parseInt(sHeight);        
     }
 
     @Override
     public void draw(Graphics2D g, int x, int y, int width) {
-        g.setStroke(new BasicStroke(4));
+//        g.setStroke(new BasicStroke(4));
         g.drawRect(sX, sY, sW, sH);
     }
 
-    @Override
-    public int getHeight() {
-        return sH;
-    }
+//    @Override
+//    public int getHeight() {
+//        return sH;
+//    }
 }

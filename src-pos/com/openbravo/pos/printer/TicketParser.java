@@ -294,7 +294,7 @@ public class TicketParser extends DefaultHandler {
                 m_oOutputPrinter.printBarCode(
                         bctype,
                         bcposition,
-                        text.toString());
+                        readString(text.toString(), "0000000000000"));
                 text = null;
             } else if ("text".equals(qName)) {
                 if (m_iTextLength > 0) {
