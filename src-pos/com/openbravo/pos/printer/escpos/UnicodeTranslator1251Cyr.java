@@ -31,7 +31,7 @@ public class UnicodeTranslator1251Cyr extends UnicodeTranslator {
     public byte[] getCodeTable() {
         return ESCPOS.CODE_TABLE_13;
     }
-    
+
     public final byte[] convertString(String sConvert) {
         byte bAux[] = new byte[sConvert.length()];
         for (int i = 0; i < sConvert.length(); i++) {
@@ -115,6 +115,9 @@ public class UnicodeTranslator1251Cyr extends UnicodeTranslator {
             case '\u044D': return (byte) 0xFD;// ы
             case '\u044E': return (byte) 0xFE;// ю
             case '\u044F': return (byte) 0xFF;// я
+
+            case '\u00A0': return (byte) 0x20;// &nbsp
+            case '\u2116': return (byte) 0xB9;// №
             }
         }
     }
