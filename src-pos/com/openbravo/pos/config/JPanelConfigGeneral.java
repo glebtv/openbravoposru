@@ -152,6 +152,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter.addItem("senor866cyr");
         jcboMachinePrinter.addItem("citizen866cyr");
         jcboMachinePrinter.addItem("sprtpos58cyr");
+        jcboMachinePrinter.addItem("gb2312chinese");
         jcboMachinePrinter.addItem("ithaca");
         jcboMachinePrinter.addItem("surepos");
         jcboMachinePrinter.addItem("plain");
@@ -173,6 +174,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter.addItem("/dev/ttyS1");
         jcboSerialPrinter.addItem("/dev/ttyS2");
         jcboSerialPrinter.addItem("/dev/ttyS3");
+        jcboSerialPrinter.addItem("/dev/usb/lp0");
 
         // Printer 2        
         jcboMachinePrinter2.addItem("screen");
@@ -185,6 +187,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter2.addItem("senor866cyr");
         jcboMachinePrinter2.addItem("citizen866cyr");
         jcboMachinePrinter2.addItem("sprtpos58cyr");
+        jcboMachinePrinter2.addItem("gb2312chinese");
         jcboMachinePrinter2.addItem("ithaca");
         jcboMachinePrinter2.addItem("surepos");
         jcboMachinePrinter2.addItem("plain");
@@ -206,6 +209,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter2.addItem("/dev/ttyS1");
         jcboSerialPrinter2.addItem("/dev/ttyS2");
         jcboSerialPrinter2.addItem("/dev/ttyS3");
+        jcboSerialPrinter2.addItem("/dev/usb/lp0");
 
         // Printer 3
         jcboMachinePrinter3.addItem("screen");
@@ -218,6 +222,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachinePrinter3.addItem("senor866cyr");
         jcboMachinePrinter3.addItem("citizen866cyr");
         jcboMachinePrinter3.addItem("sprtpos58cyr");
+        jcboMachinePrinter3.addItem("gb2312chinese");
         jcboMachinePrinter3.addItem("ithaca");
         jcboMachinePrinter3.addItem("surepos");
         jcboMachinePrinter3.addItem("plain");
@@ -239,6 +244,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboSerialPrinter3.addItem("/dev/ttyS1");
         jcboSerialPrinter3.addItem("/dev/ttyS2");
         jcboSerialPrinter3.addItem("/dev/ttyS3");
+        jcboSerialPrinter3.addItem("/dev/usb/lp0");                
 
         // Fiscal printer
         jcboMachineFiscalPrinter.addItem("javapos");
@@ -527,6 +533,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(sMachinePrinter)
                 || "citizen866cyr".equals(sMachinePrinter)
                 || "sprtpos58cyr".equals(sMachinePrinter)
+                || "gb2312chinese".equals(sMachinePrinter)
                 || "ithaca".equals(sMachinePrinter)
                 || "surepos".equals(sMachinePrinter)
                 || "elveskkm".equals(sMachinePrinter)
@@ -551,6 +558,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(sMachinePrinter2)
                 || "citizen866cyr".equals(sMachinePrinter2)
                 || "sprtpos58cyr".equals(sMachinePrinter2)
+                || "gb2312chinese".equals(sMachinePrinter2)
                 || "ithaca".equals(sMachinePrinter2)
                 || "surepos".equals(sMachinePrinter2)
                 || "elveskkm".equals(sMachinePrinter2)
@@ -576,6 +584,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(sMachinePrinter3)
                 || "citizen866cyr".equals(sMachinePrinter3)
                 || "sprtpos58cyr".equals(sMachinePrinter3)
+                || "gb2312chinese".equals(sMachinePrinter3)
                 || "ithaca".equals(sMachinePrinter3)
                 || "surepos".equals(sMachinePrinter3)
                 || "elveskkm".equals(sMachinePrinter3)
@@ -1550,6 +1559,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(jcboMachinePrinter3.getSelectedItem())
                 || "citizen866cyr".equals(jcboMachinePrinter3.getSelectedItem())
                 || "sprtpos58cyr".equals(jcboMachinePrinter3.getSelectedItem())
+                || "gb2312chinese".equals(jcboMachinePrinter3.getSelectedItem())
                 || "ithaca".equals(jcboMachinePrinter3.getSelectedItem())
                 || "surepos".equals(jcboMachinePrinter3.getSelectedItem())
                 || "elveskkm".equals(jcboMachinePrinter3.getSelectedItem())
@@ -1577,6 +1587,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(jcboMachinePrinter2.getSelectedItem())
                 || "citizen866cyr".equals(jcboMachinePrinter2.getSelectedItem())
                 || "sprtpos58cyr".equals(jcboMachinePrinter2.getSelectedItem())
+                || "gb2312chinese".equals(jcboMachinePrinter2.getSelectedItem())
                 || "ithaca".equals(jcboMachinePrinter2.getSelectedItem())
                 || "surepos".equals(jcboMachinePrinter2.getSelectedItem())
                 || "elveskkm".equals(jcboMachinePrinter2.getSelectedItem())
@@ -1615,6 +1626,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "senor866cyr".equals(jcboMachinePrinter.getSelectedItem())
                 || "citizen866cyr".equals(jcboMachinePrinter.getSelectedItem())
                 || "sprtpos58cyr".equals(jcboMachinePrinter.getSelectedItem())
+                || "gb2312chinese".equals(jcboMachinePrinter.getSelectedItem())
                 || "star".equals(jcboMachinePrinter.getSelectedItem())
                 || "ithaca".equals(jcboMachinePrinter.getSelectedItem())
                 || "surepos".equals(jcboMachinePrinter.getSelectedItem())

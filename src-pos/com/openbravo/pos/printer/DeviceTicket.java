@@ -197,6 +197,8 @@ public class DeviceTicket {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorCitizenCyr()));
                  } else if ("sprtpos58cyr".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorSPRTCyr()));
+                } else if ("gb2312chinese".equals(sPrinterType)) {
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorGB2312Chinese()));                    
                 } else if ("tmu220".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesTMU220(), new UnicodeTranslatorInt()));
                 } else if ("star".equals(sPrinterType)) {
