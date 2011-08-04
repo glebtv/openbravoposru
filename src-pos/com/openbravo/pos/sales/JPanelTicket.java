@@ -242,11 +242,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnconfig.setPermissions(m_App.getAppUserView().getUser());
 
         // Permissões para desconto
-        m_jDiscount1.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.discount"));
-        m_jDiscount2.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.discount"));
-        m_jDiscount3.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.discount"));
-        m_jKeypadDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
-        m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.discount") || m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
+        m_jDiscount1.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount"));
+        m_jDiscount2.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount"));
+        m_jDiscount3.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount"));
+        m_jKeypadDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.DiscountMulti"));
+        m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount") || m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
 
         // Valores para descontos
         m_jDiscount1.setText(m_jbtnconfig.getProperty("discount-1") + " %");
