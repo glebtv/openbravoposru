@@ -277,6 +277,13 @@ public class JRootApp extends JPanel implements AppView {
         m_jLblTitle.setIcon(imgicon == null ? null : new ImageIcon(imgicon));
         m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));  
         
+        BufferedImage imgdesclogo = m_dlSystem.getResourceAsImage("Window.DescLogo");
+        m_jLblDescription.setIcon(imgdesclogo == null ? new ImageIcon(getClass().getResource("/com/openbravo/images/logo.png")) : new ImageIcon(imgdesclogo));
+        m_jLblDescription.setText(m_dlSystem.getResourceAsText("Window.Description")); 
+
+        BufferedImage imgsupportby = m_dlSystem.getResourceAsImage("Window.SupportBy");        
+        m_jLblSupportBy.setIcon(imgsupportby == null ? null : new ImageIcon(imgsupportby));
+        
         String sWareHouse;
         try {
             sWareHouse = m_dlSystem.findLocationName(m_sInventoryLocation);
@@ -681,11 +688,11 @@ public class JRootApp extends JPanel implements AppView {
         m_jPanelTitle = new javax.swing.JPanel();
         m_jLblTitle = new javax.swing.JLabel();
         poweredby = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        m_jLblSupportBy = new javax.swing.JLabel();
         m_jPanelContainer = new javax.swing.JPanel();
         m_jPanelLogin = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        m_jLblDescription = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         m_jLogonName = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -713,8 +720,11 @@ public class JRootApp extends JPanel implements AppView {
         poweredby.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         m_jPanelTitle.add(poweredby, java.awt.BorderLayout.LINE_END);
 
-        jLabel2.setPreferredSize(new java.awt.Dimension(142, 34));
-        m_jPanelTitle.add(jLabel2, java.awt.BorderLayout.LINE_START);
+        m_jLblSupportBy.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        m_jLblSupportBy.setMaximumSize(new java.awt.Dimension(142, 34));
+        m_jLblSupportBy.setMinimumSize(new java.awt.Dimension(142, 34));
+        m_jLblSupportBy.setPreferredSize(new java.awt.Dimension(142, 34));
+        m_jPanelTitle.add(m_jLblSupportBy, java.awt.BorderLayout.LINE_START);
 
         add(m_jPanelTitle, java.awt.BorderLayout.NORTH);
 
@@ -724,23 +734,13 @@ public class JRootApp extends JPanel implements AppView {
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/logo.png"))); // NOI18N
-        jLabel1.setText("<html><center>Openbravo POS is a point of sale application designed for touch screens.<br>" +
-            "Copyright \u00A9 2007-2009 Openbravo, S.L.<br>" +
-            "http://www.openbravo.com/product/pos<br>" +
-            "<br>" +
-            "Openbravo POS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.<br>" +
-            "<br>" +
-            "Openbravo POS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.<br>" +
-            "<br>" +
-            "You should have received a copy of the GNU General Public License along with Openbravo POS.  If not, see http://www.gnu.org/licenses/.<br>" +
-            "</center>");
-        jLabel1.setAlignmentX(0.5F);
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel1.setMaximumSize(new java.awt.Dimension(800, 1024));
-        jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(jLabel1);
+        m_jLblDescription.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        m_jLblDescription.setText("Window.Description");
+        m_jLblDescription.setAlignmentX(0.5F);
+        m_jLblDescription.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jLblDescription.setMaximumSize(new java.awt.Dimension(800, 1024));
+        m_jLblDescription.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jPanel4.add(m_jLblDescription);
 
         m_jPanelLogin.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -825,8 +825,6 @@ public class JRootApp extends JPanel implements AppView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -836,6 +834,8 @@ public class JRootApp extends JPanel implements AppView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton m_jClose;
     private javax.swing.JLabel m_jHost;
+    private javax.swing.JLabel m_jLblDescription;
+    private javax.swing.JLabel m_jLblSupportBy;
     private javax.swing.JLabel m_jLblTitle;
     private javax.swing.JPanel m_jLogonName;
     private javax.swing.JPanel m_jPanelContainer;

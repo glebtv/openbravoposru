@@ -100,7 +100,7 @@ INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90001', 'Script.StockC
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90002', 'Script.StockCurrentAdd', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentAdd.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90003', 'Script.StockCurrentSet', 0, $FILE{/com/openbravo/pos/templates/Script.StockCurrentSet.txt});
 INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90004', 'icon.stock', 1, $FILE{/com/openbravo/pos/templates/applications-other.png});
-
+INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('90005', 'Window.Description', 0, $FILE{/com/openbravo/pos/templates/Window.Description.txt});
 CREATE TABLE TAXCUSTCATEGORIES (
     ID VARCHAR(256) NOT NULL,
     NAME VARCHAR(1024) NOT NULL,
