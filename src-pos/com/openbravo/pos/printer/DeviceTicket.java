@@ -32,6 +32,9 @@ import com.openbravo.pos.printer.aurafr.*;
 import com.openbravo.pos.printer.screen.*;
 
 import com.openbravo.pos.util.StringParser;
+import com.openbravo.pos.util.SerialPortParameters;
+import gnu.io.SerialPort;
+
 import java.awt.Component;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +49,9 @@ public class DeviceTicket {
     private DevicePrinter m_nullprinter;
     private Map<String, DevicePrinter> m_deviceprinters;
     private List<DevicePrinter> m_deviceprinterslist;
-
+    
+    
+    
     /** Creates a new instance of DeviceTicket */
     public DeviceTicket() {
         // Una impresora solo de pantalla.
@@ -112,6 +117,11 @@ public class DeviceTicket {
         String sDisplayType = sd.nextToken(':');
         String sDisplayParam1 = sd.nextToken(',');
         String sDisplayParam2 = sd.nextToken(',');
+        
+        Integer iDisplaySerialPortSpeed = 9600;
+        Integer iDisplaySerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iDisplaySerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iDisplaySerialPortParity = SerialPort.PARITY_NONE;
 
         // compatibilidad hacia atras.
         if ("serial".equals(sDisplayType) || "rxtx".equals(sDisplayType) || "file".equals(sDisplayType)) {
@@ -126,13 +136,13 @@ public class DeviceTicket {
             } else if ("window".equals(sDisplayType)) {
                 m_deviceDisplay = new DeviceDisplayWindow();
             } else if ("epson".equals(sDisplayType)) {
-                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorInt());
+                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorInt());
             } else if ("surepos".equals(sDisplayType)) {
-                m_deviceDisplay = new DeviceDisplaySurePOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2));
+                m_deviceDisplay = new DeviceDisplaySurePOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity));
             } else if ("ld200".equals(sDisplayType)) {
-                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorEur());
+                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorEur());
             } else if ("cd5220rus".equals(sDisplayType)) {
-                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2), new UnicodeTranslatorCD5220rus());
+                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorCD5220rus());
             } else if ("javapos".equals(sDisplayType)) {
                 m_deviceDisplay = new DeviceDisplayJavaPOS(sDisplayParam1);
             } else {
@@ -158,14 +168,25 @@ public class DeviceTicket {
             String sPrinterType = sp.nextToken(':');
             String sPrinterParam1 = sp.nextToken(',');
             String sPrinterParam2 = sp.nextToken(',');
-
+            Integer iPrinterSerialPortSpeed = 9600;
+            Integer iPrinterSerialPortDataBits = SerialPort.DATABITS_8;
+            Integer iPrinterSerialPortStopBits = SerialPort.STOPBITS_1;
+            Integer iPrinterSerialPortParity = SerialPort.PARITY_NONE;
+            
             // compatibilidad hacia atras.
             if ("serial".equals(sPrinterType) || "rxtx".equals(sPrinterType) || "file".equals(sPrinterType)) {
                 sPrinterParam2 = sPrinterParam1;
                 sPrinterParam1 = sPrinterType;
                 sPrinterType = "epson";
             }
-
+            
+            if ("serial".equals(sPrinterParam1)) {
+                iPrinterSerialPortSpeed = SerialPortParameters.getSpeed(sp.nextToken(','));
+                iPrinterSerialPortDataBits =  SerialPortParameters.getDataBits(sp.nextToken(','));
+                iPrinterSerialPortStopBits = SerialPortParameters.getStopBits(sp.nextToken(','));
+                iPrinterSerialPortParity = SerialPortParameters.getParity(sp.nextToken(','));
+            }
+           
             try {
                 if ("screen".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterPanel());
@@ -186,29 +207,29 @@ public class DeviceTicket {
                             props.getProperty("paper." + sPrinterParam2 + ".mediasizename")
                             ));
                 } else if ("epson".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorInt()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorInt()));
                 } else if ("bixolon866cyr".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslator866Cyr()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslator866Cyr()));
                 } else if ("samsung1251cyr".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslator1251Cyr()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslator1251Cyr()));
                 } else if ("senor866cyr".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorSenorCyr()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorSenorCyr()));
                 } else if ("citizen866cyr".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorCitizenCyr()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorCitizenCyr()));
                  } else if ("sprtpos58cyr".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorSPRTCyr()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorSPRTCyr()));
                 } else if ("gb2312chinese".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesEpson(), new UnicodeTranslatorGB2312Chinese()));                    
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorGB2312Chinese()));                    
                 } else if ("tmu220".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesTMU220(), new UnicodeTranslatorInt()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesTMU220(), new UnicodeTranslatorInt()));
                 } else if ("star".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesStar(), new UnicodeTranslatorStar()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesStar(), new UnicodeTranslatorStar()));
                 } else if ("ithaca".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesIthaca(), new UnicodeTranslatorInt()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesIthaca(), new UnicodeTranslatorInt()));
                 } else if ("surepos".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2), new CodesSurePOS(), new UnicodeTranslatorSurePOS()));
+                    addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesSurePOS(), new UnicodeTranslatorSurePOS()));
                 } else if ("plain".equals(sPrinterType)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterPlain(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2)));
+                    addPrinter(sPrinterIndex, new DevicePrinterPlain(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity)));
                 } else if ("elveskkm".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
                     addPrinter(sPrinterIndex, new DevicePrinterElvesKKM(sPrinterParam2));
                 } else if ("shtrihfr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
@@ -238,13 +259,13 @@ public class DeviceTicket {
 
         private Map<String, PrinterWritter> m_apool = new HashMap<String, PrinterWritter>();
 
-        public PrinterWritter getPrinterWritter(String con, String port) throws TicketPrinterException {
+        public PrinterWritter getPrinterWritter(String con, String port, Integer speed,  Integer bits, Integer stopbits, Integer parity) throws TicketPrinterException {
 
             String skey = con + "-->" + port;
             PrinterWritter pw = (PrinterWritter) m_apool.get(skey);
             if (pw == null) {
                 if ("serial".equals(con) || "rxtx".equals(con)) {
-                    pw = new PrinterWritterRXTX(port);
+                    pw = new PrinterWritterRXTX(port, speed, bits, stopbits, parity);
                     m_apool.put(skey, pw);
                 } else if ("file".equals(con)) {
                     pw = new PrinterWritterFile(port);
