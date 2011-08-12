@@ -999,7 +999,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jPanel31.setPreferredSize(new java.awt.Dimension(476, 100));
 
-        jlblPrinterPortParams3.setText("Speed");
+        jlblPrinterPortParams3.setText(AppLocal.getIntString("label.serialportspeed")); // NOI18N
         jlblPrinterPortParams3.setMaximumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams3.setMinimumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams3.setPreferredSize(new java.awt.Dimension(120, 18));
@@ -1007,17 +1007,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboDisplaySerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
         jcboDisplaySerialPortSpeed.setSelectedIndex(2);
 
-        jLabel32.setText("Bits");
+        jLabel32.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
 
         jcboDisplaySerialPortDataBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits));
         jcboDisplaySerialPortDataBits.setSelectedIndex(3);
 
-        jLabel33.setText("Stopbits");
+        jLabel33.setText(AppLocal.getIntString("label.serialportstopbits")); // NOI18N
 
         jcboDisplaySerialPortStopBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits));
         jcboDisplaySerialPortStopBits.setSelectedIndex(0);
 
-        jLabel34.setText("Parity");
+        jLabel34.setText(AppLocal.getIntString("label.serialportparity")); // NOI18N
 
         jcboDisplaySerialPortParity.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortParity));
         jcboDisplaySerialPortParity.setSelectedIndex(0);
@@ -1152,7 +1152,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jPanel25.setPreferredSize(new java.awt.Dimension(476, 100));
 
-        jlblPrinterPortParams.setText("Speed");
+        jlblPrinterPortParams.setText(AppLocal.getIntString("label.serialportspeed")); // NOI18N
         jlblPrinterPortParams.setMaximumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams.setMinimumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams.setPreferredSize(new java.awt.Dimension(120, 18));
@@ -1160,17 +1160,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboPrinter1SerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
         jcboPrinter1SerialPortSpeed.setSelectedIndex(2);
 
-        jLabel3.setText("Bits");
+        jLabel3.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
 
         jcboPrinter1SerialPortDataBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits));
         jcboPrinter1SerialPortDataBits.setSelectedIndex(3);
 
-        jLabel4.setText("Stopbits");
+        jLabel4.setText(AppLocal.getIntString("label.serialportstopbits")); // NOI18N
 
         jcboPrinter1SerialPortStopBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits));
         jcboPrinter1SerialPortStopBits.setSelectedIndex(0);
 
-        jLabel9.setText("Parity");
+        jLabel9.setText(AppLocal.getIntString("label.serialportparity")); // NOI18N
 
         jcboPrinter1SerialPortParity.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortParity));
         jcboPrinter1SerialPortParity.setSelectedIndex(0);
@@ -1311,7 +1311,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jPanel27.setPreferredSize(new java.awt.Dimension(476, 100));
 
-        jlblPrinterPortParams1.setText("Speed");
+        jlblPrinterPortParams1.setText(AppLocal.getIntString("label.serialportspeed")); // NOI18N
         jlblPrinterPortParams1.setMaximumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams1.setMinimumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams1.setPreferredSize(new java.awt.Dimension(120, 18));
@@ -1319,17 +1319,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboPrinter2SerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
         jcboPrinter2SerialPortSpeed.setSelectedIndex(2);
 
-        jLabel10.setText("Bits");
+        jLabel10.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
 
         jcboPrinter2SerialPortDataBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits));
         jcboPrinter2SerialPortDataBits.setSelectedIndex(3);
 
-        jLabel11.setText("Stopbits");
+        jLabel11.setText(AppLocal.getIntString("label.serialportstopbits")); // NOI18N
 
         jcboPrinter2SerialPortStopBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits));
         jcboPrinter2SerialPortStopBits.setSelectedIndex(0);
 
-        jLabel12.setText("Parity");
+        jLabel12.setText(AppLocal.getIntString("label.serialportparity")); // NOI18N
 
         jcboPrinter2SerialPortParity.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortParity));
         jcboPrinter2SerialPortParity.setSelectedIndex(0);
@@ -1469,7 +1469,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jPanel29.setPreferredSize(new java.awt.Dimension(476, 100));
 
-        jlblPrinterPortParams2.setText("Speed");
+        jlblPrinterPortParams2.setText(AppLocal.getIntString("label.serialportspeed")); // NOI18N
         jlblPrinterPortParams2.setMaximumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams2.setMinimumSize(new java.awt.Dimension(120, 18));
         jlblPrinterPortParams2.setPreferredSize(new java.awt.Dimension(120, 18));
@@ -1477,17 +1477,17 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboPrinter3SerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
         jcboPrinter3SerialPortSpeed.setSelectedIndex(2);
 
-        jLabel13.setText("Bits");
+        jLabel13.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
 
         jcboPrinter3SerialPortDataBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits));
         jcboPrinter3SerialPortDataBits.setSelectedIndex(3);
 
-        jLabel14.setText("Stopbits");
+        jLabel14.setText(AppLocal.getIntString("label.serialportstopbits")); // NOI18N
 
         jcboPrinter3SerialPortStopBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits));
         jcboPrinter3SerialPortStopBits.setSelectedIndex(0);
 
-        jLabel17.setText("Parity");
+        jLabel17.setText(AppLocal.getIntString("label.serialportparity")); // NOI18N
 
         jcboPrinter3SerialPortParity.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortParity));
         jcboPrinter3SerialPortParity.setSelectedIndex(0);
