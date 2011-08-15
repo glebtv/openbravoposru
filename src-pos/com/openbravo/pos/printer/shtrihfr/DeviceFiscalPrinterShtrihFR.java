@@ -50,8 +50,8 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     // Constants
 
     // Creates new TicketPrinter
-    public DeviceFiscalPrinterShtrihFR(String sDevicePrinterPort) {
-        super(sDevicePrinterPort);
+    public DeviceFiscalPrinterShtrihFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
+        super(sDevicePrinterPort, iPortSpeed, iPortBits, iPortStopBits, iPortParity);
     }
 
     public String getFiscalName() {

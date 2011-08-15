@@ -31,7 +31,14 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
 
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;
+
+    //Параметры порта
     private String m_sPort;
+    private Integer m_iPortSpeed;
+    private Integer m_iPortBits;
+    private Integer m_iPortStopBits;
+    private Integer m_iPortParity; 
+    
     private OutputStream m_out;
     private InputStream m_in;
 
@@ -55,8 +62,8 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     private static final byte[] STX = {0x02};       //Начало блока данных
     private static final byte[] NAK = {0x15};       //Отрицание получения сообщения
     private static final byte[] ETX = {0x03};       //Символ конца блока данных
-
-    public DeviceElvesKKMComm(String sPortPrinter) {
+    
+    public DeviceElvesKKMComm(String sPortPrinter, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         m_sPort = sPortPrinter;
         m_PortIdPrinter = null;
         m_CommPortPrinter = null;
@@ -185,7 +192,8 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
                 m_CommPortPrinter.addEventListener(this);
                 m_CommPortPrinter.notifyOnDataAvailable(true);
 
-                m_CommPortPrinter.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_ODD); // Configuramos el puerto
+//                m_CommPortPrinter.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_ODD);
+                m_CommPortPrinter.setSerialPortParams(m_iPortSpeed, m_iPortBits, m_iPortStopBits, m_iPortParity);
             }
             m_out.write(data); //Отправка байта сообщения на принтер
         } catch (NoSuchPortException e) {

@@ -51,7 +51,7 @@ public class DeviceShtrihFR implements PrinterConst {
     private static final int SLEEP_THRESHOLD = 500;
     private static final int SLEEP_MAX_STEPS = 60;
     private static final String sCharsetName = "CP1251";
-    private static final int iBaudRate = 115200;
+//    private static final int iBaudRate = 115200;
     private static final int iFiscalTimeout = 100;
     private static final int iAdminPassword = 30;
 
@@ -59,13 +59,24 @@ public class DeviceShtrihFR implements PrinterConst {
     //protected String m_sName;
     protected String m_sSerialDevice;
     private PrinterPort m_Port;
+    
+    private Integer m_iPortSpeed;
+    private Integer m_iPortBits;
+    private Integer m_iPortStopBits;
+    private Integer m_iPortParity;
+   
     private PrinterDevice m_PrinterDevice;
 
     // Constructor
-    public DeviceShtrihFR(String sDevicePrinterPort) {
+    public DeviceShtrihFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         logger.finer("Create Shtrih-FR printer instance with port: " + sDevicePrinterPort);
         //m_sName = AppLocal.getIntString("Printer.Serial");
         m_sSerialDevice = sDevicePrinterPort;
+        m_iPortSpeed = iPortSpeed;
+        m_iPortBits = iPortBits;
+        m_iPortStopBits = iPortStopBits;
+        m_iPortParity = iPortParity;       
+                
         m_Port = new PrinterPort();
         m_PrinterDevice = new PrinterDevice(m_Port);
     }
@@ -88,7 +99,7 @@ public class DeviceShtrihFR implements PrinterConst {
     protected void openPort() throws Exception {
         if (!m_Port.isOpened()) {
             logger.finer("Try to open serial port...");
-            m_Port.open(m_sSerialDevice, iBaudRate, iFiscalTimeout, this);
+            m_Port.open(m_sSerialDevice, m_iPortSpeed, m_iPortBits, m_iPortStopBits, m_iPortParity, iFiscalTimeout, this);
         }
     }
 

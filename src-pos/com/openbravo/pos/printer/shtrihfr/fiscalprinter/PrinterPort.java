@@ -39,7 +39,7 @@ public class PrinterPort
         return port;
     }
     
-    public void open(String portName, int baudRate, int timeout, Object owner)
+    public void open(String portName, int BaudRate, int DataBits, int StopBits, int Parity, int timeout, Object owner)
         throws Exception
     {
         logger.log(Level.INFO, "open: " + 
@@ -55,20 +55,20 @@ public class PrinterPort
         serialPort.setOutputBufferSize(1024);
         serialPort.setFlowControlMode(serialPort.FLOWCONTROL_NONE);
         
-        serialPort.setSerialPortParams(baudRate,
-            SerialPort.DATABITS_8,
-            SerialPort.STOPBITS_1,
-            SerialPort.PARITY_NONE);
+        serialPort.setSerialPortParams(BaudRate,
+            DataBits,
+            StopBits,
+            Parity);
     }
     
-    public void setBaudRate(int baudRate)
+    public void setBaudRate(int BaudRate, int DataBits, int StopBits, int Parity)
     throws UnsupportedCommOperationException
     {
         SerialPort serialPort = port.getSerialPort();
-        serialPort.setSerialPortParams(baudRate,
-            SerialPort.DATABITS_8,
-            SerialPort.STOPBITS_1,
-            SerialPort.PARITY_NONE);
+        serialPort.setSerialPortParams(BaudRate,
+            DataBits,
+            StopBits,
+            Parity);
     }
     
     public void close()

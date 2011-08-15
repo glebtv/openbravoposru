@@ -44,8 +44,8 @@ public class DevicePrinterShtrihFR extends DeviceShtrihFR implements DevicePrint
     private String sLine;
 
     // Creates new TicketPrinter
-    public DevicePrinterShtrihFR(String sDevicePrinterPort) {
-        super(sDevicePrinterPort);
+    public DevicePrinterShtrihFR(String sDevicePrinterPort,  Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
+        super(sDevicePrinterPort, iPortSpeed, iPortBits, iPortStopBits, iPortParity);
     }
 
     public String getPrinterName() {

@@ -82,13 +82,26 @@ public class DeviceTicket {
         String sFiscalType = sf.nextToken(':');
         String sFiscalParam1 = sf.nextToken(',');
         String sFiscalParam2 = sf.nextToken(',');
+        
+        Integer iFiscalPrinterSerialPortSpeed = 115200;
+        Integer iFiscalPrinterSerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iFiscalPrinterSerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iFiscalPrinterSerialPortParity = SerialPort.PARITY_NONE;
+        
+        if ("serial".equals(sFiscalParam1)) {
+            iFiscalPrinterSerialPortSpeed = SerialPortParameters.getSpeed(sf.nextToken(','));
+            iFiscalPrinterSerialPortDataBits =  SerialPortParameters.getDataBits(sf.nextToken(','));
+            iFiscalPrinterSerialPortStopBits = SerialPortParameters.getStopBits(sf.nextToken(','));
+            iFiscalPrinterSerialPortParity = SerialPortParameters.getParity(sf.nextToken(','));            
+        }
+        
         try {
             if ("javapos".equals(sFiscalType)) {
                 m_deviceFiscal = new DeviceFiscalPrinterJavaPOS(sFiscalParam1);
             } else if ("shtrihfr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
-                m_deviceFiscal = new DeviceFiscalPrinterShtrihFR(sFiscalParam2);
+                m_deviceFiscal = new DeviceFiscalPrinterShtrihFR(sFiscalParam2, iFiscalPrinterSerialPortSpeed, iFiscalPrinterSerialPortDataBits, iFiscalPrinterSerialPortStopBits, iFiscalPrinterSerialPortParity);
             } else if ("aurafr".equals(sFiscalType) && "serial".equals(sFiscalParam1)) {
-                m_deviceFiscal = new DeviceFiscalPrinterAuraFR(sFiscalParam2);
+                m_deviceFiscal = new DeviceFiscalPrinterAuraFR(sFiscalParam2, iFiscalPrinterSerialPortSpeed, iFiscalPrinterSerialPortDataBits, iFiscalPrinterSerialPortStopBits, iFiscalPrinterSerialPortParity);
             } else {
                 m_deviceFiscal = new DeviceFiscalPrinterNull();
             }
@@ -129,6 +142,13 @@ public class DeviceTicket {
             sDisplayParam1 = sDisplayType;
             sDisplayType = "epson";
         }
+        
+        if ("serial".equals(sDisplayParam1)) {
+                iDisplaySerialPortSpeed = SerialPortParameters.getSpeed(sd.nextToken(','));
+                iDisplaySerialPortDataBits =  SerialPortParameters.getDataBits(sd.nextToken(','));
+                iDisplaySerialPortStopBits = SerialPortParameters.getStopBits(sd.nextToken(','));
+                iDisplaySerialPortParity = SerialPortParameters.getParity(sd.nextToken(','));
+            }
 
         try {
             if ("screen".equals(sDisplayType)) {
@@ -231,11 +251,11 @@ public class DeviceTicket {
                 } else if ("plain".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterPlain(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity)));
                 } else if ("elveskkm".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterElvesKKM(sPrinterParam2));
+                    addPrinter(sPrinterIndex, new DevicePrinterElvesKKM(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
                 } else if ("shtrihfr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterShtrihFR(sPrinterParam2));
+                    addPrinter(sPrinterIndex, new DevicePrinterShtrihFR(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
                 } else if ("aurafr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterAuraFR(sPrinterParam2));
+                    addPrinter(sPrinterIndex, new DevicePrinterAuraFR(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
                 } else if ("javapos".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterJavaPOS(sPrinterParam1, sPrinterParam2));
                 }

@@ -34,10 +34,10 @@ public class DevicePrinterElvesKKM implements DevicePrinter {
     private String m_sName;
 
     // Creates new TicketPrinter
-    public DevicePrinterElvesKKM(String sDevicePrinterPort) throws TicketPrinterException {
+    public DevicePrinterElvesKKM(String sDevicePrinterPort, Integer iPrinterPortSpeed, Integer iPrinterPortBits, Integer iPrinterPortStopBits, Integer iPrinterPortParity) throws TicketPrinterException {
 
         m_sName = AppLocal.getIntString("Printer.Serial");
-        m_CommOutputPrinter = new DeviceElvesKKMComm(sDevicePrinterPort);
+        m_CommOutputPrinter = new DeviceElvesKKMComm(sDevicePrinterPort, iPrinterPortSpeed, iPrinterPortBits, iPrinterPortStopBits, iPrinterPortParity);
         m_CommOutputPrinter.sendInitMessage();
         m_CommOutputPrinter.disconnectDevice();
     }

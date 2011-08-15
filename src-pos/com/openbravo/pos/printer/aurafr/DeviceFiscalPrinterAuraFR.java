@@ -37,9 +37,9 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
     private String m_sName;
 
     // Creates new TicketPrinter
-    public DeviceFiscalPrinterAuraFR(String sDevicePrinterPort) throws TicketPrinterException {
+    public DeviceFiscalPrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketPrinterException {
         m_sName = AppLocal.getIntString("Printer.Serial");
-        m_CommOutputFiscal = new DeviceAuraFRComm(sDevicePrinterPort);
+        m_CommOutputFiscal = new DeviceAuraFRComm(sDevicePrinterPort, iPortSpeed, iPortBits, iPortStopBits, iPortParity);
 //        m_CommOutputFiscal.getTypePrinter();
         m_CommOutputFiscal.connectDevice();
         m_CommOutputFiscal.sendInitMessage();

@@ -34,10 +34,10 @@ public class DevicePrinterAuraFR implements DevicePrinter {
     private String m_sName;
 
     // Creates new TicketPrinter
-    public DevicePrinterAuraFR(String sDevicePrinterPort) throws TicketPrinterException {
+    public DevicePrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketPrinterException {
 
         m_sName = AppLocal.getIntString("Printer.Serial");
-        m_CommOutputPrinter = new DeviceAuraFRComm(sDevicePrinterPort);
+        m_CommOutputPrinter = new DeviceAuraFRComm(sDevicePrinterPort, iPortSpeed, iPortBits, iPortStopBits, iPortParity);
         m_CommOutputPrinter.connectDevice();
         m_CommOutputPrinter.sendInitMessage();
 
