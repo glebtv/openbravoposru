@@ -49,12 +49,32 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private ParametersConfig printer3printerparams;
 
 //    private ParametersConfig fiscalprinterparams;
-    
+
+    String[] modelPrinterName = {"screen",
+                                 "printer",
+                                 "epson",
+                                 "tmu220",
+                                 "star",
+                                 "samsung1251cyr",
+                                 "bixolon866cyr",
+                                 "senor866cyr",
+                                 "citizen866cyr",
+                                 "sprtpos58cyr",
+                                 "gb2312chinese",
+                                 "ithaca",
+                                 "surepos",
+                                 "plain",
+                                 "javapos",
+                                 "elveskkm",
+                                 "shtrihfr",
+                                 "aurafr",
+                                 "Not defined"};  
+    String[] modelSerialPortName = {"COM1","COM2","COM3","COM4","/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3"}; //NOI18N    
     String[] modelSerialPortSpeed = {"2400","4800","9600","19200","38400","57600","115200"}; //NOI18N
     String[] modelSerialPortDataBits = {"5","6","7","8"};     //NOI18N
     String[] modelSerialPortStopBits = {"1","2"};     //NOI18N
     String[] modelSerialPortParity = {"none","even","odd"}; //NOI18N
-    
+
     /** Creates new form JPanelConfigGeneral */
     public JPanelConfigGeneral() {
 
@@ -146,109 +166,22 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboTicketsBag.addItem("standard");
         jcboTicketsBag.addItem("restaurant");
 
-        // Printer 1
-        jcboMachinePrinter.addItem("screen");
-        jcboMachinePrinter.addItem("printer");
-        jcboMachinePrinter.addItem("epson");
-        jcboMachinePrinter.addItem("tmu220");
-        jcboMachinePrinter.addItem("star");
-        jcboMachinePrinter.addItem("samsung1251cyr");
-        jcboMachinePrinter.addItem("bixolon866cyr");
-        jcboMachinePrinter.addItem("senor866cyr");
-        jcboMachinePrinter.addItem("citizen866cyr");
-        jcboMachinePrinter.addItem("sprtpos58cyr");
-        jcboMachinePrinter.addItem("gb2312chinese");
-        jcboMachinePrinter.addItem("ithaca");
-        jcboMachinePrinter.addItem("surepos");
-        jcboMachinePrinter.addItem("plain");
-        jcboMachinePrinter.addItem("javapos");
-        jcboMachinePrinter.addItem("elveskkm");
-        jcboMachinePrinter.addItem("shtrihfr");
-        jcboMachinePrinter.addItem("aurafr");
-        jcboMachinePrinter.addItem("Not defined");
-
         jcboConnPrinter.addItem("serial");
         jcboConnPrinter.addItem("file");
 
-        jcboSerialPrinter.addItem("COM1");
-        jcboSerialPrinter.addItem("COM2");
-        jcboSerialPrinter.addItem("COM3");
-        jcboSerialPrinter.addItem("COM4");
         jcboSerialPrinter.addItem("LPT1");
-        jcboSerialPrinter.addItem("/dev/ttyS0");
-        jcboSerialPrinter.addItem("/dev/ttyS1");
-        jcboSerialPrinter.addItem("/dev/ttyS2");
-        jcboSerialPrinter.addItem("/dev/ttyS3");
         jcboSerialPrinter.addItem("/dev/usb/lp0");
-
-        // Printer 2        
-        jcboMachinePrinter2.addItem("screen");
-        jcboMachinePrinter2.addItem("printer");
-        jcboMachinePrinter2.addItem("epson");
-        jcboMachinePrinter2.addItem("tmu220");
-        jcboMachinePrinter2.addItem("star");
-        jcboMachinePrinter2.addItem("samsung1251cyr");
-        jcboMachinePrinter2.addItem("bixolon866cyr");
-        jcboMachinePrinter2.addItem("senor866cyr");
-        jcboMachinePrinter2.addItem("citizen866cyr");
-        jcboMachinePrinter2.addItem("sprtpos58cyr");
-        jcboMachinePrinter2.addItem("gb2312chinese");
-        jcboMachinePrinter2.addItem("ithaca");
-        jcboMachinePrinter2.addItem("surepos");
-        jcboMachinePrinter2.addItem("plain");
-        jcboMachinePrinter2.addItem("javapos");
-        jcboMachinePrinter2.addItem("elveskkm");
-        jcboMachinePrinter2.addItem("shtrihfr");
-        jcboMachinePrinter2.addItem("aurafr");
-        jcboMachinePrinter2.addItem("Not defined");
 
         jcboConnPrinter2.addItem("serial");
         jcboConnPrinter2.addItem("file");
 
-        jcboSerialPrinter2.addItem("COM1");
-        jcboSerialPrinter2.addItem("COM2");
-        jcboSerialPrinter2.addItem("COM3");
-        jcboSerialPrinter2.addItem("COM4");
         jcboSerialPrinter2.addItem("LPT1");
-        jcboSerialPrinter2.addItem("/dev/ttyS0");
-        jcboSerialPrinter2.addItem("/dev/ttyS1");
-        jcboSerialPrinter2.addItem("/dev/ttyS2");
-        jcboSerialPrinter2.addItem("/dev/ttyS3");
         jcboSerialPrinter2.addItem("/dev/usb/lp0");
-
-        // Printer 3
-        jcboMachinePrinter3.addItem("screen");
-        jcboMachinePrinter3.addItem("printer");
-        jcboMachinePrinter3.addItem("epson");
-        jcboMachinePrinter3.addItem("tmu220");
-        jcboMachinePrinter3.addItem("star");
-        jcboMachinePrinter3.addItem("samsung1251cyr");
-        jcboMachinePrinter3.addItem("bixolon866cyr");
-        jcboMachinePrinter3.addItem("senor866cyr");
-        jcboMachinePrinter3.addItem("citizen866cyr");
-        jcboMachinePrinter3.addItem("sprtpos58cyr");
-        jcboMachinePrinter3.addItem("gb2312chinese");
-        jcboMachinePrinter3.addItem("ithaca");
-        jcboMachinePrinter3.addItem("surepos");
-        jcboMachinePrinter3.addItem("plain");
-        jcboMachinePrinter3.addItem("javapos");
-        jcboMachinePrinter3.addItem("elveskkm");
-        jcboMachinePrinter3.addItem("shtrihfr");
-        jcboMachinePrinter3.addItem("aurafr");
-        jcboMachinePrinter3.addItem("Not defined");
 
         jcboConnPrinter3.addItem("serial");
         jcboConnPrinter3.addItem("file");
 
-        jcboSerialPrinter3.addItem("COM1");
-        jcboSerialPrinter3.addItem("COM2");
-        jcboSerialPrinter3.addItem("COM3");
-        jcboSerialPrinter3.addItem("COM4");
         jcboSerialPrinter3.addItem("LPT1");
-        jcboSerialPrinter3.addItem("/dev/ttyS0");
-        jcboSerialPrinter3.addItem("/dev/ttyS1");
-        jcboSerialPrinter3.addItem("/dev/ttyS2");
-        jcboSerialPrinter3.addItem("/dev/ttyS3");
         jcboSerialPrinter3.addItem("/dev/usb/lp0");                
 
         // Fiscal printer
@@ -260,15 +193,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jcboConnFiscalPrinter.addItem("serial");
 
-        jcboSerialFiscalPrinter.addItem("COM1");
-        jcboSerialFiscalPrinter.addItem("COM2");
-        jcboSerialFiscalPrinter.addItem("COM3");
-        jcboSerialFiscalPrinter.addItem("COM4");
-        jcboSerialFiscalPrinter.addItem("/dev/ttyS0");
-        jcboSerialFiscalPrinter.addItem("/dev/ttyS1");
-        jcboSerialFiscalPrinter.addItem("/dev/ttyS2");
-        jcboSerialFiscalPrinter.addItem("/dev/ttyS3");
-        
         // Label printer
         jcboMachineLabelPrinter.addItem("screen");        
         jcboMachineLabelPrinter.addItem("godexezpl");
@@ -277,14 +201,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboConnLabelPrinter.addItem("serial");
         jcboConnLabelPrinter.addItem("file");        
 
-        jcboSerialLabelPrinter.addItem("COM1");
-        jcboSerialLabelPrinter.addItem("COM2");
-        jcboSerialLabelPrinter.addItem("COM3");
-        jcboSerialLabelPrinter.addItem("COM4");
-        jcboSerialLabelPrinter.addItem("/dev/ttyS0");
-        jcboSerialLabelPrinter.addItem("/dev/ttyS1");
-        jcboSerialLabelPrinter.addItem("/dev/ttyS2");
-        jcboSerialLabelPrinter.addItem("/dev/ttyS3");        
         jcboSerialLabelPrinter.addItem("/dev/usb/lp0");
         
         // Display
@@ -300,16 +216,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboConnDisplay.addItem("serial");
         jcboConnDisplay.addItem("file");
 
-        jcboSerialDisplay.addItem("COM1");
-        jcboSerialDisplay.addItem("COM2");
-        jcboSerialDisplay.addItem("COM3");
-        jcboSerialDisplay.addItem("COM4");
-        jcboSerialDisplay.addItem("LPT1");
-        jcboSerialDisplay.addItem("/dev/ttyS0");
-        jcboSerialDisplay.addItem("/dev/ttyS1");
-        jcboSerialDisplay.addItem("/dev/ttyS2");
-        jcboSerialDisplay.addItem("/dev/ttyS3");
-
         // Scale
         jcboMachineScale.addItem("screen");
         jcboMachineScale.addItem("dialog1");
@@ -318,29 +224,11 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jcboMachineScale.addItem("massak");
         jcboMachineScale.addItem("Not defined");
 
-        jcboSerialScale.addItem("COM1");
-        jcboSerialScale.addItem("COM2");
-        jcboSerialScale.addItem("COM3");
-        jcboSerialScale.addItem("COM4");
-        jcboSerialScale.addItem("/dev/ttyS0");
-        jcboSerialScale.addItem("/dev/ttyS1");
-        jcboSerialScale.addItem("/dev/ttyS2");
-        jcboSerialScale.addItem("/dev/ttyS3");
-
         // Scanner and Device with PLUs
         jcboMachineScanner.addItem("scanpal2");
         jcboMachineScanner.addItem("mercury130kz039");
         jcboMachineScanner.addItem("massakvpm");
         jcboMachineScanner.addItem("Not defined");
-
-        jcboSerialScanner.addItem("COM1");
-        jcboSerialScanner.addItem("COM2");
-        jcboSerialScanner.addItem("COM3");
-        jcboSerialScanner.addItem("COM4");
-        jcboSerialScanner.addItem("/dev/ttyS0");
-        jcboSerialScanner.addItem("/dev/ttyS1");
-        jcboSerialScanner.addItem("/dev/ttyS2");
-        jcboSerialScanner.addItem("/dev/ttyS3");
 
         // Printers
         cboPrinters.addItem("(Default)");
@@ -509,27 +397,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             jcboMachineFiscalPrinter.setSelectedItem(sparam);
             m_jtxtJPOSFiscalPrinter.setText(p.nextToken(','));
             m_jtxtJPOSFiscalDrawer.setText(p.nextToken(','));
-        } else {
-            jcboMachineFiscalPrinter.setSelectedItem(sparam);
-            jcboConnFiscalPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
-            jcboSerialFiscalPrinter.setSelectedItem(p.nextToken(','));
-            jcboFiscalPrinterSerialPortSpeed.setSelectedItem(p.nextToken(',')); 
-            jcboFiscalPrinterSerialPortDataBits.setSelectedItem(p.nextToken(',')); 
-            jcboFiscalPrinterSerialPortStopBits.setSelectedItem(p.nextToken(',')); 
-            jcboFiscalPrinterSerialPortParity.setSelectedItem(p.nextToken(','));             
         }
         
         p = new StringParser(config.getProperty("machine.labelprinter"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("godexezpl".equals(sparam) 
-            ) {
+        if ("godexezpl".equals(sparam)) {
             jcboMachineLabelPrinter.setSelectedItem(sparam);
             jcboConnLabelPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialLabelPrinter.setSelectedItem(p.nextToken(','));
-        } else {
-            jcboMachineFiscalPrinter.setSelectedItem(sparam);
-            jcboConnFiscalPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
-            jcboSerialFiscalPrinter.setSelectedItem(p.nextToken(','));
         }
 
         p = new StringParser(config.getProperty("machine.display"));
@@ -568,6 +443,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "massak".equals(sparam)
                 ) {
             jcboSerialScale.setSelectedItem(p.nextToken(','));
+            jcboScaleSerialPortSpeed.setSelectedItem(p.nextToken(',')); 
+            jcboScaleSerialPortDataBits.setSelectedItem(p.nextToken(',')); 
+            jcboScaleSerialPortStopBits.setSelectedItem(p.nextToken(',')); 
+            jcboScaleSerialPortParity.setSelectedItem(p.nextToken(',')); 
         }
 
         p = new StringParser(config.getProperty("machine.scanner"));
@@ -697,8 +576,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + comboValue(jcboConnFiscalPrinter.getSelectedItem()) + "," + comboValue(jcboSerialFiscalPrinter.getSelectedItem())  + "," + comboValue(jcboFiscalPrinterSerialPortSpeed.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortDataBits.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortStopBits.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortParity.getSelectedItem()));
         } else if ("javapos".equals(sMachineFiscalPrinter)) {
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + m_jtxtJPOSFiscalPrinter.getText() + "," + m_jtxtJPOSFiscalDrawer.getText());
-        } else {
-            config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter);
         }
         
         String sMachineLabelPrinter = comboValue(jcboMachineLabelPrinter.getSelectedItem());
@@ -961,6 +838,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jPanel17 = new javax.swing.JPanel();
         jlblPrinterPort4 = new javax.swing.JLabel();
         jcboSerialScale = new javax.swing.JComboBox();
+        jlblPrinterPortParams5 = new javax.swing.JLabel();
+        jcboScaleSerialPortSpeed = new javax.swing.JComboBox();
+        jLabel38 = new javax.swing.JLabel();
+        jcboScaleSerialPortDataBits = new javax.swing.JComboBox();
+        jLabel39 = new javax.swing.JLabel();
+        jcboScaleSerialPortStopBits = new javax.swing.JComboBox();
+        jLabel40 = new javax.swing.JLabel();
+        jcboScaleSerialPortParity = new javax.swing.JComboBox();
         jLabel26 = new javax.swing.JLabel();
         jcboMachineScanner = new javax.swing.JComboBox();
         m_jScannerParams = new javax.swing.JPanel();
@@ -1007,6 +892,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblDisplayPort.setText(AppLocal.getIntString("label.machinedisplayport")); // NOI18N
 
         jcboSerialDisplay.setEditable(true);
+        jcboSerialDisplay.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
         jcboSerialDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcboDisplayPortTypeActionPerformed(evt);
@@ -1114,7 +1000,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(2, 2, 2)
                     .addComponent(m_jDisplayPortParams, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(57, Short.MAX_VALUE)))
         );
 
         m_jDisplayParams.add(jPanel1, "comm");
@@ -1145,6 +1031,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jLabel7.setText(AppLocal.getIntString("Label.MachinePrinter")); // NOI18N
 
+        jcboMachinePrinter.setMaximumRowCount(10);
+        jcboMachinePrinter.setModel(new javax.swing.DefaultComboBoxModel(modelPrinterName));
         jcboMachinePrinter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcboMachinePrinterActionPerformed(evt);
@@ -1166,6 +1054,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPort.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
 
         jcboSerialPrinter.setEditable(true);
+        jcboSerialPrinter.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
 
         m_jPrinterPortParams1.setPreferredSize(new java.awt.Dimension(476, 212));
         m_jPrinterPortParams1.setLayout(new java.awt.CardLayout());
@@ -1303,6 +1192,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jLabel18.setText(AppLocal.getIntString("Label.MachinePrinter2")); // NOI18N
 
+        jcboMachinePrinter2.setMaximumRowCount(10);
+        jcboMachinePrinter2.setModel(new javax.swing.DefaultComboBoxModel(modelPrinterName));
         jcboMachinePrinter2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcboMachinePrinter2ActionPerformed(evt);
@@ -1324,6 +1215,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPort2.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
 
         jcboSerialPrinter2.setEditable(true);
+        jcboSerialPrinter2.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
 
         m_jPrinterPortParams2.setPreferredSize(new java.awt.Dimension(476, 212));
         m_jPrinterPortParams2.setLayout(new java.awt.CardLayout());
@@ -1464,6 +1356,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jLabel19.setText(AppLocal.getIntString("Label.MachinePrinter3")); // NOI18N
 
+        jcboMachinePrinter3.setMaximumRowCount(10);
+        jcboMachinePrinter3.setModel(new javax.swing.DefaultComboBoxModel(modelPrinterName));
         jcboMachinePrinter3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcboMachinePrinter3ActionPerformed(evt);
@@ -1485,6 +1379,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPort3.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
 
         jcboSerialPrinter3.setEditable(true);
+        jcboSerialPrinter3.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
 
         m_jPrinterPortParams3.setPreferredSize(new java.awt.Dimension(476, 212));
         m_jPrinterPortParams3.setLayout(new java.awt.CardLayout());
@@ -1586,7 +1481,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                     .addComponent(m_jPrinterPortParams3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(125, Short.MAX_VALUE)))
         );
 
         m_jPrinterParams3.add(jPanel10, "comm");
@@ -1646,6 +1541,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPort6.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
 
         jcboSerialFiscalPrinter.setEditable(true);
+        jcboSerialFiscalPrinter.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
 
         m_jFiscalPrinterPortParams.setPreferredSize(new java.awt.Dimension(476, 212));
         m_jFiscalPrinterPortParams.setLayout(new java.awt.CardLayout());
@@ -1799,6 +1695,30 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPort4.setText(AppLocal.getIntString("label.machineprinterport")); // NOI18N
 
         jcboSerialScale.setEditable(true);
+        jcboSerialScale.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortName));
+
+        jlblPrinterPortParams5.setText(AppLocal.getIntString("label.serialportspeed")); // NOI18N
+        jlblPrinterPortParams5.setMaximumSize(new java.awt.Dimension(120, 18));
+        jlblPrinterPortParams5.setMinimumSize(new java.awt.Dimension(120, 18));
+        jlblPrinterPortParams5.setPreferredSize(new java.awt.Dimension(120, 18));
+
+        jcboScaleSerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
+        jcboScaleSerialPortSpeed.setSelectedIndex(1);
+
+        jLabel38.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
+
+        jcboScaleSerialPortDataBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits));
+        jcboScaleSerialPortDataBits.setSelectedIndex(3);
+
+        jLabel39.setText(AppLocal.getIntString("label.serialportstopbits")); // NOI18N
+
+        jcboScaleSerialPortStopBits.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits));
+        jcboScaleSerialPortStopBits.setSelectedIndex(0);
+
+        jLabel40.setText(AppLocal.getIntString("label.serialportparity")); // NOI18N
+
+        jcboScaleSerialPortParity.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortParity));
+        jcboScaleSerialPortParity.setSelectedIndex(1);
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -1808,15 +1728,39 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addContainerGap()
                 .addComponent(jlblPrinterPort4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(756, Short.MAX_VALUE))
+                .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlblPrinterPortParams5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboScaleSerialPortSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboScaleSerialPortDataBits, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboScaleSerialPortStopBits, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcboScaleSerialPortParity, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcboSerialScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlblPrinterPort4))
+                    .addComponent(jlblPrinterPort4)
+                    .addComponent(jcboScaleSerialPortSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcboScaleSerialPortDataBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcboScaleSerialPortStopBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcboScaleSerialPortParity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlblPrinterPortParams5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel38)
+                    .addComponent(jLabel39)
+                    .addComponent(jLabel40))
                 .addContainerGap())
         );
 
@@ -2272,7 +2216,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2346,6 +2293,10 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JComboBox jcboPrinter3SerialPortParity;
     private javax.swing.JComboBox jcboPrinter3SerialPortSpeed;
     private javax.swing.JComboBox jcboPrinter3SerialPortStopBits;
+    private javax.swing.JComboBox jcboScaleSerialPortDataBits;
+    private javax.swing.JComboBox jcboScaleSerialPortParity;
+    private javax.swing.JComboBox jcboScaleSerialPortSpeed;
+    private javax.swing.JComboBox jcboScaleSerialPortStopBits;
     private javax.swing.JComboBox jcboSerialDisplay;
     private javax.swing.JComboBox jcboSerialFiscalPrinter;
     private javax.swing.JComboBox jcboSerialLabelPrinter;
@@ -2374,6 +2325,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private javax.swing.JLabel jlblPrinterPortParams2;
     private javax.swing.JLabel jlblPrinterPortParams3;
     private javax.swing.JLabel jlblPrinterPortParams4;
+    private javax.swing.JLabel jlblPrinterPortParams5;
     private javax.swing.JTextField jtxtMachineHostname;
     private javax.swing.JPanel m_jDisplayParams;
     private javax.swing.JPanel m_jDisplayPortParams;
