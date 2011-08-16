@@ -21,7 +21,9 @@ package com.openbravo.pos.scale;
 
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppProperties;
+import com.openbravo.pos.util.SerialPortParameters;
 import com.openbravo.pos.util.StringParser;
+import gnu.io.SerialPort;
 import java.awt.Component;
 
 public class DeviceScale {
@@ -31,23 +33,34 @@ public class DeviceScale {
     
     /** Creates a new instance of DeviceScale */
     public DeviceScale(Component parent, AppProperties props) {
+        
+        Integer iScaleSerialPortSpeed = 4800;
+        Integer iScaleSerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iScaleSerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iScaleSerialPortParity = SerialPort.PARITY_ODD;
+        
         StringParser sd = new StringParser(props.getProperty("machine.scale"));
         sScaleType = sd.nextToken(':');
         String sScaleParam1 = sd.nextToken(',');
         // String sScaleParam2 = sd.nextToken(',');
         
+        iScaleSerialPortSpeed = SerialPortParameters.getSpeed(sd.nextToken(','));
+        iScaleSerialPortDataBits =  SerialPortParameters.getDataBits(sd.nextToken(','));
+        iScaleSerialPortStopBits = SerialPortParameters.getStopBits(sd.nextToken(','));
+        iScaleSerialPortParity = SerialPortParameters.getParity(sd.nextToken(','));
+        
         if ("dialog1".equals(sScaleType)) {
-            m_scale = new ScaleComm(sScaleParam1);
+            m_scale = new ScaleComm(sScaleParam1, iScaleSerialPortSpeed, iScaleSerialPortDataBits, iScaleSerialPortStopBits, iScaleSerialPortParity);
         } else if ("samsungesp".equals(sScaleType)) {
-            m_scale = new ScaleSamsungEsp(sScaleParam1);            
+            m_scale = new ScaleSamsungEsp(sScaleParam1, iScaleSerialPortSpeed, iScaleSerialPortDataBits, iScaleSerialPortStopBits, iScaleSerialPortParity);            
         } else if ("fake".equals(sScaleType)) { // a fake scale for debugging purposes
             m_scale = new ScaleFake();            
         } else if ("screen".equals(sScaleType)) { // on screen scale
             m_scale = new ScaleDialog(parent);
         } else if ("tves4149".equals(sScaleType)) { // scale ВР4149-10 & ВР4149-11
-            m_scale = new ScaleTves(sScaleParam1);
+            m_scale = new ScaleTves(sScaleParam1, iScaleSerialPortSpeed, iScaleSerialPortDataBits, iScaleSerialPortStopBits, iScaleSerialPortParity);
         } else if ("massak".equals(sScaleType)) { // scale MK_A
-            m_scale = new ScaleMassaK(sScaleParam1);
+            m_scale = new ScaleMassaK(sScaleParam1, iScaleSerialPortSpeed, iScaleSerialPortDataBits, iScaleSerialPortStopBits, iScaleSerialPortParity);
         } else {
             m_scale = null;
         }

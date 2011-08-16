@@ -29,6 +29,11 @@ import java.util.TooManyListenersException;
 public class ScaleTves implements Scale, SerialPortEventListener {
 
     private String m_sPortScale;
+    private Integer m_iPortSpeed;
+    private Integer m_iPortBits;
+    private Integer m_iPortStopBits;
+    private Integer m_iPortParity;
+    
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;
     private OutputStream m_out;
@@ -38,8 +43,13 @@ public class ScaleTves implements Scale, SerialPortEventListener {
     private double m_dWeightBuffer;
     private int m_iStatusScale;
 
-    public ScaleTves(String sPortPrinter) {
+    public ScaleTves(String sPortPrinter, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         m_sPortScale = sPortPrinter;
+        m_iPortSpeed = iPortSpeed;
+        m_iPortBits = iPortBits;
+        m_iPortStopBits = iPortStopBits;
+        m_iPortParity = iPortParity;   
+        
         m_out = null;
         m_in = null;
         m_iStatusScale = SCALE_READY;
@@ -99,7 +109,8 @@ public class ScaleTves implements Scale, SerialPortEventListener {
                 m_in = m_CommPortPrinter.getInputStream();
                 m_CommPortPrinter.addEventListener(this);
                 m_CommPortPrinter.notifyOnDataAvailable(true);
-                m_CommPortPrinter.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); // Configuramos el puerto
+//                m_CommPortPrinter.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); // Configuramos el puerto
+                m_CommPortPrinter.setSerialPortParams(m_iPortSpeed, m_iPortBits, m_iPortStopBits, m_iPortParity);
             }
             m_out.write(data);
         } catch (NoSuchPortException e) {
