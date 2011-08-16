@@ -23,14 +23,14 @@
 package com.openbravo.pos.printer.shtrihfr;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
 import com.openbravo.pos.printer.DevicePrinter;
-import com.openbravo.pos.printer.TicketPrinterException;
+//import com.openbravo.pos.printer.TicketPrinterException;
 
-import com.openbravo.pos.printer.shtrihfr.DeviceShtrihFR;
+//import com.openbravo.pos.printer.shtrihfr.DeviceShtrihFR;
 
 import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 

@@ -23,7 +23,7 @@ public class SharedSerialPort
     private final Object owner;
     private final String portName;
     private final SerialPort port;
-    static Logger logger = Logger.getLogger("com.shtrih.fiscalprinter");
+    static Logger logger = Logger.getLogger("com.openbravo.pos.printer.shtrihfr.fiscalprinter");
 
     public SharedSerialPort(SerialPort port, String portName, Object owner) 
     {
