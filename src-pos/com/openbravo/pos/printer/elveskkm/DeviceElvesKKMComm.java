@@ -65,6 +65,10 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
     
     public DeviceElvesKKMComm(String sPortPrinter, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         m_sPort = sPortPrinter;
+        m_iPortSpeed = iPortSpeed;
+        m_iPortBits = iPortBits;
+        m_iPortStopBits = iPortStopBits;
+        m_iPortParity = iPortParity;
         m_PortIdPrinter = null;
         m_CommPortPrinter = null;
         m_out = null;
@@ -197,15 +201,15 @@ public class DeviceElvesKKMComm implements PrinterReaderWritter, SerialPortEvent
             }
             m_out.write(data); //Отправка байта сообщения на принтер
         } catch (NoSuchPortException e) {
-            e.printStackTrace();
+            System.err.println(e);
         } catch (PortInUseException e) {
-            e.printStackTrace();
+            System.err.println(e);
         } catch (UnsupportedCommOperationException e) {
-            e.printStackTrace();
+            System.err.println(e);
         } catch (TooManyListenersException e) {
-            e.printStackTrace();
+            System.err.println(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 
