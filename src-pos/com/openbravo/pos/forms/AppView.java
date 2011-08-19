@@ -23,9 +23,9 @@ import java.util.Date;
 import com.openbravo.data.loader.Session;
 import com.openbravo.pos.printer.*;
 import com.openbravo.pos.scale.DeviceScale;
-import com.openbravo.pos.scanpal2.DeviceScanner;
-import com.openbravo.pos.mercury130.DeviceMercury130;
-import com.openbravo.pos.massakvpm.DeviceScaleVPM;
+import com.openbravo.pos.pludevice.scanpal2.DeviceScanner;
+import com.openbravo.pos.pludevice.mercury130.DeviceMercury130;
+import com.openbravo.pos.pludevice.massakvpm.DeviceScaleVPM;
 
 /**
  *

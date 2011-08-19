@@ -38,9 +38,9 @@ import com.openbravo.pos.printer.TicketParser;
 import com.openbravo.pos.printer.TicketPrinterException;
 import com.openbravo.pos.printer.TicketFiscalPrinterException;
 import com.openbravo.pos.sales.JProductAttEdit;
-import com.openbravo.pos.scanpal2.DeviceScanner;
-import com.openbravo.pos.scanpal2.DeviceScannerException;
-import com.openbravo.pos.scanpal2.ProductDownloaded;
+import com.openbravo.pos.pludevice.scanpal2.DeviceScanner;
+import com.openbravo.pos.pludevice.scanpal2.DeviceScannerException;
+import com.openbravo.pos.pludevice.scanpal2.ProductDownloaded;
 import com.openbravo.pos.ticket.ProductInfoExt;
 
 /**

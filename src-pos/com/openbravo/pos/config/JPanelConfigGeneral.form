@@ -74,7 +74,7 @@
                               <Component id="jcboMachineDisplay" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboTicketsBag" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboMachineScale" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
-                              <Component id="jcboMachineScanner" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
+                              <Component id="jcboMachinePLUDevice" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboMachinePrinter2" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboMachineFiscalPrinter" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboLAF" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
@@ -90,7 +90,7 @@
                               <Component id="m_jPrinterParams3" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                               <Component id="m_jFiscalPrinterParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                               <Component id="m_jScaleParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
-                              <Component id="m_jScannerParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
+                              <Component id="m_jPLUDeviceParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                               <Component id="m_jLabelPrinterParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -162,8 +162,8 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel26" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="jcboMachineScanner" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="m_jScannerParams" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
+                      <Component id="jcboMachinePLUDevice" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="m_jPLUDeviceParams" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -2037,16 +2037,16 @@
         <Component class="javax.swing.JLabel" name="jLabel26">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="pos_messages.properties" key="label.scanner" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="pos_messages.properties" key="label.pludevice" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jcboMachineScanner">
+        <Component class="javax.swing.JComboBox" name="jcboMachinePLUDevice">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboMachineScannerActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboMachinePLUDeviceActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JPanel" name="m_jScannerParams">
+        <Container class="javax.swing.JPanel" name="m_jPLUDeviceParams">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
@@ -2078,23 +2078,23 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jlblPrinterPort5" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialScanner" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="jcboSerialPLUDevice" min="-2" pref="110" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jlblPrinterPortParams6" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortSpeed" min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortSpeed" min="-2" pref="80" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel41" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortDataBits" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortDataBits" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel42" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortStopBits" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortStopBits" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel43" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortParity" min="-2" pref="70" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortParity" min="-2" pref="70" max="-2" attributes="0"/>
                           <EmptySpace pref="190" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -2102,12 +2102,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jcboSerialScanner" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcboSerialPLUDevice" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jlblPrinterPort5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortSpeed" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortDataBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortStopBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jcboScannerSerialPortParity" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortSpeed" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortDataBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortStopBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcboPLUDeviceSerialPortParity" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jlblPrinterPortParams6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -2124,7 +2124,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jcboSerialScanner">
+                <Component class="javax.swing.JComboBox" name="jcboSerialPLUDevice">
                   <Properties>
                     <Property name="editable" type="boolean" value="true"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -2148,7 +2148,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jcboScannerSerialPortSpeed">
+                <Component class="javax.swing.JComboBox" name="jcboPLUDeviceSerialPortSpeed">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed)" type="code"/>
@@ -2165,7 +2165,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jcboScannerSerialPortDataBits">
+                <Component class="javax.swing.JComboBox" name="jcboPLUDeviceSerialPortDataBits">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.DefaultComboBoxModel(modelSerialPortDataBits)" type="code"/>
@@ -2182,7 +2182,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jcboScannerSerialPortStopBits">
+                <Component class="javax.swing.JComboBox" name="jcboPLUDeviceSerialPortStopBits">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.DefaultComboBoxModel(modelSerialPortStopBits)" type="code"/>
@@ -2199,7 +2199,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jcboScannerSerialPortParity">
+                <Component class="javax.swing.JComboBox" name="jcboPLUDeviceSerialPortParity">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.DefaultComboBoxModel(modelSerialPortParity)" type="code"/>

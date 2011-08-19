@@ -25,8 +25,8 @@ import javax.swing.ListModel;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.user.BrowsableEditableData;
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.scanpal2.DeviceScanner;
-import com.openbravo.pos.scanpal2.DeviceScannerException;
+import com.openbravo.pos.pludevice.scanpal2.DeviceScanner;
+import com.openbravo.pos.pludevice.scanpal2.DeviceScannerException;
 
 /**
  *

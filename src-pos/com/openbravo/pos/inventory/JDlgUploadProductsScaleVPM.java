@@ -32,8 +32,8 @@ import javax.swing.ListModel;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.user.BrowsableEditableData;
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.massakvpm.DeviceScaleVPM;
-import com.openbravo.pos.massakvpm.DeviceScaleVPMException;
+import com.openbravo.pos.pludevice.massakvpm.DeviceScaleVPM;
+import com.openbravo.pos.pludevice.massakvpm.DeviceScaleVPMException;
 
 public class JDlgUploadProductsScaleVPM extends javax.swing.JDialog {
     private DeviceScaleVPM m_scale;
