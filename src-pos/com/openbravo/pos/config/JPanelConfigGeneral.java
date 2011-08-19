@@ -576,6 +576,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + comboValue(jcboConnFiscalPrinter.getSelectedItem()) + "," + comboValue(jcboSerialFiscalPrinter.getSelectedItem())  + "," + comboValue(jcboFiscalPrinterSerialPortSpeed.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortDataBits.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortStopBits.getSelectedItem())+ "," + comboValue(jcboFiscalPrinterSerialPortParity.getSelectedItem()));
         } else if ("javapos".equals(sMachineFiscalPrinter)) {
             config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter + ":" + m_jtxtJPOSFiscalPrinter.getText() + "," + m_jtxtJPOSFiscalDrawer.getText());
+        } else {
+            config.setProperty("machine.fiscalprinter", sMachineFiscalPrinter);
         }
         
         String sMachineLabelPrinter = comboValue(jcboMachineLabelPrinter.getSelectedItem());
