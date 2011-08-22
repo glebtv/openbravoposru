@@ -1810,7 +1810,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         jlblPrinterPortParams6.setPreferredSize(new java.awt.Dimension(120, 18));
 
         jcboPLUDeviceSerialPortSpeed.setModel(new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed));
-        jcboPLUDeviceSerialPortSpeed.setSelectedIndex(6);
+        jcboPLUDeviceSerialPortSpeed.setSelectedIndex(5);
 
         jLabel41.setText(AppLocal.getIntString("label.serialportdatabits")); // NOI18N
 

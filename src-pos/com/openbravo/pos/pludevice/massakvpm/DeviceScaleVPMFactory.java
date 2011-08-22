@@ -23,7 +23,9 @@
 package com.openbravo.pos.pludevice.massakvpm;
 
 import com.openbravo.pos.forms.AppProperties;
+import com.openbravo.pos.util.SerialPortParameters;
 import com.openbravo.pos.util.StringParser;
+import gnu.io.SerialPort;
 
 /**
  * @author Andrey Svininykh <svininykh@gmail.com>
@@ -34,7 +36,12 @@ public class DeviceScaleVPMFactory {
     }
 
     public static DeviceScaleVPM createInstance(AppProperties props) {
-
+        
+        Integer iPLUDeviceSerialPortSpeed = 57600;
+        Integer iPLUDeviceSerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iPLUDeviceSerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iPLUDeviceSerialPortParity = SerialPort.PARITY_NONE;
+        
         StringParser sd = null;
         sd = new StringParser(props.getProperty("machine.pludevice"));            
         
@@ -42,11 +49,15 @@ public class DeviceScaleVPMFactory {
             sd = new StringParser(props.getProperty("machine.scanner"));
         }
         
-        String sScaleType = sd.nextToken(':');
-        String sScaleType1 = sd.nextToken(',');
+        String sPLUDeviceType = sd.nextToken(':');
+        String sPLUDeviceType1 = sd.nextToken(',');
+        iPLUDeviceSerialPortSpeed = SerialPortParameters.getSpeed(sd.nextToken(','));
+        iPLUDeviceSerialPortDataBits =  SerialPortParameters.getDataBits(sd.nextToken(','));
+        iPLUDeviceSerialPortStopBits = SerialPortParameters.getStopBits(sd.nextToken(','));
+        iPLUDeviceSerialPortParity = SerialPortParameters.getParity(sd.nextToken(','));          
 
-        if ("massakvpm".equals(sScaleType)) {
-            return new DeviceScaleVPMComm(sScaleType, sScaleType1);
+        if ("massakvpm".equals(sPLUDeviceType)) {
+            return new DeviceScaleVPMComm(sPLUDeviceType, sPLUDeviceType1, iPLUDeviceSerialPortSpeed, iPLUDeviceSerialPortDataBits, iPLUDeviceSerialPortStopBits, iPLUDeviceSerialPortParity);
         } else {
             return null;
         }

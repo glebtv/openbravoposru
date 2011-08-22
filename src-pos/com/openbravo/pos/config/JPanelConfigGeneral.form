@@ -2154,7 +2154,7 @@
                       <Connection code="new javax.swing.DefaultComboBoxModel(modelSerialPortSpeed)" type="code"/>
                     </Property>
                     <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="6" type="code"/>
+                      <Connection code="5" type="code"/>
                     </Property>
                   </Properties>
                 </Component>

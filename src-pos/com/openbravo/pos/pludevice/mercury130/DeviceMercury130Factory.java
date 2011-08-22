@@ -23,7 +23,9 @@
 package com.openbravo.pos.pludevice.mercury130;
 
 import com.openbravo.pos.forms.AppProperties;
+import com.openbravo.pos.util.SerialPortParameters;
 import com.openbravo.pos.util.StringParser;
+import gnu.io.SerialPort;
 
 public class DeviceMercury130Factory {
     
@@ -32,18 +34,27 @@ public class DeviceMercury130Factory {
     
     public static DeviceMercury130 createInstance(AppProperties props) {
         
+        Integer iPassiveCRSerialPortSpeed = 19200;
+        Integer iPassiveCRSerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iPassiveCRSerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iPassiveCRSerialPortParity = SerialPort.PARITY_NONE;
+        
         StringParser sd = null;
         sd = new StringParser(props.getProperty("machine.pludevice"));            
-        
+
         if (sd == null) {
             sd = new StringParser(props.getProperty("machine.scanner"));
         }
 
         String sPassiveCRType = sd.nextToken(':');
         String sPassiveCRParam1 = sd.nextToken(',');
-
+        iPassiveCRSerialPortSpeed = SerialPortParameters.getSpeed(sd.nextToken(','));
+        iPassiveCRSerialPortDataBits =  SerialPortParameters.getDataBits(sd.nextToken(','));
+        iPassiveCRSerialPortStopBits = SerialPortParameters.getStopBits(sd.nextToken(','));
+        iPassiveCRSerialPortParity = SerialPortParameters.getParity(sd.nextToken(','));          
+        
         if ("mercury130kz039".equals(sPassiveCRType)) {
-            return new DeviceMercury130Comm(sPassiveCRParam1);
+            return new DeviceMercury130Comm(sPassiveCRParam1, iPassiveCRSerialPortSpeed, iPassiveCRSerialPortDataBits, iPassiveCRSerialPortStopBits, iPassiveCRSerialPortParity);
         } else {
             return null;
         }

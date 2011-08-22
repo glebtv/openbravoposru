@@ -20,7 +20,9 @@
 package com.openbravo.pos.pludevice.scanpal2;
 
 import com.openbravo.pos.forms.AppProperties;
+import com.openbravo.pos.util.SerialPortParameters;
 import com.openbravo.pos.util.StringParser;
+import gnu.io.SerialPort;
 
 public class DeviceScannerFactory {
     
@@ -29,6 +31,11 @@ public class DeviceScannerFactory {
     }
     
     public static DeviceScanner createInstance(AppProperties props) {
+        
+        Integer iScannerSerialPortSpeed = 115200;
+        Integer iScannerSerialPortDataBits = SerialPort.DATABITS_8;
+        Integer iScannerSerialPortStopBits = SerialPort.STOPBITS_1;
+        Integer iScannerSerialPortParity = SerialPort.PARITY_NONE;
         
         StringParser sd = null;
         sd = new StringParser(props.getProperty("machine.pludevice"));            
@@ -40,9 +47,13 @@ public class DeviceScannerFactory {
         String sScannerType = sd.nextToken(':');
         String sScannerParam1 = sd.nextToken(',');
         // String sScannerParam2 = sd.nextToken(',');
+        iScannerSerialPortSpeed = SerialPortParameters.getSpeed(sd.nextToken(','));
+        iScannerSerialPortDataBits =  SerialPortParameters.getDataBits(sd.nextToken(','));
+        iScannerSerialPortStopBits = SerialPortParameters.getStopBits(sd.nextToken(','));
+        iScannerSerialPortParity = SerialPortParameters.getParity(sd.nextToken(','));          
         
         if ("scanpal2".equals(sScannerType)) {
-            return new DeviceScannerComm(sScannerParam1);
+            return new DeviceScannerComm(sScannerParam1, iScannerSerialPortSpeed, iScannerSerialPortDataBits, iScannerSerialPortStopBits, iScannerSerialPortParity);
         } else {
             return null;
         }

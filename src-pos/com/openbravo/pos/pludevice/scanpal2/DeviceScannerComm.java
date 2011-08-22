@@ -32,6 +32,11 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
     private SerialPort m_CommPortPrinter;  
     
     private String m_sPort;
+    private Integer m_iPortSpeed;
+    private Integer m_iPortBits;
+    private Integer m_iPortStopBits;
+    private Integer m_iPortParity;
+    
     private OutputStream m_out;
     private InputStream m_in;
     
@@ -50,8 +55,12 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
     private int m_iProductOrder;
     
     /** Creates a new instance of ScanDeviceComm */
-    DeviceScannerComm(String sPort) {
+    DeviceScannerComm(String sPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         m_sPort = sPort;
+        m_iPortSpeed = iPortSpeed;
+        m_iPortBits = iPortBits;
+        m_iPortStopBits = iPortStopBits;
+        m_iPortParity = iPortParity; 
         
         m_PortIdPrinter = null;
         m_CommPortPrinter = null;
@@ -72,7 +81,8 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
             m_CommPortPrinter.addEventListener(this);
             m_CommPortPrinter.notifyOnDataAvailable(true);
 
-            m_CommPortPrinter.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); // Configuramos el puerto
+//            m_CommPortPrinter.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); // Configuramos el puerto
+            m_CommPortPrinter.setSerialPortParams(m_iPortSpeed, m_iPortBits, m_iPortStopBits, m_iPortParity); // Configuramos el puerto
 //        } catch (NoSuchPortException e) {
 //            e.printStackTrace();
 //        } catch (PortInUseException e) {
