@@ -36,7 +36,7 @@ FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LE
 				<textElement>
 					<font pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{ROLE}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ROLE}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
 				<reportElement key="barcode-1" x="6" y="87" width="180" height="35"/>
@@ -49,7 +49,7 @@ FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LE
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.0" lineStyle="Solid"/>
 				</graphicElement>
-				<imageExpression class="java.awt.Image"><![CDATA[com.openbravo.pos.util.BarcodeImage.getBarcode128($F{CARD})]]></imageExpression>
+				<imageExpression><![CDATA[com.openbravo.pos.util.BarcodeImage.getBarcode128($F{CARD})]]></imageExpression>
 			</image>
 			<image scaleImage="RetainShape">
 				<reportElement key="image-1" x="6" y="8" width="63" height="75"/>
@@ -62,7 +62,7 @@ FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LE
 				<graphicElement>
 					<pen lineWidth="0.0" lineStyle="Solid"/>
 				</graphicElement>
-				<imageExpression class="java.awt.Image"><![CDATA[$F{IMAGE}]]></imageExpression>
+				<imageExpression><![CDATA[$F{IMAGE}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField" x="72" y="8" width="114" height="26"/>
@@ -75,7 +75,7 @@ FROM PRODUCTS LEFT OUTER JOIN CATEGORIES ON PRODUCTS.CATEGORY = CATEGORIES.ID LE
 				<textElement>
 					<font size="14" isBold="true" pdfFontName="FreeSans.ttf" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{NAME}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
