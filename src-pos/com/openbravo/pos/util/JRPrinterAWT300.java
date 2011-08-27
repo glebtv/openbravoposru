@@ -1,29 +1,25 @@
 /*
- * ============================================================================
- * GNU Lesser General Public License
- * ============================================================================
- *
- * JasperReports - Free Java report-generating library.
- * Copyright (C) 2001-2006 JasperSoft Corporation http://www.jaspersoft.com
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
- * 
- * JasperSoft Corporation
- * 303 Second Street, Suite 450 North
- * San Francisco, CA 94107
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 
 //    Portions:
@@ -31,11 +27,16 @@
 //    Copyright (C) 2007-2009 Openbravo, S.L.
 //    http://www.openbravo.com/product/pos
 //    author adrian romero
-// This class is a copy of net.sf.jasperreports.engine.print.JRPrinterAWT
-// The modifications are:
-// Added to the constructor the service, instead of isDialog
-// And the redesign of the design properties of the toolbar
-// Nothing else.
+//    This class is a copy of net.sf.jasperreports.view.JRViewer
+//    The modifications are:
+//    The loadJasperPrint() method 
+//    And the redesign of the design properties of the toolbar
+//    Nothing else.
+
+/*    Update for support library jasperreports 4.1.1
+ *    @author Andrey Svininykh <svininykh@gmail.com>
+ *    http://code.google.com/p/openbravoposru/
+ */
 
 package com.openbravo.pos.util;
 
@@ -52,20 +53,22 @@ import java.awt.print.PrinterJob;
 import javax.print.PrintService;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.util.JRGraphEnvInitializer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: JRPrinterAWT.java 2123 2008-03-12 11:00:41Z teodord $
+ * @version $Id: JRPrinterAWT.java 3940 2010-08-20 10:35:15Z teodord $
  */
 public class JRPrinterAWT300 implements Printable
 {
-
+	private static final Log log = LogFactory.getLog(JRPrinterAWT300.class);
 
 	/**
 	 *
@@ -123,7 +126,7 @@ public class JRPrinterAWT300 implements Printable
 	 */
 	private boolean printPages(
 		int firstPageIndex,
-		int lastPageIndex, 
+		int lastPageIndex,
                 PrintService service
 		) throws JRException
 	{
@@ -155,9 +158,9 @@ public class JRPrinterAWT300 implements Printable
 
 		printJob.setJobName("JasperReports - " + jasperPrint.getName());
 		
-		switch (jasperPrint.getOrientation())
+		switch (jasperPrint.getOrientationValue())
 		{
-			case JRReport.ORIENTATION_LANDSCAPE :
+			case LANDSCAPE :
 			{
 				pageFormat.setOrientation(PageFormat.LANDSCAPE);
 				paper.setSize(jasperPrint.getPageHeight(), jasperPrint.getPageWidth());
@@ -169,7 +172,7 @@ public class JRPrinterAWT300 implements Printable
 					);
 				break;
 			}
-			case JRReport.ORIENTATION_PORTRAIT :
+			case PORTRAIT :
 			default :
 			{
 				pageFormat.setOrientation(PageFormat.PORTRAIT);
@@ -189,16 +192,18 @@ public class JRPrinterAWT300 implements Printable
 		book.append(this, pageFormat, lastPageIndex - firstPageIndex + 1);
 		printJob.setPageable(book);
 		try
-		{
+            {
                     if (service == null) {
-                        if (printJob.printDialog()) {
-                            printJob.print();
-                        }
-                    } else {
-                        printJob.setPrintService(service);
+                    if (printJob.printDialog()) {
                         printJob.print();
+                    } else {
+                        isOK = false;
                     }
-		}
+                } else {
+                    printJob.setPrintService(service);
+                    printJob.print();
+                }
+            }
 		catch (Exception ex)
 		{
 			throw new JRException("Error printing report.", ex);
@@ -230,13 +235,17 @@ public class JRPrinterAWT300 implements Printable
 			JRGraphics2DExporter exporter = new JRGraphics2DExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
 			exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, graphics);
-			exporter.setParameter(JRExporterParameter.PAGE_INDEX, new Integer(pageIndex));
+			exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(pageIndex));
 			exporter.exportReport();
 		}
 		catch (JRException e)
 		{
-			e.printStackTrace();
-			throw new PrinterException(e.getMessage());
+			if (log.isDebugEnabled())
+			{
+				log.debug("Print failed.", e);
+			}
+
+			throw new PrinterException(e.getMessage()); //NOPMD
 		}
 
 		return Printable.PAGE_EXISTS;
@@ -257,7 +266,7 @@ public class JRPrinterAWT300 implements Printable
 		JRGraphics2DExporter exporter = new JRGraphics2DExporter();
 		exporter.setParameter(JRExporterParameter.JASPER_PRINT, this.jasperPrint);
 		exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, pageImage.getGraphics());
-		exporter.setParameter(JRExporterParameter.PAGE_INDEX, new Integer(pageIndex));
+		exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(pageIndex));
 		exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, new Float(zoom));
 		exporter.exportReport();
 

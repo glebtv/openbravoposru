@@ -1,29 +1,25 @@
 /*
- * ============================================================================
- * GNU Lesser General Public License
- * ============================================================================
- *
- * JasperReports - Free Java report-generating library.
- * Copyright (C) 2001-2006 JasperSoft Corporation http://www.jaspersoft.com
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
- *
- * JasperSoft Corporation
- * 303 Second Street, Suite 450 North
- * San Francisco, CA 94107
+ * JasperReports - Free Java Reporting Library.
+ * Copyright (C) 2001 - 2009 Jaspersoft Corporation. All rights reserved.
  * http://www.jaspersoft.com
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of JasperReports.
+ *
+ * JasperReports is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JasperReports is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -38,11 +34,16 @@
 //    Copyright (C) 2007-2009 Openbravo, S.L.
 //    http://www.openbravo.com/product/pos
 //    author adrian romero
-// This class is a copy of net.sf.jasperreports.view.JRViewer
-// The modifications are:
-// The loadJasperPrint() method 
-// And the redesign of the design properties of the toolbar
-// Nothing else.
+//    This class is a copy of net.sf.jasperreports.view.JRViewer
+//    The modifications are:
+//    The loadJasperPrint() method 
+//    And the redesign of the design properties of the toolbar
+//    Nothing else.
+
+/*    Update for support library jasperreports 4.1.1
+ *    @author Andrey Svininykh <svininykh@gmail.com>
+ *    http://code.google.com/p/openbravoposru/
+ */
 
 package com.openbravo.pos.util;
 
@@ -93,7 +94,6 @@ import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JRHyperlink;
 import net.sf.jasperreports.engine.JRImageMapRenderer;
 import net.sf.jasperreports.engine.JRPrintAnchorIndex;
 import net.sf.jasperreports.engine.JRPrintElement;
@@ -109,21 +109,28 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
 import net.sf.jasperreports.engine.export.JRGraphics2DExporterParameter;
 import net.sf.jasperreports.engine.print.JRPrinterAWT;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.util.JRClassLoader;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
+import net.sf.jasperreports.engine.util.SimpleFileResolver;
 import net.sf.jasperreports.engine.xml.JRPrintXmlLoader;
 import net.sf.jasperreports.view.JRHyperlinkListener;
 import net.sf.jasperreports.view.JRSaveContributor;
 import net.sf.jasperreports.view.save.JRPrintSaveContributor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * @author Teodor Danciu (teodord@users.sourceforge.net)
- * @version $Id: JRViewer300.java 2160 2008-04-29 11:31:51Z lucianc $
+ * @version $Id: JRViewer.java 4426 2011-06-22 14:52:21Z teodord $
  */
 public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListener
 {
+	private static final Log log = LogFactory.getLog(JRViewer300.class);
+
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
@@ -151,15 +158,16 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	 */
 	public static final int REPORT_RESOLUTION = 72;
 
-	protected float MIN_ZOOM = 0.5f;
-	protected float MAX_ZOOM = 10f;
+	protected final float MIN_ZOOM = 0.5f;
+	protected final float MAX_ZOOM = 10f;
 	protected int zooms[] = {50, 75, 100, 125, 150, 175, 200, 250, 400, 800};
 	protected int defaultZoomIndex = 2;
 
 	protected int type = TYPE_FILE_NAME;
 	protected boolean isXML = false;
 	protected String reportFileName = null;
-	JasperPrint jasperPrint = null;
+	protected SimpleFileResolver fileResolver;
+	JasperPrint jasperPrint= null;
 	private int pageIndex = 0;
 	private boolean pageError;
 	protected float zoom = 0f;
@@ -182,8 +190,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	private int downX = 0;
 	private int downY = 0;
 
-	private java.util.List hyperlinkListeners = new ArrayList();
-	private Map linksMap = new HashMap();
+	private List<JRHyperlinkListener> hyperlinkListeners = new ArrayList<JRHyperlinkListener>();
+	private Map<JPanel,JRPrintHyperlink> linksMap = new HashMap<JPanel,JRPrintHyperlink>();
 	private MouseListener mouseListener =
 		new java.awt.event.MouseAdapter()
 		{
@@ -207,53 +215,53 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			}
 		};
 
-	protected List saveContributors = new ArrayList();
+	protected List<JRSaveContributor> saveContributors = new ArrayList<JRSaveContributor>();
 	protected File lastFolder = null;
 	protected JRSaveContributor lastSaveContributor = null;
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(String fileName, boolean isXML) throws JRException
 	{
 		this(fileName, isXML, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(InputStream is, boolean isXML) throws JRException
 	{
 		this(is, isXML, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(JasperPrint jrPrint)
 	{
 		this(jrPrint, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(String fileName, boolean isXML, Locale locale) throws JRException
 	{
 		this(fileName, isXML, locale, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(InputStream is, boolean isXML, Locale locale) throws JRException
 	{
 		this(is, isXML, locale, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(JasperPrint jrPrint, Locale locale)
 	{
 		this(jrPrint, locale, null);
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(String fileName, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
 	{
 		initResources(locale, resBundle);
@@ -274,7 +282,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(InputStream is, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
 	{
 		initResources(locale, resBundle);
@@ -295,7 +303,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	}
 
 
-	/** Creates new form JRViewer300 */
+	/** Creates new form JRViewer */
 	public JRViewer300(JasperPrint jrPrint, Locale locale, ResourceBundle resBundle)
 	{
 		initResources(locale, resBundle);
@@ -314,9 +322,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 		addHyperlinkListener(this);
 	}
-        
+
         public void loadJasperPrint(JasperPrint jrPrint) {
-            
+
 		loadReport(jrPrint);
 		setZoomRatio(zooms[defaultZoomIndex] / 100f);
                 cmbZoomItemStateChanged(null);
@@ -371,19 +379,19 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	 */
 	public JRSaveContributor[] getSaveContributors()
 	{
-		return (JRSaveContributor[])saveContributors.toArray(new JRSaveContributor[saveContributors.size()]);
+		return saveContributors.toArray(new JRSaveContributor[saveContributors.size()]);
 	}
 
 
 	/**
 	 * Replaces the save contributors with the ones provided as parameter. 
 	 */
-	public void setSaveContributors(JRSaveContributor[] saveContributors)
+	public void setSaveContributors(JRSaveContributor[] saveContribs)
 	{
-		this.saveContributors = new ArrayList();
-		if (saveContributors != null)
+		this.saveContributors = new ArrayList<JRSaveContributor>();
+		if (saveContribs != null)
 		{
-			this.saveContributors.addAll(Arrays.asList(saveContributors));
+			this.saveContributors.addAll(Arrays.asList(saveContribs));
 		}
 	}
 
@@ -411,7 +419,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	 */
 	public JRHyperlinkListener[] getHyperlinkListeners()
 	{
-		return (JRHyperlinkListener[])hyperlinkListeners.toArray(new JRHyperlinkListener[hyperlinkListeners.size()]);
+		return hyperlinkListeners.toArray(new JRHyperlinkListener[hyperlinkListeners.size()]);
 	}
 
 
@@ -421,10 +429,13 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	protected void initResources(Locale locale, ResourceBundle resBundle)
 	{
 		if (locale != null)
+		{
 			setLocale(locale);
+		}
 		else
+		{
 			setLocale(Locale.getDefault());
-
+		}
 		if (resBundle == null)
 		{
 			this.resourceBundle = ResourceBundle.getBundle("net/sf/jasperreports/view/viewer", getLocale());
@@ -456,6 +467,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				"net.sf.jasperreports.view.save.JRPdfSaveContributor",
 				"net.sf.jasperreports.view.save.JRRtfSaveContributor",
 				"net.sf.jasperreports.view.save.JROdtSaveContributor",
+				"net.sf.jasperreports.view.save.JRDocxSaveContributor",
 				"net.sf.jasperreports.view.save.JRHtmlSaveContributor",
 				"net.sf.jasperreports.view.save.JRSingleSheetXlsSaveContributor",
 				"net.sf.jasperreports.view.save.JRMultipleSheetsXlsSaveContributor",
@@ -468,8 +480,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		{
 			try
 			{
-				Class saveContribClass = JRClassLoader.loadClassForName(DEFAULT_CONTRIBUTORS[i]);
-				Constructor constructor = saveContribClass.getConstructor(new Class[]{Locale.class, ResourceBundle.class});
+				Class<?> saveContribClass = JRClassLoader.loadClassForName(DEFAULT_CONTRIBUTORS[i]);
+				Constructor<?> constructor = saveContribClass.getConstructor(new Class[]{Locale.class, ResourceBundle.class});
 				JRSaveContributor saveContrib = (JRSaveContributor)constructor.newInstance(new Object[]{getLocale(), resourceBundle});
 				saveContributors.add(saveContrib);
 			}
@@ -485,9 +497,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	 */
 	public void gotoHyperlink(JRPrintHyperlink hyperlink)
 	{
-		switch(hyperlink.getHyperlinkType())
+		switch(hyperlink.getHyperlinkTypeValue())
 		{
-			case JRHyperlink.HYPERLINK_TYPE_REFERENCE :
+			case REFERENCE :
 			{
 				if (isOnlyHyperlinkListener())
 				{
@@ -496,12 +508,12 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_ANCHOR :
+			case LOCAL_ANCHOR :
 			{
 				if (hyperlink.getHyperlinkAnchor() != null)
 				{
-					Map anchorIndexes = jasperPrint.getAnchorIndexes();
-					JRPrintAnchorIndex anchorIndex = (JRPrintAnchorIndex)anchorIndexes.get(hyperlink.getHyperlinkAnchor());
+					Map<String,JRPrintAnchorIndex> anchorIndexes = jasperPrint.getAnchorIndexes();
+					JRPrintAnchorIndex anchorIndex = anchorIndexes.get(hyperlink.getHyperlinkAnchor());
 					if (anchorIndex.getPageIndex() != pageIndex)
 					{
 						setPageIndex(anchorIndex.getPageIndex());
@@ -541,7 +553,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_PAGE :
+			case LOCAL_PAGE :
 			{
 				int page = pageIndex + 1;
 				if (hyperlink.getHyperlinkPage() != null)
@@ -563,7 +575,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_ANCHOR :
+			case REMOTE_ANCHOR :
 			{
 				if (isOnlyHyperlinkListener())
 				{
@@ -573,7 +585,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_PAGE :
+			case REMOTE_PAGE :
 			{
 				if (isOnlyHyperlinkListener())
 				{
@@ -583,7 +595,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_CUSTOM:
+			case CUSTOM:
 			{
 				if (isOnlyHyperlinkListener())
 				{
@@ -592,7 +604,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_NONE :
+			case NONE :
 			default :
 			{
 				break;
@@ -644,7 +656,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
         jLabel1 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         lblPage = new PageRenderer(this);
-        jToolBar1 = new javax.swing.JToolBar();
+        jToolBar = new javax.swing.JToolBar();
         btnSave = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
         btnReload = new javax.swing.JButton();
@@ -736,7 +748,6 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
         gridBagConstraints.gridy = 2;
         jPanel4.add(jPanel6, gridBagConstraints);
 
-        jPanel7.setBackground(java.awt.Color.gray);
         jPanel7.setMinimumSize(new java.awt.Dimension(5, 5));
         jPanel7.setPreferredSize(new java.awt.Dimension(5, 5));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -745,7 +756,6 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel4.add(jPanel7, gridBagConstraints);
 
-        jPanel8.setBackground(java.awt.Color.gray);
         jPanel8.setMinimumSize(new java.awt.Dimension(5, 5));
         jPanel8.setPreferredSize(new java.awt.Dimension(5, 5));
 
@@ -787,7 +797,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
         pnlMain.add(scrollPane, java.awt.BorderLayout.CENTER);
 
-        jToolBar1.setFloatable(false);
+        jToolBar.setFloatable(false);
+        jToolBar.setOpaque(false);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/filesave.png"))); // NOI18N
         btnSave.setToolTipText(getBundleString("save"));
@@ -796,7 +807,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnSaveActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnSave);
+        jToolBar.add(btnSave);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/yast_printer.png"))); // NOI18N
         btnPrint.setToolTipText(getBundleString("print"));
@@ -805,7 +816,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnPrintActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnPrint);
+        jToolBar.add(btnPrint);
 
         btnReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/reload.png"))); // NOI18N
         btnReload.setToolTipText(getBundleString("reload"));
@@ -814,8 +825,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnReloadActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnReload);
-        jToolBar1.add(jSeparator1);
+        jToolBar.add(btnReload);
+        jToolBar.add(jSeparator1);
 
         btnActualSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/mime.png"))); // NOI18N
         btnActualSize.setToolTipText(getBundleString("actual.size"));
@@ -824,7 +835,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnActualSizeActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnActualSize);
+        jToolBar.add(btnActualSize);
 
         btnFitPage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/mime2.png"))); // NOI18N
         btnFitPage.setToolTipText(getBundleString("fit.page"));
@@ -833,7 +844,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnFitPageActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnFitPage);
+        jToolBar.add(btnFitPage);
 
         btnFitWidth.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/mime3.png"))); // NOI18N
         btnFitWidth.setToolTipText(getBundleString("fit.width"));
@@ -842,8 +853,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnFitWidthActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnFitWidth);
-        jToolBar1.add(jSeparator2);
+        jToolBar.add(btnFitWidth);
+        jToolBar.add(jSeparator2);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/viewmag+.png"))); // NOI18N
         btnZoomIn.setToolTipText(getBundleString("zoom.in"));
@@ -852,7 +863,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnZoomInActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnZoomIn);
+        jToolBar.add(btnZoomIn);
 
         cmbZoom.setEditable(true);
         cmbZoom.setToolTipText(getBundleString("zoom.ratio"));
@@ -869,7 +880,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 cmbZoomActionPerformed(evt);
             }
         });
-        jToolBar1.add(cmbZoom);
+        jToolBar.add(cmbZoom);
 
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/viewmag-.png"))); // NOI18N
         btnZoomOut.setToolTipText(getBundleString("zoom.out"));
@@ -878,8 +889,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnZoomOutActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnZoomOut);
-        jToolBar1.add(jSeparator3);
+        jToolBar.add(btnZoomOut);
+        jToolBar.add(jSeparator3);
 
         btnFirst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2leftarrow.png"))); // NOI18N
         btnFirst.setToolTipText(getBundleString("first.page"));
@@ -888,7 +899,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnFirstActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnFirst);
+        jToolBar.add(btnFirst);
 
         btnPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1leftarrow.png"))); // NOI18N
         btnPrevious.setToolTipText(getBundleString("previous.page"));
@@ -897,7 +908,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnPreviousActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnPrevious);
+        jToolBar.add(btnPrevious);
 
         txtGoTo.setToolTipText(getBundleString("go.to.page"));
         txtGoTo.setMaximumSize(new java.awt.Dimension(40, 23));
@@ -908,7 +919,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 txtGoToActionPerformed(evt);
             }
         });
-        jToolBar1.add(txtGoTo);
+        jToolBar.add(txtGoTo);
 
         btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1rightarrow.png"))); // NOI18N
         btnNext.setToolTipText(getBundleString("next.page"));
@@ -917,7 +928,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnNextActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnNext);
+        jToolBar.add(btnNext);
 
         btnLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/2rightarrow.png"))); // NOI18N
         btnLast.setToolTipText(getBundleString("last.page"));
@@ -926,13 +937,13 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
                 btnLastActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnLast);
-        jToolBar1.add(jSeparator4);
+        jToolBar.add(btnLast);
+        jToolBar.add(jSeparator4);
 
         lblStatus.setText("Page i of n");
-        jToolBar1.add(lblStatus);
+        jToolBar.add(lblStatus);
 
-        pnlMain.add(jToolBar1, java.awt.BorderLayout.NORTH);
+        pnlMain.add(jToolBar, java.awt.BorderLayout.NORTH);
 
         add(pnlMain, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -1022,7 +1033,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		fileChooser.updateUI();
 		for(int i = 0; i < saveContributors.size(); i++)
 		{
-			fileChooser.addChoosableFileFilter((JRSaveContributor)saveContributors.get(i));
+			fileChooser.addChoosableFileFilter(saveContributors.get(i));
 		}
 
 		if (saveContributors.contains(lastSaveContributor))
@@ -1031,7 +1042,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		}
 		else if (saveContributors.size() > 0)
 		{
-			fileChooser.setFileFilter((JRSaveContributor)saveContributors.get(0));
+			fileChooser.setFileFilter(saveContributors.get(0));
 		}
 		
 		if (lastFolder != null)
@@ -1058,7 +1069,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				int i = 0;
 				while(contributor == null && i < saveContributors.size())
 				{
-					contributor = (JRSaveContributor)saveContributors.get(i++);
+					contributor = saveContributors.get(i++);
 					if (!contributor.accept(file))
 					{
 						contributor = null;
@@ -1079,7 +1090,10 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			}
 			catch (JRException e)
 			{
-				e.printStackTrace();
+				if (log.isErrorEnabled())
+				{
+					log.error("Save error.", e);
+				}
 				JOptionPane.showMessageDialog(this, getBundleString("error.saving"));
 			}
 		}
@@ -1137,7 +1151,8 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	{//GEN-HEADEREND:event_btnPrintActionPerformed
 		// Add your handling code here:
 
-            SwingUtilities.invokeLater(
+		Thread thread =
+			new Thread(
 				new Runnable()
 				{
 					public void run()
@@ -1151,7 +1166,10 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 						}
 						catch (Exception ex)
 						{
-							ex.printStackTrace();
+							if (log.isErrorEnabled())
+							{
+								log.error("Print error.", ex);
+							}
 							JOptionPane.showMessageDialog(JRViewer300.this, getBundleString("error.printing"));
 						}
 						finally
@@ -1163,6 +1181,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 			);
 
+		thread.start();
 
 	}//GEN-LAST:event_btnPrintActionPerformed
 
@@ -1205,8 +1224,10 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			}
 			catch (JRException e)
 			{
-				e.printStackTrace();
-
+				if (log.isErrorEnabled())
+				{
+					log.error("Reload error.", e);
+				}
 				jasperPrint = null;
 				setPageIndex(0);
 				refreshPage();
@@ -1287,7 +1308,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	void hyperlinkClicked(MouseEvent evt)
 	{
 		JPanel link = (JPanel)evt.getSource();
-		JRPrintHyperlink element = (JRPrintHyperlink)linksMap.get(link);
+		JRPrintHyperlink element = linksMap.get(link);
 		hyperlinkClicked(element);
 	}
 
@@ -1299,13 +1320,16 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			JRHyperlinkListener listener = null;
 			for(int i = 0; i < hyperlinkListeners.size(); i++)
 			{
-				listener = (JRHyperlinkListener)hyperlinkListeners.get(i);
+				listener = hyperlinkListeners.get(i);
 				listener.gotoHyperlink(hyperlink);
 			}
 		}
 		catch(JRException e)
 		{
-			e.printStackTrace();
+			if (log.isErrorEnabled())
+			{
+				log.error("Hyperlink click error.", e);
+			}
 			JOptionPane.showMessageDialog(this, getBundleString("error.hyperlink"));
 		}
 	}
@@ -1342,7 +1366,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				lblStatus.setText(
 					MessageFormat.format(
 						getBundleString("page"),
-						new Object[]{new Integer(pageIndex + 1), new Integer(jasperPrint.getPages().size())}
+						new Object[]{Integer.valueOf(pageIndex + 1), Integer.valueOf(jasperPrint.getPages().size())}
 						)
 					);
 			}
@@ -1370,12 +1394,14 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		}
 		else
 		{
-			jasperPrint = (JasperPrint)JRLoader.loadObject(fileName);
+			jasperPrint = (JasperPrint)JRLoader.loadObjectFromFile(fileName);
 		}
 
 		type = TYPE_FILE_NAME;
 		this.isXML = isXmlReport;
 		reportFileName = fileName;
+		fileResolver = new SimpleFileResolver(Arrays.asList(new File[]{new File(fileName).getParentFile(), new File(".")}));
+		fileResolver.setResolveAbsolutePath(true);
 		btnReload.setEnabled(true);
 		setPageIndex(0);
 	}
@@ -1478,7 +1504,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		}
 
 		pnlLinks.removeAll();
-		linksMap = new HashMap();
+		linksMap = new HashMap<JPanel,JRPrintHyperlink>();
 
 		createHyperlinks();
 
@@ -1507,8 +1533,11 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			}
 			catch (Exception e)
 			{
+				if (log.isErrorEnabled())
+				{
+					log.error("Print page to image error.", e);
+				}
 				pageError = true;
-				e.printStackTrace();
 
 				image = getPageErrorImage();
 				JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("net/sf/jasperreports/view/viewer").getString("error.displaying"));
@@ -1531,25 +1560,25 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		transform.scale(realZoom, realZoom);
 		grx.transform(transform);
 
-		drawPageError((Graphics2D) grx);
+		drawPageError(grx);
 		
 		return image;
 	}
 
 	protected void createHyperlinks()
 	{
-		java.util.List pages = jasperPrint.getPages();
-		JRPrintPage page = (JRPrintPage)pages.get(pageIndex);
+		List<JRPrintPage> pages = jasperPrint.getPages();
+		JRPrintPage page = pages.get(pageIndex);
 		createHyperlinks(page.getElements(), 0, 0);
 	}
 
-	protected void createHyperlinks(List elements, int offsetX, int offsetY)
+	protected void createHyperlinks(List<JRPrintElement> elements, int offsetX, int offsetY)
 	{
 		if(elements != null && elements.size() > 0)
 		{
-			for(Iterator it = elements.iterator(); it.hasNext();)
+			for(Iterator<JRPrintElement> it = elements.iterator(); it.hasNext();)
 			{
-				JRPrintElement element = (JRPrintElement)it.next();
+				JRPrintElement element = it.next();
 
 				JRImageMapRenderer imageMap = null;
 				if (element instanceof JRPrintImage)
@@ -1572,7 +1601,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 					hyperlink = (JRPrintHyperlink) element;
 				}
 				boolean hasHyperlink = !hasImageMap 
-					&& hyperlink != null && hyperlink.getHyperlinkType() != JRHyperlink.HYPERLINK_TYPE_NONE;
+					&& hyperlink != null && hyperlink.getHyperlinkTypeValue() != HyperlinkTypeEnum.NONE;
 				boolean hasTooltip = hyperlink != null && hyperlink.getHyperlinkTooltip() != null;
 
 				if (hasHyperlink || hasImageMap || hasTooltip)
@@ -1615,7 +1644,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 					link.setToolTipText(toolTip);
 
 					pnlLinks.add(link);
-					linksMap.put(link, element);
+					linksMap.put(link, hyperlink);
 				}
 
 				if (element instanceof JRPrintFrame)
@@ -1634,7 +1663,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	{
 		private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
-		protected final List imageAreaHyperlinks;
+		protected final List<JRPrintImageAreaHyperlink> imageAreaHyperlinks;
 
 		public ImageMapPanel(Rectangle renderingArea, JRImageMapRenderer imageMap)
 		{
@@ -1677,7 +1706,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		{
 			JRPrintImageAreaHyperlink imageArea = getImageMapArea(e);
 			if (imageArea != null
-					&& imageArea.getHyperlink().getHyperlinkType() != JRHyperlink.HYPERLINK_TYPE_NONE)
+					&& imageArea.getHyperlink().getHyperlinkTypeValue() != HyperlinkTypeEnum.NONE)
 			{
 				e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			}
@@ -1697,9 +1726,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			JRPrintImageAreaHyperlink image = null;
 			if (imageAreaHyperlinks != null)
 			{
-				for (ListIterator it = imageAreaHyperlinks.listIterator(imageAreaHyperlinks.size()); image == null && it.hasPrevious();)
+				for (ListIterator<JRPrintImageAreaHyperlink> it = imageAreaHyperlinks.listIterator(imageAreaHyperlinks.size()); image == null && it.hasPrevious();)
 				{
-					JRPrintImageAreaHyperlink area = (JRPrintImageAreaHyperlink) it.previous();
+					JRPrintImageAreaHyperlink area = it.previous();
 					if (area.getArea().containsPoint(x, y))
 					{
 						image = area;
@@ -1755,14 +1784,14 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	protected String getFallbackTooltip(JRPrintHyperlink hyperlink)
 	{
 		String toolTip = null;
-		switch(hyperlink.getHyperlinkType())
+		switch(hyperlink.getHyperlinkTypeValue())
 		{
-			case JRHyperlink.HYPERLINK_TYPE_REFERENCE :
+			case REFERENCE :
 			{
 				toolTip = hyperlink.getHyperlinkReference();
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_ANCHOR :
+			case LOCAL_ANCHOR :
 			{
 				if (hyperlink.getHyperlinkAnchor() != null)
 				{
@@ -1770,7 +1799,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_PAGE :
+			case LOCAL_PAGE :
 			{
 				if (hyperlink.getHyperlinkPage() != null)
 				{
@@ -1778,7 +1807,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_ANCHOR :
+			case REMOTE_ANCHOR :
 			{
 				toolTip = "";
 				if (hyperlink.getHyperlinkReference() != null)
@@ -1791,7 +1820,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 				}
 				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_PAGE :
+			case REMOTE_PAGE :
 			{
 				toolTip = "";
 				if (hyperlink.getHyperlinkReference() != null)
@@ -1943,16 +1972,23 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRGraphics2DExporterParameter.GRAPHICS_2D, grx.create());
-			exporter.setParameter(JRExporterParameter.PAGE_INDEX, new Integer(pageIndex));
+			exporter.setParameter(JRExporterParameter.PAGE_INDEX, Integer.valueOf(pageIndex));
 			exporter.setParameter(JRGraphics2DExporterParameter.ZOOM_RATIO, new Float(realZoom));
-			exporter.setParameter(JRExporterParameter.OFFSET_X, new Integer(1)); //lblPage border
-			exporter.setParameter(JRExporterParameter.OFFSET_Y, new Integer(1));
+			exporter.setParameter(JRExporterParameter.OFFSET_X, Integer.valueOf(1)); //lblPage border
+			exporter.setParameter(JRExporterParameter.OFFSET_Y, Integer.valueOf(1));
+			if (type == TYPE_FILE_NAME)
+			{
+				exporter.setParameter(JRExporterParameter.FILE_RESOLVER, fileResolver);
+			}
 			exporter.exportReport();
 		}
 		catch(Exception e)
 		{
+			if (log.isErrorEnabled())
+			{
+				log.error("Page paint error.", e);
+			}
 			pageError = true;
-			e.printStackTrace();
 			
 			paintPageError(grx);
 			SwingUtilities.invokeLater(new Runnable()
@@ -2030,7 +2066,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		{
 			setPageIndex(pageIndex + 1);
 			if(scrollPane.isEnabled())
+			{
 				scrollPane.getVerticalScrollBar().setValue(0);
+			}
 		}
 	}
 
@@ -2042,7 +2080,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		{
 			setPageIndex(pageIndex - 1);
 			if(scrollPane.isEnabled())
+			{
 				scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+			}
 		}
 		else
 		{
@@ -2054,7 +2094,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	{
 		setPageIndex(pageNumber);
 		if(scrollPane.isEnabled())
+		{
 			scrollPane.getVerticalScrollBar().setValue(0);
+		}
 	}
 
 	/**
@@ -2128,7 +2170,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar;
     private PageRenderer lblPage;
     protected javax.swing.JLabel lblStatus;
     private javax.swing.JPanel pnlInScroll;
