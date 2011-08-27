@@ -127,14 +127,14 @@ import org.apache.commons.logging.LogFactory;
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JRViewer.java 4426 2011-06-22 14:52:21Z teodord $
  */
-public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListener
+public class JRViewer411 extends javax.swing.JPanel implements JRHyperlinkListener
 {
-	private static final Log log = LogFactory.getLog(JRViewer300.class);
+	private static final Log log = LogFactory.getLog(JRViewer411.class);
 
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	/**
-	 * Maximum size (in pixels) of a buffered image that would be used by {@link JRViewer300 JRViewer300} to render a report page.
+	 * Maximum size (in pixels) of a buffered image that would be used by {@link JRViewer JRViewer} to render a report page.
 	 * <p>
 	 * If rendering a report page would require an image larger than this threshold
 	 * (i.e. image width x image height > maximum size), the report page will be rendered directly on the viewer component.
@@ -220,49 +220,49 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 	protected JRSaveContributor lastSaveContributor = null;
 
 	/** Creates new form JRViewer */
-	public JRViewer300(String fileName, boolean isXML) throws JRException
+	public JRViewer411(String fileName, boolean isXML) throws JRException
 	{
 		this(fileName, isXML, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(InputStream is, boolean isXML) throws JRException
+	public JRViewer411(InputStream is, boolean isXML) throws JRException
 	{
 		this(is, isXML, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(JasperPrint jrPrint)
+	public JRViewer411(JasperPrint jrPrint)
 	{
 		this(jrPrint, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(String fileName, boolean isXML, Locale locale) throws JRException
+	public JRViewer411(String fileName, boolean isXML, Locale locale) throws JRException
 	{
 		this(fileName, isXML, locale, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(InputStream is, boolean isXML, Locale locale) throws JRException
+	public JRViewer411(InputStream is, boolean isXML, Locale locale) throws JRException
 	{
 		this(is, isXML, locale, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(JasperPrint jrPrint, Locale locale)
+	public JRViewer411(JasperPrint jrPrint, Locale locale)
 	{
 		this(jrPrint, locale, null);
 	}
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(String fileName, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
+	public JRViewer411(String fileName, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
 	{
 		initResources(locale, resBundle);
 
@@ -283,7 +283,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(InputStream is, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
+	public JRViewer411(InputStream is, boolean isXML, Locale locale, ResourceBundle resBundle) throws JRException
 	{
 		initResources(locale, resBundle);
 
@@ -304,7 +304,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 
 
 	/** Creates new form JRViewer */
-	public JRViewer300(JasperPrint jrPrint, Locale locale, ResourceBundle resBundle)
+	public JRViewer411(JasperPrint jrPrint, Locale locale, ResourceBundle resBundle)
 	{
 		initResources(locale, resBundle);
 
@@ -1161,7 +1161,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 						{
 							
 							btnPrint.setEnabled(false);
-							JRViewer300.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							JRViewer411.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 							JasperPrintManager.printReport(jasperPrint, true);
 						}
 						catch (Exception ex)
@@ -1170,11 +1170,11 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 							{
 								log.error("Print error.", ex);
 							}
-							JOptionPane.showMessageDialog(JRViewer300.this, getBundleString("error.printing"));
+							JOptionPane.showMessageDialog(JRViewer411.this, getBundleString("error.printing"));
 						}
 						finally
 						{
-							JRViewer300.this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+							JRViewer411.this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 							btnPrint.setEnabled(true);
 						}
 					}
@@ -1995,7 +1995,7 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 			{
 				public void run()
 				{
-					JOptionPane.showMessageDialog(JRViewer300.this, getBundleString("error.displaying"));
+					JOptionPane.showMessageDialog(JRViewer411.this, getBundleString("error.displaying"));
 				}
 			});
 		}
@@ -2115,9 +2115,9 @@ public class JRViewer300 extends javax.swing.JPanel implements JRHyperlinkListen
 		private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 		private boolean renderImage;
-		JRViewer300 viewer = null;
+		JRViewer411 viewer = null;
 
-		public PageRenderer(JRViewer300 viewer)
+		public PageRenderer(JRViewer411 viewer)
 		{
 			this.viewer = viewer;
 		}

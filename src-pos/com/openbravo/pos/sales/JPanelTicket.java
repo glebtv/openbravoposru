@@ -56,7 +56,7 @@ import com.openbravo.pos.ticket.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.ticket.TicketTaxInfo;
-import com.openbravo.pos.util.JRPrinterAWT300;
+import com.openbravo.pos.util.JRPrinterAWT411;
 import com.openbravo.pos.util.ReportUtils;
 import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.RoundUtils;
@@ -1050,7 +1050,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             PrintService service = ReportUtils.getPrintService(m_App.getProperties().getProperty("machine.printername"));
 
-            JRPrinterAWT300.printPages(jp, 0, jp.getPages().size() - 1, service);
+            JRPrinterAWT411.printPages(jp, 0, jp.getPages().size() - 1, service);
 
         } catch (Exception e) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotloadreport"), e);

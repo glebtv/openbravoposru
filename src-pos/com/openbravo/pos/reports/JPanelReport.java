@@ -40,11 +40,11 @@ import com.openbravo.pos.forms.BeanFactoryApp;
 import com.openbravo.pos.forms.BeanFactoryException;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.sales.TaxesLogic;
-import com.openbravo.pos.util.JRViewer300;
+import com.openbravo.pos.util.JRViewer411;
 
 public abstract class JPanelReport extends JPanel implements JPanelView, BeanFactoryApp   {
     
-    private JRViewer300 reportviewer = null;   
+    private JRViewer411 reportviewer = null;   
     private JasperReport jr = null;
     private EditorCreator editor = null;
             
@@ -70,7 +70,7 @@ public abstract class JPanelReport extends JPanel implements JPanelView, BeanFac
             jPanelFilter.add(((ReportEditorCreator) editor).getComponent(), BorderLayout.CENTER);
         }
                   
-        reportviewer = new JRViewer300(null);                        
+        reportviewer = new JRViewer411(null);                        
         
         add(reportviewer, BorderLayout.CENTER);
         

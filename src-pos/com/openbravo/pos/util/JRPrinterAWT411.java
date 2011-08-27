@@ -66,9 +66,9 @@ import org.apache.commons.logging.LogFactory;
  * @author Teodor Danciu (teodord@users.sourceforge.net)
  * @version $Id: JRPrinterAWT.java 3940 2010-08-20 10:35:15Z teodord $
  */
-public class JRPrinterAWT300 implements Printable
+public class JRPrinterAWT411 implements Printable
 {
-	private static final Log log = LogFactory.getLog(JRPrinterAWT300.class);
+	private static final Log log = LogFactory.getLog(JRPrinterAWT411.class);
 
 	/**
 	 *
@@ -80,7 +80,7 @@ public class JRPrinterAWT300 implements Printable
 	/**
 	 *
 	 */
-	protected JRPrinterAWT300(JasperPrint jrPrint) throws JRException
+	protected JRPrinterAWT411(JasperPrint jrPrint) throws JRException
 	{
 		JRGraphEnvInitializer.initializeGraphEnv();
 		
@@ -98,7 +98,7 @@ public class JRPrinterAWT300 implements Printable
 		PrintService service
 		) throws JRException
 	{
-		JRPrinterAWT300 printer = new JRPrinterAWT300(jrPrint);
+		JRPrinterAWT411 printer = new JRPrinterAWT411(jrPrint);
 		return printer.printPages(
 			firstPageIndex, 
 			lastPageIndex, 
@@ -116,7 +116,7 @@ public class JRPrinterAWT300 implements Printable
 		float zoom
 		) throws JRException
 	{
-		JRPrinterAWT300 printer = new JRPrinterAWT300(jrPrint);
+		JRPrinterAWT411 printer = new JRPrinterAWT411(jrPrint);
 		return printer.printPageToImage(pageIndex, zoom);
 	}
 
