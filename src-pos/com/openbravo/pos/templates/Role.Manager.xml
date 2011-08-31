@@ -80,6 +80,7 @@
     <class name="/com/openbravo/reports/productsales.bs"/> 
     <class name="/com/openbravo/reports/piesalescat.bs"/>
     <class name="/com/openbravo/reports/timeseriesproduct.bs"/>
+    <class name="/com/openbravo/reports/inventoryanalysis.bs"/>    
     <class name="/com/openbravo/reports/top10sales.bs"/>
     <class name="Menu.ChangePassword"/>
     <class name="button.print"/>

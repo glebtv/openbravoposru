@@ -83,6 +83,7 @@
     <class name="/com/openbravo/reports/productsales.bs"/> 
     <class name="/com/openbravo/reports/piesalescat.bs"/>
     <class name="/com/openbravo/reports/timeseriesproduct.bs"/>
+    <class name="/com/openbravo/reports/inventoryanalysis.bs"/>    
     <class name="com.openbravo.pos.forms.MenuMaintenance"/>
     <class name="com.openbravo.pos.admin.PeoplePanel"/>
     <class name="com.openbravo.pos.admin.RolesPanel"/>

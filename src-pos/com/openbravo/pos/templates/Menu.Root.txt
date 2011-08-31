@@ -71,6 +71,8 @@
         submenu.addPanel("/com/openbravo/images/cakes3d.png", "Menu.SalesChart", "/com/openbravo/reports/chartsales.bs");
         submenu.addPanel("/com/openbravo/images/cakes3d.png", "Menu.ProductSales", "/com/openbravo/reports/productsales.bs");
         submenu.addPanel("/com/openbravo/images/cakes3d.png", "Menu.CategoryProductSalesChart", "/com/openbravo/reports/piesalescat.bs");
+        submenu.addTitle("Menu.SalesManagement.Extended");
+        submenu.addPanel("/com/openbravo/images/cakes3d.png", "Menu.InventoryAnalysis", "/com/openbravo/reports/inventoryanalysis.bs");
         submenu.addPanel("/com/openbravo/images/cakes3d.png", "Menu.TimeSeriesProduct", "/com/openbravo/reports/timeseriesproduct.bs");
     submenu = group.addSubmenu("/com/openbravo/images/contents.png", "Menu.Maintenance", "com.openbravo.pos.forms.MenuMaintenance");
         submenu.addTitle("Menu.Maintenance.POS");        
