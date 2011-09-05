@@ -323,6 +323,10 @@ public class StockManagement extends JPanel implements JPanelView {
             if (NUMBER_STATE != DECIMAL) {
                 NUMBER_STATE = ACTIVE;
             }
+        } else if (cTrans == '\n') {
+            String sCode = m_jcodebar.getText();
+            incProductByCode(sCode);
+            m_jcodebar.setText(null);            
         } else {
             Toolkit.getDefaultToolkit().beep();
         }
