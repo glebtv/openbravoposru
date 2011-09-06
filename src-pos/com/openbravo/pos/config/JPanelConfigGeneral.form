@@ -53,7 +53,6 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel7" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel15" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                      <Component id="jLabel8" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel25" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel18" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                       <Component id="jLabel26" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
@@ -80,7 +79,6 @@
                               <Component id="jcboLAF" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jcboMachineScreenmode" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                               <Component id="jtxtMachineHostname" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
-                              <Component id="jcboMachineLabelPrinter" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -91,7 +89,6 @@
                               <Component id="m_jFiscalPrinterParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                               <Component id="m_jScaleParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                               <Component id="m_jPLUDeviceParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
-                              <Component id="m_jLabelPrinterParams" alignment="0" min="-2" pref="920" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="cboPrinters" min="-2" pref="165" max="-2" attributes="0"/>
@@ -170,13 +167,7 @@
                       <Component id="jLabel1" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
                       <Component id="cboPrinters" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel8" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="jcboMachineLabelPrinter" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="m_jLabelPrinterParams" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="16" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -292,7 +283,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Component id="m_jDisplayPortParams" min="-2" pref="28" max="-2" attributes="1"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="57" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -1265,7 +1256,7 @@
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="m_jPrinterPortParams3" min="-2" pref="28" max="-2" attributes="1"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="125" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -2222,99 +2213,6 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cboPrinters">
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel8">
-          <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="pos_messages.properties" key="Label.MachineLabelPrinter" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
-            </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="jcboMachineLabelPrinter">
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcboMachineLabelPrinterActionPerformed"/>
-          </Events>
-        </Component>
-        <Container class="javax.swing.JPanel" name="m_jLabelPrinterParams">
-          <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="null"/>
-            </Property>
-          </Properties>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
-          <SubComponents>
-            <Container class="javax.swing.JPanel" name="jPanel20">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                  <CardConstraints cardName="empty"/>
-                </Constraint>
-              </Constraints>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-            </Container>
-            <Container class="javax.swing.JPanel" name="jPanel21">
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                  <CardConstraints cardName="comm"/>
-                </Constraint>
-              </Constraints>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jlblConnPrinter1" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboConnLabelPrinter" min="-2" pref="90" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jlblPrinterPort1" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jcboSerialLabelPrinter" min="-2" pref="110" max="-2" attributes="0"/>
-                          <EmptySpace pref="572" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jcboConnLabelPrinter" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jcboSerialLabelPrinter" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblConnPrinter1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlblPrinterPort1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="jlblConnPrinter1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="pos_messages.properties" key="label.machinedisplayconn" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="jcboConnLabelPrinter">
-                </Component>
-                <Component class="javax.swing.JLabel" name="jlblPrinterPort1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="pos_messages.properties" key="label.machineprinterport" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="jcboSerialLabelPrinter">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="true"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
-          </SubComponents>
-        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

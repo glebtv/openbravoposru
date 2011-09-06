@@ -34,6 +34,7 @@
 <!ATTLIST text bold (true | false) "false">
 <!ATTLIST text underline (true | false) "false">
 
+<!--
 <!ELEMENT label (text | line | rectangle | barcode)*>
 <!ATTLIST label codepage CDATA "ASCII">
 <!ATTLIST label width CDATA "58">
@@ -64,6 +65,7 @@
 <!ATTLIST barcode y CDATA "14">
 <!ATTLIST barcode height CDATA "50">
 <!ATTLIST barcode rotation CDATA "0">
+-->
 
 <!ELEMENT image (#PCDATA)>
 

@@ -28,7 +28,6 @@ import com.openbravo.pos.forms.JPanelView;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.printer.DeviceFiscalPrinter;
 import com.openbravo.pos.printer.DevicePrinter;
-import com.openbravo.pos.printer.DeviceLabelPrinter;
 
 /**
  *
@@ -58,12 +57,6 @@ public class JPanelPrinter extends JPanel implements JPanelView {
         if (fp.getFiscalComponent() != null) {
             m_jPrinters.add(fp.getFiscalName(), fp.getFiscalComponent());
         }
-        
-        DeviceLabelPrinter lp = oApp.getDeviceTicket().getDeviceLabel();
-        if (lp.getLabelPrinterName() != null) {
-            m_jPrinters.add(lp.getLabelPrinterName(), lp.getLabelPrinterComponent());
-        }
-        
     }
 
     public JComponent getComponent() {

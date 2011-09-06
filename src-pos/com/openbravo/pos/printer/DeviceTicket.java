@@ -27,7 +27,6 @@ import com.openbravo.pos.printer.javapos.DevicePrinterJavaPOS;
 import com.openbravo.pos.printer.printer.DevicePrinterPrinter;
 import com.openbravo.pos.printer.elveskkm.*;
 import com.openbravo.pos.printer.shtrihfr.*;
-import com.openbravo.pos.printer.ezpl.*;
 import com.openbravo.pos.printer.aurafr.*;
 import com.openbravo.pos.printer.screen.*;
 
@@ -45,7 +44,6 @@ public class DeviceTicket {
 
     private DeviceFiscalPrinter m_deviceFiscal;
     private DeviceDisplay m_deviceDisplay;
-    private DeviceLabelPrinter m_deviceLabel;    
     private DevicePrinter m_nullprinter;
     private Map<String, DevicePrinter> m_deviceprinters;
     private List<DevicePrinter> m_deviceprinterslist;
@@ -60,8 +58,6 @@ public class DeviceTicket {
 
         m_deviceDisplay = new DeviceDisplayNull();
         
-        m_deviceLabel = new DeviceLabelPrinterNull();
-
         m_nullprinter = new DevicePrinterNull();
         m_deviceprinters = new HashMap<String, DevicePrinter>();
         m_deviceprinterslist = new ArrayList<DevicePrinter>();
@@ -75,7 +71,6 @@ public class DeviceTicket {
 
         PrinterWritterPool pws = new PrinterWritterPool();
 
-        LabelPrinterWritterPool pwl = new LabelPrinterWritterPool();
 
         // La impresora fiscal
         StringParser sf = new StringParser(props.getProperty("machine.fiscalprinter"));
@@ -109,21 +104,6 @@ public class DeviceTicket {
             m_deviceFiscal = new DeviceFiscalPrinterNull(e.getMessage());
         }
         
-        StringParser sl = new StringParser(props.getProperty("machine.labelprinter"));
-        String sLabelType = sl.nextToken(':');
-        String sLabelParam1 = sl.nextToken(',');
-        String sLabelParam2 = sl.nextToken(',');
-        try {
-            if ("screen".equals(sLabelType)) {
-                m_deviceLabel = new DeviceLabelPanel();
-            } else if ("godexezpl".equals(sLabelType)) {
-                m_deviceLabel = new DeviceLabelPrinterEZPL(pwl.getLabelPrinterWritter(sLabelParam1, sLabelParam2));
-            } else {
-                m_deviceLabel = new DeviceLabelPrinterNull();
-            }
-        } catch (TicketPrinterException e) {
-            m_deviceLabel = new DeviceLabelPrinterNull(e.getMessage());
-        }
 
         // El visor
         StringParser sd = new StringParser(props.getProperty("machine.display"));
@@ -298,28 +278,6 @@ public class DeviceTicket {
         }
     }
     
-    private static class LabelPrinterWritterPool {
-
-        private Map<String, LabelPrinterWritter> m_aLabelPool = new HashMap<String, LabelPrinterWritter>();
-
-        public LabelPrinterWritter getLabelPrinterWritter(String con, String port) throws TicketPrinterException {
-
-            String skey = con + "-->" + port;
-            LabelPrinterWritter lpw = (LabelPrinterWritter) m_aLabelPool.get(skey);
-            if (lpw == null) {
-                if ("serial".equals(con) || "rxtx".equals(con)) {
-                    lpw = new LabelPrinterWritterRXTX(port);
-                    m_aLabelPool.put(skey, lpw);
-                } else if ("file".equals(con)) {
-                    lpw = new LabelPrinterWritterFile(port);
-                    m_aLabelPool.put(skey, lpw);
-                } else {
-                    throw new TicketPrinterException();
-                }
-            }
-            return lpw;
-        }
-    }
         
     // Impresora fiscal
     public DeviceFiscalPrinter getFiscalPrinter() {
@@ -328,10 +286,6 @@ public class DeviceTicket {
     // Display
     public DeviceDisplay getDeviceDisplay() {
         return m_deviceDisplay;
-    }
-    
-    public DeviceLabelPrinter getDeviceLabel() {
-        return m_deviceLabel;
     }
     
     // Receipt printers
