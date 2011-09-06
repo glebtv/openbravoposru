@@ -131,8 +131,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     public void init(AppView app) throws BeanFactoryException {
 
-        bTypeDiscount = true;
-
+        bTypeDiscount = false;
+        m_jbtnDiscount.setText(AppLocal.getIntString("button.ticketdiscount"));
         m_App = app;
         dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
         dlSales = (DataLogicSales) m_App.getBean("com.openbravo.pos.forms.DataLogicSales");
@@ -462,7 +462,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private double includeTaxes(String tcid, double dValue) {
         if (m_jaddtax.isSelected()) {
-            TaxInfo tax = taxeslogic.getTaxInfo(tcid,  m_oTicket.getDate(), m_oTicket.getCustomer());            double dTaxRate = tax == null ? 0.0 : tax.getRate();
+            TaxInfo tax = taxeslogic.getTaxInfo(tcid,  m_oTicket.getDate(), m_oTicket.getCustomer());
+            double dTaxRate = tax == null ? 0.0 : tax.getRate();
             return dValue / (1.0 + dTaxRate);
         } else {
             return dValue;
@@ -509,7 +510,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             } else {
                 // Se anade directamente una unidad con el precio y todo
                 incProduct(oProduct);
-            }
+             }
         } catch (BasicException eData) {
             stateToZero();
             new MessageInf(eData).show(this);
@@ -529,7 +530,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 // Se anade directamente una unidad con el precio y todo
                 if (m_jaddtax.isSelected()) {
                     // debemos quitarle los impuestos ya que el precio es con iva incluido...
-                    TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(),  m_oTicket.getDate(), m_oTicket.getCustomer());                    addTicketLine(oProduct, 1.0, dPriceSell / (1.0 + tax.getRate()));
+                    TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(),  m_oTicket.getDate(), m_oTicket.getCustomer());                    
+                    addTicketLine(oProduct, 1.0, dPriceSell / (1.0 + tax.getRate()));
                 } else {
                     addTicketLine(oProduct, 1.0, dPriceSell);
                 }
@@ -549,7 +551,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 stateToZero();
             } else {
                 if (m_jaddtax.isSelected()) {
-                    TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(),  m_oTicket.getDate(), m_oTicket.getCustomer());                    addTicketLine(oProduct, dUnitSell, oProduct.getPriceSellTax(tax) / (1.0 + tax.getRate()));
+                    TaxInfo tax = taxeslogic.getTaxInfo(oProduct.getTaxCategoryID(),  m_oTicket.getDate(), m_oTicket.getCustomer());                    
+                    addTicketLine(oProduct, dUnitSell, oProduct.getPriceSellTax(tax) / (1.0 + tax.getRate()));
                 } else {
                     addTicketLine(oProduct, dUnitSell, oProduct.getPriceSell());
                 }
@@ -612,7 +615,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                         } else {
                             m_oTicket.setCustomer(newcustomer);
                             m_jTicketId.setText(m_oTicket.getName(m_oTicketExt));
-                        }
+                          }
                     } catch (BasicException e) {
                         Toolkit.getDefaultToolkit().beep();
                         new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.nocustomer"), e).show(this);
@@ -1170,7 +1173,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (bTypeDiscount == true) {
             if (index >= 0) {
                 TicketLineInfo line = m_oTicket.getLine(index);
-                if (line.getPrice() > 0.0 && discountrate > 0.0 && line.getProperty("discountrate") == null) {
+                if (line.getPrice() > 0.0 && discountrate > 0.0 && line.getProperty("discountrate") == null || Double.parseDouble(line.getProperty("discountrate")) != discountrate) {
                     line.setPrice(RoundUtils.getValue(line.getPrice() - line.getPrice() * discountrate / 100.00));
                     line.setProperty("discountrate", Double.toString(discountrate));
                 } else {
@@ -1183,7 +1186,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             if (total > 0.0) {
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     TicketLineInfo row = m_oTicket.getLine(i);
-                    if (row.getProperty("discountrate") == null) {
+                    if ((row.getProperty("discountrate") == null || Double.parseDouble(row.getProperty("discountrate")) != discountrate)) {
                         row.setPrice(RoundUtils.getValue(row.getPrice() - row.getPrice() * discountrate / 100.00));
                         row.setProperty("discountrate", Double.toString(discountrate));
                     }
