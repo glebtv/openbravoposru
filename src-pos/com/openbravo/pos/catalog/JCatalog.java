@@ -33,6 +33,7 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.JMessageDialog;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.sales.PropertiesConfig;
 import com.openbravo.pos.sales.TaxesLogic;
 import com.openbravo.pos.ticket.TaxInfo;
 
@@ -59,17 +60,12 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private ThumbNailBuilder tnbcat;
     
     private CategoryInfo showingcategory = null;
-        
-    /** Creates new form JCatalog */
-    public JCatalog(DataLogicSales dlSales) {
-        this(dlSales, false, false, 64, 54);
-    }
-    
-    public JCatalog(DataLogicSales dlSales, boolean pricevisible, boolean taxesincluded, int width, int height) {
-        
+          
+    public JCatalog(DataLogicSales dlSales, PropertiesConfig panelconfig) {
+
         m_dlSales = dlSales;
-        this.pricevisible = pricevisible;
-        this.taxesincluded = taxesincluded;
+        this.pricevisible = "true".equals(panelconfig.getProperty("pricevisible"));
+        this.taxesincluded =  "true".equals(panelconfig.getProperty("taxesincluded"));
         
         initComponents();
         
@@ -77,7 +73,9 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_jscrollcat.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
         
         tnbcat = new ThumbNailBuilder(32, 32, "com/openbravo/images/folder_yellow.png");           
-        tnbbutton = new ThumbNailBuilder(width, height, "com/openbravo/images/package.png");
+        tnbbutton = new ThumbNailBuilder(Integer.parseInt(panelconfig.getProperty("img-width", "64")),
+                Integer.parseInt(panelconfig.getProperty("img-height", "54")),
+                "com/openbravo/images/package.png");
     }
     
     public Component getComponent() {

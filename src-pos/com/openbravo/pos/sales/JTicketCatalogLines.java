@@ -36,7 +36,7 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
     private CatalogSelector m_catalog;
     
     /** Creates new form JTicketCatalogLines */
-    public JTicketCatalogLines(AppView app, JPanelTicketEdits jTicketEdit, boolean pricevisible, boolean taxesincluded, int width, int height) {
+    public JTicketCatalogLines(AppView app, JPanelTicketEdits jTicketEdit, PropertiesConfig panelconfig) {
         
         DataLogicSystem dlSystem = null;
         DataLogicSales dlSales = null;
@@ -48,7 +48,7 @@ public class JTicketCatalogLines extends javax.swing.JPanel {
         m_reflines = new JRefundLines(dlSystem, jTicketEdit);        
         add(m_reflines, "reflines");
         
-        m_catalog = new JCatalog(dlSales, pricevisible, taxesincluded, width, height);
+        m_catalog = new JCatalog(dlSales, panelconfig);
         m_catalog.getComponent().setPreferredSize(new Dimension(0, 245));
         // m_catalog.addActionListener(new CatalogListener());        
         add(m_catalog.getComponent(), "catalog");

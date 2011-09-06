@@ -112,6 +112,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private TaxesLogic taxeslogic;
 //    private ScriptObject scriptobjinst;
     protected JPanelButtons m_jbtnconfig;
+    protected PropertiesConfig panelconfig;    
     protected AppView m_App;
     protected DataLogicSystem dlSystem;
     protected DataLogicSales dlSales;
@@ -155,15 +156,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_TTP = new TicketParser(m_App.getDeviceTicket(), dlSystem);
 
         // Los botones configurables...
-        m_jbtnconfig = new JPanelButtons("Ticket.Buttons", this);
+        String sConfigRes = dlSystem.getResourceAsXML("Ticket.Buttons");
+        m_jbtnconfig = new JPanelButtons(sConfigRes, this);
+        panelconfig = new PropertiesConfig(sConfigRes);
         m_jButtonsExt.add(m_jbtnconfig);
 
         // El panel de los productos o de las lineas...
-        if ("false".equals(m_jbtnconfig.getProperty("catvisible")) == false) {
+        if ("false".equals(panelconfig.getProperty("catvisible")) == false) {
             catcontainer.add(getSouthComponent(), BorderLayout.CENTER);
         }
 
-        if ("true".equals(m_jbtnconfig.getProperty("discountvisible"))) {
+        if ("true".equals(panelconfig.getProperty("discountvisible"))) {
             m_jDiscountPanel.setVisible(true);
         } else {
             m_jDiscountPanel.setVisible(false);
@@ -199,7 +202,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         paymentdialogrefund.init(m_App);
 
         // impuestos incluidos seleccionado ?
-        m_jaddtax.setSelected("true".equals(m_jbtnconfig.getProperty("taxesincluded")));
+        m_jaddtax.setSelected("true".equals(panelconfig.getProperty("taxesincluded")));
 
         // Inicializamos el combo de los impuestos.
         java.util.List<TaxInfo> taxlist = senttax.list();
@@ -210,7 +213,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         taxcategoriesmodel = new ComboBoxValModel(taxcategorieslist);
         m_jTax.setModel(taxcategoriesmodel);
 
-//        String taxesid = m_jbtnconfig.getProperty("taxcategoryid");
+//        String taxesid = panelconfig.getProperty("taxcategoryid");
 
         String taxesid = m_App.getDefaultTaxCategory();
 
@@ -249,9 +252,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount") || m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
 
         // Valores para descontos
-        m_jDiscount1.setText(m_jbtnconfig.getProperty("discount-1") + " %");
-        m_jDiscount2.setText(m_jbtnconfig.getProperty("discount-2") + " %");
-        m_jDiscount3.setText(m_jbtnconfig.getProperty("discount-3") + " %");
+        m_jDiscount1.setText(panelconfig.getProperty("discount-1") + " %");
+        m_jDiscount2.setText(panelconfig.getProperty("discount-2") + " %");
+        m_jDiscount3.setText(panelconfig.getProperty("discount-3") + " %");
 
         m_ticketsbag.activate();
     }
@@ -900,7 +903,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     JPaymentSelect paymentdialog = ticket.getTicketType() == TicketInfo.RECEIPT_NORMAL
                             ? paymentdialogreceipt
                             : paymentdialogrefund;
-                    paymentdialog.setPrintSelected("true".equals(m_jbtnconfig.getProperty("printselected", "true")));
+                    paymentdialog.setPrintSelected("true".equals(panelconfig.getProperty("printselected", "true")));
 
                     paymentdialog.setTransactionID(ticket.getTransactionID());
 
@@ -1139,10 +1142,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    public String getResourceAsXML(String sresourcename) {
-        return dlSystem.getResourceAsXML(sresourcename);
-    }
-
     public BufferedImage getResourceAsImage(String sresourcename) {
         return dlSystem.getResourceAsImage(sresourcename);
     }
@@ -1162,7 +1161,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         double discountrate = 0.0;
 
         if (button != null) {
-            discountrate = Double.parseDouble(m_jbtnconfig.getProperty(button));
+            discountrate = Double.parseDouble(panelconfig.getProperty(button));
         } else {
             String discountperc = JOptionPane.showInputDialog(null, AppLocal.getIntString("message.setdiscountrate"));
             if (!discountperc.equals("") || !(discountperc == null)) {

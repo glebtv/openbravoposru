@@ -40,8 +40,10 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.catalog.JCatalog;
+import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.panels.JProductFinder;
 import com.openbravo.pos.sales.JProductAttEdit;
+import com.openbravo.pos.sales.PropertiesConfig;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import java.awt.Dimension;
 
@@ -70,16 +72,18 @@ public class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord
 
     private AppView m_App;
     private DataLogicSales m_dlSales;
+    private DataLogicSystem m_dlSystem;
     
     /** Creates new form StockDiaryEditor */
     public StockDiaryEditor(AppView app, DirtyManager dirty) {
         
         m_App = app;
         m_dlSales = (DataLogicSales) m_App.getBean("com.openbravo.pos.forms.DataLogicSales");
-        
+        m_dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
+
         initComponents();      
         
-        m_cat = new JCatalog(m_dlSales);
+        m_cat = new JCatalog(m_dlSales, new PropertiesConfig(m_dlSystem.getResourceAsXML("Ticket.Buttons")));
         m_cat.getComponent().setPreferredSize(new Dimension(0, 245));
         m_cat.addActionListener(new CatalogListener());
         add(m_cat.getComponent(), BorderLayout.SOUTH);
