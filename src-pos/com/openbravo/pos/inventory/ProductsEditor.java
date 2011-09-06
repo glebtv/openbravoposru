@@ -30,6 +30,7 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.format.Formats;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ComboBoxValModel;
+import com.openbravo.data.loader.SentenceFind;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.SentenceList;
 import com.openbravo.data.user.EditorRecord;
@@ -69,6 +70,8 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     private SentenceList taxsent;
     private TaxesLogic taxeslogic;
     
+    private SentenceFind loadimage;
+    
     private ComboBoxValModel m_CodetypeModel;
     
     private Object m_id;
@@ -80,6 +83,8 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     /** Creates new form JEditProduct */
     public ProductsEditor(DataLogicSales dlSales, DirtyManager dirty) {
         initComponents();
+        
+        loadimage = dlSales.getProductImage();
         
         product = dlSales.getProductList();
 
@@ -324,7 +329,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         m_CategoryModel.setSelectedKey(myprod[8]);
         taxcatmodel.setSelectedKey(myprod[9]);
         attmodel.setSelectedKey(myprod[10]);
-        m_jImage.setImage((BufferedImage) myprod[11]);
+        m_jImage.setImage(findImage(m_id));
         m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[12]));
         m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[13]));
         m_jInCatalog.setSelected(((Boolean)myprod[14]).booleanValue());
@@ -373,7 +378,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         m_CategoryModel.setSelectedKey(myprod[8]);
         taxcatmodel.setSelectedKey(myprod[9]);
         attmodel.setSelectedKey(myprod[10]);
-        m_jImage.setImage((BufferedImage) myprod[11]);
+        m_jImage.setImage(findImage(m_id));
         m_jstockcost.setText(Formats.CURRENCY.formatValue(myprod[12]));
         m_jstockvolume.setText(Formats.DOUBLE.formatValue(myprod[13]));
         m_jInCatalog.setSelected(((Boolean)myprod[14]).booleanValue());
@@ -432,6 +437,14 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     
     public Component getComponent() {
         return this;
+    }
+    
+    private BufferedImage findImage(Object id) {
+        try {
+            return (BufferedImage) loadimage.find(id);
+        } catch (BasicException e) {
+            return null;
+        }
     }
     
     private void calculateMargin() {
