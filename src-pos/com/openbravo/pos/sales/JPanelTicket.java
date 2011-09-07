@@ -416,7 +416,28 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             visorTicketLine(oLine);
             printPartialTotals();
             stateToZero();
-
+            
+            if ("true".equals(panelconfig.getProperty("attributesautoset")) == true) {
+                // открываем окно ввода характеристик, если они предусмотрены
+                int i = m_ticketlines.getSelectedIndex();
+                try {
+                    TicketLineInfo line = m_oTicket.getLine(i);
+                    JProductAttEdit attedit = JProductAttEdit.getAttributesEditor(this, m_App.getSession());
+                    attedit.editAttributes(line.getProductAttSetId(), line.getProductAttSetInstId());
+                    attedit.setVisible(true);
+                    if (attedit.isOK()) {
+                        line.setProductAttSetInstId(attedit.getAttributeSetInst());
+                        line.setProductAttSetInstDesc(attedit.getAttributeSetInstDescription());
+                        paintTicketLine(i, line);
+                    } else {
+                        // если нажата кнопка отмены, окно закрывается, строка с текущим товаром удаляется
+                        removeTicketLine(i);
+                    }
+                } catch (BasicException ex) {
+                    // тут можно выполнять код, если у товара не установлены характеристики
+                }
+            }
+            
             // event receipt
             executeEventAndRefresh("ticket.change");
         }

@@ -41,6 +41,8 @@
     <!-- <pricevisible value="true" /> -->
 
     <!-- <catvisible value="false" /> -->
+    
+    <attributesautoset value="true"/>
 
     <discountvisible value="true" />
     <discount-1 value="5" />
