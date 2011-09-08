@@ -170,6 +170,7 @@ public class JDlgUploadProducts extends javax.swing.JDialog {
                     (String) myprod[3], // name
                     (String) myprod[2], // barcode
                     (Double) myprod[6],  // buy price
+                    (Double) myprod[7],  // sell price                    
                     i+1,
                     size, 
                     m_sUserBarcode

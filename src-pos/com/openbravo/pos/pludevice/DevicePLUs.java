@@ -16,6 +16,6 @@ public interface DevicePLUs {
     public ProductDownloaded recieveProduct() throws DevicePLUsException;
     
     public void startUploadProduct() throws DevicePLUsException;
-    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException;
+    public void sendProduct(String sName, String sCode, Double dPriceBuy, Double dPriceSell, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException;
     public void stopUploadProduct() throws DevicePLUsException;    
 }

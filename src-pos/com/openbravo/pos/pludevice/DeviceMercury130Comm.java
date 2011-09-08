@@ -130,7 +130,7 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
         writeLine(COMMAND_OFF);
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
+    public void sendProduct(String sName, String sCode, Double dPriceBuy, Double dPriceSell, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
 
       m_iProductOrder++;
 
@@ -154,7 +154,7 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
             lineout.write(convertASCII(sName), 0, 24);
 
             // Цена товара. Смещение 28. Длина 4.
-            lineout.write(convertHEX((long) (dPrice * 100)), 0, 4);
+            lineout.write(convertHEX((long) (dPriceSell * 100)), 0, 4);
 
             // Налоговая группа товара. Смещение 32. Длина 1.
             lineout.write(0x01);

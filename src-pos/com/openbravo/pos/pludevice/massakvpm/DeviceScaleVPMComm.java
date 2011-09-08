@@ -154,7 +154,7 @@ public class DeviceScaleVPMComm implements DevicePLUs, SerialPortEventListener {
 
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
+    public void sendProduct(String sName, String sCode, Double dPriceBuy, Double dPriceSell, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
         m_iCounter = 0;
         m_iInMesSize = 0;
         if (iTotalPLUs > 20000) {
@@ -164,11 +164,11 @@ public class DeviceScaleVPMComm implements DevicePLUs, SerialPortEventListener {
         if (!sCode.substring(0,3).equals(sBarcode) || sCode.length() != 7) { // Сделано исходя из сушествующей логике работы с весовыми этикетками.
             sName = "";
             sCode = "0000000";
-            dPrice = 0.0;
+            dPriceSell = 0.0;
         }
 
         try {
-            writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName), iCurrentPLU, iTotalPLUs));
+            writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPriceSell, sName), iCurrentPLU, iTotalPLUs));
         } catch (IOException ex) {
         }
     readCommand(CMD_TCP_ACK_DFILE);

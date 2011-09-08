@@ -171,7 +171,7 @@ public class DeviceScannerComm implements DevicePLUs, SerialPortEventListener {
         m_iProductOrder = 0;
     }
     
-    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
+    public void sendProduct(String sName, String sCode, Double dPriceBuy, Double dPriceSell, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
         
         m_iProductOrder++;
         
@@ -186,7 +186,7 @@ public class DeviceScannerComm implements DevicePLUs, SerialPortEventListener {
             lineout.write(0x7c); // El Pipe "|"
             lineout.write(0x7c); // El Pipe "|"
             lineout.write(0x7c); // El Pipe "|"
-            lineout.write(convert(dPrice.toString()));
+            lineout.write(convert(dPriceBuy.toString()));
             lineout.write(0x7c); // El Pipe "|"
             // Mandamos el checksum
             lineout.write(calcCheckSum1(lineout.toByteArray()));
