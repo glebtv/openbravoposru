@@ -78,67 +78,28 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     }  
     
         
-    public Component getToolbarExtrasScanPal() {
+    public Component getToolbarExtrasDevicePLUs() {
 
-        JButton btnScanPal = new JButton();
-        btnScanPal.setText("ScanPal");
-        btnScanPal.setVisible(app.getDeviceScanner() != null);
-        btnScanPal.addActionListener(new java.awt.event.ActionListener() {
+        JButton btnDevicePLUs = new JButton();
+        btnDevicePLUs.setText(AppLocal.getIntString("button.uploadplu"));
+        btnDevicePLUs.setVisible(app.getDevicePLUs() != null);
+        btnDevicePLUs.addActionListener(new java.awt.event.ActionListener() {
 
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnScanPalActionPerformed(evt);
+                btnExtrasDevicePLUsActionPerformed(evt);
             }
         });      
         
-        return btnScanPal;
+        return btnDevicePLUs;
     }
     
-    public Component getToolbarExtrasMercury130() {
-
-        JButton btnMercury130 = new JButton();
-        btnMercury130.setText("Mercury130");
-        btnMercury130.setVisible(app.getDeviceMercury130() != null);
-        btnMercury130.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMercury130ActionPerformed(evt);
-            }
-        });
-
-        return btnMercury130;
-    }
-
-        public Component getToolbarExtrasScaleVPM() {
-
-        JButton btnScaleVPM = new JButton();
-        btnScaleVPM.setText("MassaKVPM");
-        btnScaleVPM.setVisible(app.getDeviceScaleVPM() != null);
-        btnScaleVPM.addActionListener(new java.awt.event.ActionListener() {
-
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnScaleVPMActionPerformed(evt);
-            }
-        });
-
-        return btnScaleVPM;
-    }
-
-    private void btnScanPalActionPerformed(java.awt.event.ActionEvent evt) {                                           
-  
-        JDlgUploadProducts.showMessage(this, app.getDeviceScanner(), bd);
-    }  
-    
-    private void btnMercury130ActionPerformed(java.awt.event.ActionEvent evt) {
-        JDlgUploadProductsMercury130.showMessage(this, app.getDeviceMercury130(), bd);
-    }
-
-    private void btnScaleVPMActionPerformed(java.awt.event.ActionEvent evt) {
-        JDlgUploadProductsScaleVPM.showMessage(this, app.getDeviceScaleVPM(), bd, app.getUnitBarcode());
+    private void btnExtrasDevicePLUsActionPerformed(java.awt.event.ActionEvent evt) {
+        JDlgUploadProducts.showMessage(this, app.getDevicePLUs(), bd);
     }
 
     public String getTitle() {
         return AppLocal.getIntString("Menu.Products");
-    } 
+    }
         
     @Override
     public void activate() throws BasicException {

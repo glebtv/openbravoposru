@@ -17,8 +17,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 
-package com.openbravo.pos.pludevice.scanpal2;
+package com.openbravo.pos.pludevice;
 
+import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.pludevice.DevicePLUsException;
 import gnu.io.*;
 import java.io.*;
 import java.util.LinkedList;
@@ -26,7 +28,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 import com.openbravo.pos.util.StringUtils;
 
-public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener {
+public class DeviceScannerComm implements DevicePLUs, SerialPortEventListener {
 
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;  
@@ -55,7 +57,7 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
     private int m_iProductOrder;
     
     /** Creates a new instance of ScanDeviceComm */
-    DeviceScannerComm(String sPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
+    public DeviceScannerComm(String sPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
         m_sPort = sPort;
         m_iPortSpeed = iPortSpeed;
         m_iPortBits = iPortBits;
@@ -68,7 +70,7 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
         m_in = null;
     }
 
-    public void connectDevice() throws DeviceScannerException {    
+    public void connectDevice() throws DevicePLUsException {    
         
         try {
             // Conecto con el puerto
@@ -98,7 +100,7 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
             m_CommPortPrinter = null;
             m_out = null;
             m_in = null;
-            throw new DeviceScannerException(e);
+            throw new DevicePLUsException(e);
         }         
         
         synchronized(this) {
@@ -129,11 +131,11 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
         m_in = null;      
     }
     
-    public void startDownloadProduct() throws DeviceScannerException {
+    public void startDownloadProduct() throws DevicePLUsException {
         writeLine(COMMAND_READ); // writeLine(COMMAND_READ);
         readCommand(COMMAND_ACK);
     }
-    public ProductDownloaded recieveProduct() throws DeviceScannerException {
+    public ProductDownloaded recieveProduct() throws DevicePLUsException {
         byte[] line = readLine();
         if (checkCommand(COMMAND_OVER, line)) {
             // La Scanpal a terminado.
@@ -162,13 +164,14 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
         }
     }
     
-    public void startUploadProduct() throws DeviceScannerException {
+    public void startUploadProduct() throws DevicePLUsException {
         // Inicializamos la conversacion
         writeLine(COMMAND_CIPHER);
         readCommand(COMMAND_ACK);      
         m_iProductOrder = 0;
     }
-    public void sendProduct(String sName, String sCode, Double dPrice) throws DeviceScannerException {
+    
+    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
         
         m_iProductOrder++;
         
@@ -194,24 +197,24 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
         writeLine(lineout.toByteArray());
         readCommand(COMMAND_ACK);
     }
-    public void stopUploadProduct() throws DeviceScannerException {
+    public void stopUploadProduct() throws DevicePLUsException {
         // Cerramos la conversacion
         writeLine(COMMAND_OVER);
         readCommand(COMMAND_ACK);
     }
     
-    private void readCommand(byte[] cmd) throws DeviceScannerException {
+    private void readCommand(byte[] cmd) throws DevicePLUsException {
         byte[] b = readLine();
         if (!checkCommand(cmd, b)) {
             // excepcion que te crio.
-            throw new DeviceScannerException("Command not expected");
+            throw new DevicePLUsException("Command not expected");
         }
     }
     
-    private void writeLine(byte[] aline) throws DeviceScannerException {
+    private void writeLine(byte[] aline) throws DevicePLUsException {
         
         if (m_CommPortPrinter == null) {
-            throw new DeviceScannerException("No Serial port opened");
+            throw new DevicePLUsException("No Serial port opened");
         } else {
         
             synchronized(this) {               
@@ -220,13 +223,13 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
                     m_out.write(0x0D);
                     m_out.flush();
                 } catch (IOException e) {
-                    throw new DeviceScannerException(e);
+                    throw new DevicePLUsException(e);
                 }
             }
         }
     }
     
-    private byte[] readLine() throws DeviceScannerException {
+    private byte[] readLine() throws DevicePLUsException {
         
         synchronized (this) {
             
@@ -241,7 +244,7 @@ public class DeviceScannerComm implements DeviceScanner, SerialPortEventListener
             }  
             
             if (m_aLines.isEmpty()) {  
-                throw new DeviceScannerException("Timeout");
+                throw new DevicePLUsException("Timeout");
             } else {
                 return m_aLines.poll();
             }            

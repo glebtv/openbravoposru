@@ -134,7 +134,9 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="btnDownloadProducts">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="ScanPal"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="pos_messages.properties" key="button.downloadplu" replaceFormat="AppLocal.getIntString(&quot;{key}&quot;)"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDownloadProductsActionPerformed"/>

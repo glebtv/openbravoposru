@@ -27,6 +27,9 @@ package com.openbravo.pos.pludevice.massakvpm;
  */
 
 //import com.openbravo.pos.forms.AppView;
+import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.pludevice.DevicePLUsException;
+import com.openbravo.pos.pludevice.ProductDownloaded;
 import com.openbravo.pos.util.ByteArrayUtils;
 import gnu.io.*;
 import java.io.*;
@@ -34,9 +37,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TooManyListenersException;
 //import java.util.logging.Level;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListener {
+public class DeviceScaleVPMComm implements DevicePLUs, SerialPortEventListener {
 
     protected static Logger logger = Logger.getLogger("com.openbravo.pos.pludevice.massakvpm");
     
@@ -70,7 +74,7 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
     private MassaKVPM m_ScaleVPM;
 
     public DeviceScaleVPMComm(String sDevice, String sPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) {
-        m_sDevice = sDevice;
+        m_sDevice = sDevice;        
         m_iPortSpeed = iPortSpeed;
         m_iPortBits = iPortBits;
         m_iPortStopBits = iPortStopBits;
@@ -82,7 +86,7 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
         m_in = null;
     }
 
-        public void connectDevice() throws DeviceScaleVPMException {
+        public void connectDevice() throws DevicePLUsException {
         try {
             m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPort);
             m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", 2000);
@@ -136,25 +140,25 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
         m_in = null;
     }
 
-    public void startUploadProduct() throws DeviceScaleVPMException {
+    public void startUploadProduct() throws DevicePLUsException {
         m_iCounter = 0;
         m_iInMesSize = 0;
         try {
             writeLine(m_ScaleVPM.CreateUDPMessage(CMD_UDP_POLL));
         } catch (IOException ex) {
-    }
+        }
         readCommand(CMD_UDP_RES_ID);
     }
 
-    public void stopUploadProduct() throws DeviceScaleVPMException {
+    public void stopUploadProduct() throws DevicePLUsException {
 
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DeviceScaleVPMException {
+    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
         m_iCounter = 0;
         m_iInMesSize = 0;
         if (iTotalPLUs > 20000) {
-            throw new DeviceScaleVPMException("PLUs exceed an accessible range");            
+            throw new DevicePLUsException("PLUs exceed an accessible range");            
         }
         
         if (!sCode.substring(0,3).equals(sBarcode) || sCode.length() != 7) { // Сделано исходя из сушествующей логике работы с весовыми этикетками.
@@ -163,38 +167,46 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             dPrice = 0.0;
         }
 
-            try {
+        try {
             writeLine(m_ScaleVPM.CreateDATAMessage(CMD_TCP_DFILE, m_ScaleVPM.CreatePLUMessage(sCode, dPrice, sName), iCurrentPLU, iTotalPLUs));
-            } catch (IOException ex) {
-            }
+        } catch (IOException ex) {
+        }
     readCommand(CMD_TCP_ACK_DFILE);
     }
 
-    private void writeLine(byte[] aline) throws DeviceScaleVPMException {
+    private void writeLine(byte[] aline) throws DevicePLUsException {
         if (m_CommPortPrinter == null) {
-            throw new DeviceScaleVPMException("No Serial port opened");
+            throw new DevicePLUsException("No Serial port opened");
         } else {
             synchronized (this) {
                 try {
-                    logger.info("Device: " + m_sDevice + " Message size: " + aline.length + " Send line:" + ByteArrayUtils.getHexString(aline));
+                    logger.info("Device: " + m_sDevice + ", Message size: " + aline.length + ", Send line:" + ByteArrayUtils.getHexString(aline));
                     m_out.write(aline);
                     m_out.flush();
                 } catch (IOException e) {
-                    throw new DeviceScaleVPMException(e);
+                    throw new DevicePLUsException(e);
                 }
             }
         }
     }
 
-    private void readCommand(byte cmd) throws DeviceScaleVPMException {
+    public void startDownloadProduct() throws DevicePLUsException {
+
+    }
+    
+    public ProductDownloaded recieveProduct() throws DevicePLUsException {
+        return null;
+    }
+    
+    private void readCommand(byte cmd) throws DevicePLUsException {
         byte[] b = readLine();
         logger.info("Device: " + m_sDevice + " Message size: " + b.length + " Read line:" + ByteArrayUtils.getHexString(b));
         if (!checkCommand(cmd, b[5])) {
-            throw new DeviceScaleVPMException("Command not expected");
+            throw new DevicePLUsException("Command not expected");
         }
     }
 
-    private byte[] readLine() throws DeviceScaleVPMException {
+    private byte[] readLine() throws DevicePLUsException {
         synchronized (this) {
 
             if (!m_aLines.isEmpty()) {
@@ -207,7 +219,7 @@ public class DeviceScaleVPMComm implements DeviceScaleVPM, SerialPortEventListen
             }
 
             if (m_aLines.isEmpty()) {
-                throw new DeviceScaleVPMException("Timeout");
+                throw new DevicePLUsException("Timeout");
             } else {
                 return m_aLines.poll();
             }

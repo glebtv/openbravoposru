@@ -39,9 +39,9 @@ import com.openbravo.pos.printer.TicketPrinterException;
 import com.openbravo.pos.printer.TicketFiscalPrinterException;
 import com.openbravo.pos.sales.JProductAttEdit;
 import com.openbravo.pos.sales.PropertiesConfig;
-import com.openbravo.pos.pludevice.scanpal2.DeviceScanner;
-import com.openbravo.pos.pludevice.scanpal2.DeviceScannerException;
-import com.openbravo.pos.pludevice.scanpal2.ProductDownloaded;
+import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.pludevice.DevicePLUsException;
+import com.openbravo.pos.pludevice.ProductDownloaded;
 import com.openbravo.pos.ticket.ProductInfoExt;
 
 /**
@@ -80,7 +80,7 @@ public class StockManagement extends JPanel implements JPanelView {
 
         initComponents();
 
-        btnDownloadProducts.setEnabled(m_App.getDeviceScanner() != null);
+        btnDownloadProducts.setEnabled(m_App.getDevicePLUs() != null);
 
 
         // El modelo de locales
@@ -530,7 +530,7 @@ public class StockManagement extends JPanel implements JPanelView {
 
         jPanel2.add(jPanel4);
 
-        btnDownloadProducts.setText("ScanPal");
+        btnDownloadProducts.setText(AppLocal.getIntString("button.downloadplu")); // NOI18N
         btnDownloadProducts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownloadProductsActionPerformed(evt);
@@ -548,9 +548,9 @@ public class StockManagement extends JPanel implements JPanelView {
 
         jLabel1.setText(AppLocal.getIntString("label.stockdate")); // NOI18N
         jPanel3.add(jLabel1);
-        jLabel1.setBounds(10, 30, 150, 15);
+        jLabel1.setBounds(10, 30, 150, 18);
         jPanel3.add(m_jdate);
-        m_jdate.setBounds(160, 30, 200, 19);
+        m_jdate.setBounds(160, 30, 200, 28);
 
         m_jbtndate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/date.png"))); // NOI18N
         m_jbtndate.addActionListener(new java.awt.event.ActionListener() {
@@ -559,11 +559,11 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         });
         jPanel3.add(m_jbtndate);
-        m_jbtndate.setBounds(370, 30, 40, 26);
+        m_jbtndate.setBounds(370, 30, 40, 28);
 
         jLabel2.setText(AppLocal.getIntString("label.stockreason")); // NOI18N
         jPanel3.add(jLabel2);
-        jLabel2.setBounds(10, 60, 150, 15);
+        jLabel2.setBounds(10, 60, 150, 18);
 
         m_jreason.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -575,7 +575,7 @@ public class StockManagement extends JPanel implements JPanelView {
 
         jLabel8.setText(AppLocal.getIntString("label.warehouse")); // NOI18N
         jPanel3.add(jLabel8);
-        jLabel8.setBounds(10, 90, 150, 15);
+        jLabel8.setBounds(10, 90, 150, 18);
         jPanel3.add(m_jLocation);
         m_jLocation.setBounds(160, 90, 200, 20);
 
@@ -590,7 +590,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         });
         jPanel3.add(m_jDelete);
-        m_jDelete.setBounds(430, 230, 56, 44);
+        m_jDelete.setBounds(430, 230, 62, 50);
 
         m_jUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1uparrow22.png"))); // NOI18N
         m_jUp.setFocusPainted(false);
@@ -603,7 +603,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         });
         jPanel3.add(m_jUp);
-        m_jUp.setBounds(430, 130, 56, 44);
+        m_jUp.setBounds(430, 130, 62, 50);
 
         m_jDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/1downarrow22.png"))); // NOI18N
         m_jDown.setFocusPainted(false);
@@ -616,7 +616,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         });
         jPanel3.add(m_jDown);
-        m_jDown.setBounds(430, 180, 56, 44);
+        m_jDown.setBounds(430, 180, 62, 50);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
         jPanel3.add(jPanel5);
@@ -635,7 +635,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
         });
         jPanel3.add(jEditAttributes);
-        jEditAttributes.setBounds(430, 280, 58, 46);
+        jEditAttributes.setBounds(430, 280, 64, 52);
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
 
@@ -647,7 +647,7 @@ public class StockManagement extends JPanel implements JPanelView {
     private void btnDownloadProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadProductsActionPerformed
 
         // Ejecutamos la descarga...
-        DeviceScanner s = m_App.getDeviceScanner();
+        DevicePLUs s = m_App.getDevicePLUs();
         try {
             s.connectDevice();
             s.startDownloadProduct();
@@ -659,7 +659,7 @@ public class StockManagement extends JPanel implements JPanelView {
             }
             // MessageInf msg = new MessageInf(MessageInf.SGN_SUCCESS, "Se ha subido con exito la lista de productos al ScanPal.");
             // msg.show(this);
-        } catch (DeviceScannerException e) {
+        } catch (DevicePLUsException e) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.scannerfail2"), e);
             msg.show(this);
         } finally {

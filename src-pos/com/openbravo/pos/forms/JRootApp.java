@@ -41,12 +41,8 @@ import com.openbravo.data.loader.BatchSentence;
 import com.openbravo.data.loader.BatchSentenceResource;
 import com.openbravo.data.loader.Session;
 import com.openbravo.pos.scale.DeviceScale;
-import com.openbravo.pos.pludevice.scanpal2.DeviceScanner;
-import com.openbravo.pos.pludevice.scanpal2.DeviceScannerFactory;
-import com.openbravo.pos.pludevice.mercury130.DeviceMercury130;
-import com.openbravo.pos.pludevice.mercury130.DeviceMercury130Factory;
-import com.openbravo.pos.pludevice.massakvpm.DeviceScaleVPM;
-import com.openbravo.pos.pludevice.massakvpm.DeviceScaleVPMFactory;
+import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.pludevice.DevicePLUsFactory;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -82,9 +78,7 @@ public class JRootApp extends JPanel implements AppView {
     private StringBuffer inputtext;
    
     private DeviceScale m_Scale;
-    private DeviceScanner m_Scanner;
-    private DeviceMercury130 m_Mercury130;
-    private DeviceScaleVPM m_ScaleVPM;
+    private DevicePLUs m_DevicePLUs;
     private DeviceTicket m_TP;   
     private TicketParser m_TTP;
     
@@ -266,12 +260,8 @@ public class JRootApp extends JPanel implements AppView {
         m_Scale = new DeviceScale(this, m_props);
         
         // Inicializamos la scanpal
-        m_Scanner = DeviceScannerFactory.createInstance(m_props);
+        m_DevicePLUs = DevicePLUsFactory.createInstance(this, m_props);
             
-        m_Mercury130 = DeviceMercury130Factory.createInstance(m_props);
-
-        m_ScaleVPM = DeviceScaleVPMFactory.createInstance(m_props);
-
         // Leemos los recursos basicos
         BufferedImage imgicon = m_dlSystem.getResourceAsImage("Window.Logo");
         m_jLblTitle.setIcon(imgicon == null ? null : new ImageIcon(imgicon));
@@ -337,16 +327,8 @@ public class JRootApp extends JPanel implements AppView {
     public DeviceScale getDeviceScale() {
         return m_Scale;
     }
-    public DeviceScanner getDeviceScanner() {
-        return m_Scanner;
-    }
-    
-    public DeviceMercury130 getDeviceMercury130() {
-        return m_Mercury130;
-    }
-
-    public DeviceScaleVPM getDeviceScaleVPM() {
-        return m_ScaleVPM;
+    public DevicePLUs getDevicePLUs() {
+        return m_DevicePLUs;
     }
 
     public Session getSession() {

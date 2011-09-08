@@ -20,15 +20,18 @@
 //    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
 //    А также на сайте <http://www.gnu.org/licenses/>.
 
-package com.openbravo.pos.pludevice.mercury130;
+package com.openbravo.pos.pludevice;
 
+import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.pludevice.DevicePLUsException;
+import com.openbravo.pos.pludevice.ProductDownloaded;
 import gnu.io.*;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.TooManyListenersException;
 
-public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventListener {
+public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener {
 
     private CommPortIdentifier m_PortIdPrinter;
     private SerialPort m_CommPortPrinter;
@@ -63,7 +66,7 @@ public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventLi
         m_in = null;
     }
 
-    public void connectDevice() throws DeviceMercury130Exception {
+    public void connectDevice() throws DevicePLUsException {
         try {
             m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPort);
             m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", 2000);
@@ -88,7 +91,7 @@ public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventLi
             m_CommPortPrinter = null;
             m_out = null;
             m_in = null;
-            throw new DeviceMercury130Exception(e);
+            throw new DevicePLUsException(e);
         }
 
         synchronized (this) {
@@ -117,17 +120,17 @@ public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventLi
         m_in = null;
     }
 
-    public void startUploadProduct() throws DeviceMercury130Exception {
+    public void startUploadProduct() throws DevicePLUsException {
         writeLine(COMMAND_BUFF);
         readCommand(COMMAND_ACK);
         m_iProductOrder = 0;
     }
 
-    public void stopUploadProduct() throws DeviceMercury130Exception {
+    public void stopUploadProduct() throws DevicePLUsException {
         writeLine(COMMAND_OFF);
     }
 
-    public void sendProduct(String sName, String sCode, Double dPrice) throws DeviceMercury130Exception {
+    public void sendProduct(String sName, String sCode, Double dPrice, int iCurrentPLU, int iTotalPLUs, String sBarcode) throws DevicePLUsException {
 
       m_iProductOrder++;
 
@@ -184,29 +187,37 @@ public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventLi
         readCommand(COMMAND_ACK);
     }
 
-    private void readCommand(byte[] cmd) throws DeviceMercury130Exception {
+    public void startDownloadProduct() throws DevicePLUsException {
+
+    }
+    
+    public ProductDownloaded recieveProduct() throws DevicePLUsException {
+        return null;
+    }
+    
+    private void readCommand(byte[] cmd) throws DevicePLUsException {
         byte[] b = readLine();
         if (!checkCommand(cmd, b)) {
-            throw new DeviceMercury130Exception("Command not expected");
+            throw new DevicePLUsException("Command not expected");
         }
     }
 
-    private void writeLine(byte[] aline) throws DeviceMercury130Exception {
+    private void writeLine(byte[] aline) throws DevicePLUsException {
         if (m_CommPortPrinter == null) {
-            throw new DeviceMercury130Exception("No Serial port opened");
+            throw new DevicePLUsException("No Serial port opened");
         } else {
             synchronized (this) {
                 try {
                     m_out.write(aline);
                     m_out.flush();
                 } catch (IOException e) {
-                    throw new DeviceMercury130Exception(e);
+                    throw new DevicePLUsException(e);
                 }
             }
         }
     }
 
-    private byte[] readLine() throws DeviceMercury130Exception {
+    private byte[] readLine() throws DevicePLUsException {
         synchronized (this) {
 
             if (!m_aLines.isEmpty()) {
@@ -219,7 +230,7 @@ public class DeviceMercury130Comm implements DeviceMercury130, SerialPortEventLi
             }
 
             if (m_aLines.isEmpty()) {
-                throw new DeviceMercury130Exception("Timeout");
+                throw new DevicePLUsException("Timeout");
             } else {
                 return m_aLines.poll();
             }
