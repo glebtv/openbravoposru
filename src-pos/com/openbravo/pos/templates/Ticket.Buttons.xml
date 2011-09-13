@@ -34,6 +34,7 @@
     <!-- <event key="ticket.setline" code="Script.StockCurrentSet"/> -->
     <img-width value="64"/>
     <img-height value="54"/>
+    <!-- <font-size value="12"/> -->
     <cat-height value="100" />
     <taxesincluded value="false"/>   
     <!-- <printselected value="true"/> -->    

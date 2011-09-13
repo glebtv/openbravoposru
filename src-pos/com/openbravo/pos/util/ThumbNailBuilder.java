@@ -29,30 +29,32 @@ public class ThumbNailBuilder {
     private Image m_imgdefault;
     private int m_width;
     private int m_height;
+    private int m_font_size;
 
     /** Creates a new instance of ThumbNailBuilder */
-    public ThumbNailBuilder(int width, int height) {
-        init(width, height, null);
+    public ThumbNailBuilder(int width, int height,  int font_size) {
+        init(width, height, 12, null);
     }
 
-    public ThumbNailBuilder(int width, int height, Image imgdef) {
-        init(width, height, imgdef);
+    public ThumbNailBuilder(int width, int height, int font_size, Image imgdef) {
+        init(width, height, 12,  imgdef);
 
     }
 
-    public ThumbNailBuilder(int width, int height, String img) {
+    public ThumbNailBuilder(int width, int height, int font_size, String img) {
 
         Image defimg;
         try {
-            init(width, height, ImageIO.read(getClass().getClassLoader().getResourceAsStream(img)));
+            init(width, height, font_size, ImageIO.read(getClass().getClassLoader().getResourceAsStream(img)));
         } catch (Exception fnfe) {
-            init(width, height, null);
+            init(width, height, 12, null);
         }
     }
 
-    private void init(int width, int height, Image imgdef) {
+    private void init(int width, int height, int font_size, Image imgdef) {
         m_width = width;
         m_height = height;
+        m_font_size = font_size;
         if (imgdef == null) {
             m_imgdefault = null;
         } else {
@@ -79,6 +81,7 @@ public class ThumbNailBuilder {
         // The text
         JLabel label = new JLabel();
         label.setOpaque(false);
+        label.setFont(label.getFont().deriveFont((float)m_font_size));
         //label.setText(text);
         label.setText("<html><p>" + text + "</p></html>");
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

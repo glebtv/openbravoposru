@@ -72,7 +72,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         m_version = new PreparedSentence(s, "SELECT VERSION FROM APPLICATIONS WHERE ID = ?", SerializerWriteString.INSTANCE, SerializerReadString.INSTANCE);
         m_dummy = new StaticSentence(s, "SELECT * FROM PEOPLE WHERE 1 = 0");
          
-        final ThumbNailBuilder tnb = new ThumbNailBuilder(32, 32, "com/openbravo/images/yast_sysadmin.png");        
+        final ThumbNailBuilder tnb = new ThumbNailBuilder(32, 32, 12, "com/openbravo/images/yast_sysadmin.png");        
         peopleread = new SerializerRead() {
             public Object readValues(DataRead dr) throws BasicException {
                 return new AppUser(
