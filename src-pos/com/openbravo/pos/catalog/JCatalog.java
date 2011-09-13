@@ -59,6 +59,8 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private ThumbNailBuilder tnbbutton;
     private ThumbNailBuilder tnbcat;
     
+    private Integer iTextFontSize;
+    
     private CategoryInfo showingcategory = null;
           
     public JCatalog(DataLogicSales dlSales, PropertiesConfig panelconfig) {
@@ -72,10 +74,12 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         m_jListCategories.addListSelectionListener(this);                
         m_jscrollcat.getVerticalScrollBar().setPreferredSize(new Dimension(35, 35));
         
-        tnbcat = new ThumbNailBuilder(32, 32, Integer.parseInt(panelconfig.getProperty("font-size", "12")), "com/openbravo/images/folder_yellow.png");           
+        iTextFontSize = Integer.parseInt(panelconfig.getProperty("font-size", "12"));
+        
+        tnbcat = new ThumbNailBuilder(32, 32, 12, "com/openbravo/images/folder_yellow.png");           
         tnbbutton = new ThumbNailBuilder(Integer.parseInt(panelconfig.getProperty("img-width", "64")),
                 Integer.parseInt(panelconfig.getProperty("img-height", "54")),
-                Integer.parseInt(panelconfig.getProperty("font-size", "12")),                
+                iTextFontSize,                
                 "com/openbravo/images/package.png");
     }
     
@@ -358,6 +362,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
             super.getListCellRendererComponent(list, null, index, isSelected, cellHasFocus);
             CategoryInfo cat = (CategoryInfo) value;
             setText(cat.getName());
+            setFont(getFont().deriveFont((float) iTextFontSize));
             setIcon(new ImageIcon(tnbcat.getThumbNail(cat.getImage())));
             return this;
         }      
