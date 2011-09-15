@@ -315,7 +315,7 @@ public class DeviceTicket {
     public static String alignBarCode(String sLine, int iSize) {
 
         if (sLine.length() > iSize) {
-            return sLine.substring(sLine.length() - iSize);
+            return sLine.substring(0, iSize);
         } else {
             return getWhiteString(iSize - sLine.length(), '0') + sLine;
         }

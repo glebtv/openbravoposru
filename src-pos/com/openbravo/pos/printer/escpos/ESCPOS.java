@@ -36,12 +36,15 @@ public class ESCPOS {
     public static final byte[] CHAR_FONT_2 = {0x1B, 0x4D, 0x30};
     public static final byte[] CHAR_FONT_3 = {0x1B, 0x4D, 0x31};
         
-    public static final byte[] BAR_HEIGHT = {0x1D, 0x68, 0x40};
+    public static final byte[] BAR_HEIGHT = {0x1D, 0x68, (byte) 0x60};
     public static final byte[] BAR_POSITIONDOWN = {0x1D, 0x48, 0x02};
+    public static final byte[] BAR_POSITIONUP = {0x1D, 0x48, 0x01};
     public static final byte[] BAR_POSITIONNONE = {0x1D, 0x48, 0x00};
     public static final byte[] BAR_HRIFONT1 = {0x1D, 0x66, 0x01}; 
-    
-    public static final byte[] BAR_CODE02 = {0x1D, 0x6B, 0x02}; // 12 numeros fijos
+
+    public static final byte[] BAR_EAN13 = {0x1D, 0x6B, 0x02}; // 12 numbers
+    public static final byte[] BAR_EAN8 = {0x1D, 0x6B, 0x03}; // 7 numbers
+    public static final byte[] BAR_CODE128 = {0x1D, 0x6B, 0x49}; // 128 numbers and latin symbols
     
     public static final byte[] VISOR_HIDE_CURSOR = {0x1F, 0x43, 0x00};
     public static final byte[] VISOR_SHOW_CURSOR = {0x1F, 0x43, 0x01};

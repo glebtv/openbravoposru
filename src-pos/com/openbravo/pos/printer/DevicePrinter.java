@@ -36,10 +36,12 @@ public interface DevicePrinter {
     public static final int ALIGN_LEFT = 0;
     public static final int ALIGN_RIGHT = 1;
     public static final int ALIGN_CENTER = 2;
-
+    
+    public static final String BARCODE_EAN8 = "EAN8";
     public static final String BARCODE_EAN13 = "EAN13";
     public static final String BARCODE_CODE128 = "CODE128";
 
+    public static final String POSITION_TOP = "top";
     public static final String POSITION_BOTTOM = "bottom";
     public static final String POSITION_NONE = "none";
 

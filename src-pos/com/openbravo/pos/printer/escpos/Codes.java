@@ -56,14 +56,49 @@ public abstract class Codes {
             out.write(ESCPOS.BAR_HEIGHT);
             if (DevicePrinter.POSITION_NONE.equals(position)) {
                 out.write(ESCPOS.BAR_POSITIONNONE);
+            } else if (DevicePrinter.POSITION_TOP.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONUP);
             } else {
                 out.write(ESCPOS.BAR_POSITIONDOWN);
             }
             out.write(ESCPOS.BAR_HRIFONT1);
-            out.write(ESCPOS.BAR_CODE02);
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
-            out.write(new byte[] { 0x00 });
-
+            out.write(ESCPOS.BAR_EAN13);
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
+            out.write(new byte[]{0x00});
+            out.write(getNewLine());
+        } else if (DevicePrinter.BARCODE_EAN8.equals(type)) {
+            out.write(getNewLine());
+            out.write(ESCPOS.BAR_HEIGHT);
+            if (DevicePrinter.POSITION_NONE.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONNONE);
+            } else if (DevicePrinter.POSITION_TOP.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONUP);
+            } else {
+                out.write(ESCPOS.BAR_POSITIONDOWN);
+            }
+            out.write(ESCPOS.BAR_HRIFONT1);
+            out.write(ESCPOS.BAR_EAN8);
+            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 8).substring(0, 7)));
+            out.write(new byte[]{0x00});
+            out.write(getNewLine());
+        } else if (DevicePrinter.BARCODE_CODE128.equals(type)) {
+            out.write(getNewLine());
+            out.write(ESCPOS.BAR_HEIGHT);
+            if (DevicePrinter.POSITION_NONE.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONNONE);
+            } else {
+                out.write(ESCPOS.BAR_POSITIONDOWN);
+            }
+            out.write(ESCPOS.BAR_HRIFONT1);
+            out.write(ESCPOS.BAR_CODE128);
+            if (code.length() < 2) {
+                code = '0' + code;
+            }
+            if (code.length() > 255) {
+                code.substring(0, 255);
+            }
+            out.write(new byte[]{(byte) code.length()});
+            out.write(DeviceTicket.transNumber(code));
             out.write(getNewLine());
         }
     }
