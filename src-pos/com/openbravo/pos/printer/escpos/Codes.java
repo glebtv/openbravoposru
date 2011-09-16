@@ -22,6 +22,8 @@ package com.openbravo.pos.printer.escpos;
 import com.openbravo.pos.printer.DevicePrinter;
 import com.openbravo.pos.printer.DeviceTicket;
 import java.awt.image.BufferedImage;
+import com.openbravo.pos.util.StringUtils;
+import com.openbravo.pos.util.BarcodeString;
 
 public abstract class Codes {
 
@@ -63,7 +65,7 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_EAN13);
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 13).substring(0, 12)));
+            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN13(code)));
             out.write(new byte[]{0x00});
             out.write(getNewLine());
         } else if (DevicePrinter.BARCODE_EAN8.equals(type)) {
@@ -78,7 +80,22 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_EAN8);
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code, 8).substring(0, 7)));
+            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN8(code)));            
+            out.write(new byte[]{0x00});
+            out.write(getNewLine());
+        } else if (DevicePrinter.BARCODE_CODE39.equals(type)) {
+            out.write(getNewLine());
+            out.write(ESCPOS.BAR_HEIGHT);
+            if (DevicePrinter.POSITION_NONE.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONNONE);
+            } else if (DevicePrinter.POSITION_TOP.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONUP);
+            } else {
+                out.write(ESCPOS.BAR_POSITIONDOWN);
+            }
+            out.write(ESCPOS.BAR_HRIFONT1);
+            out.write(ESCPOS.BAR_CODE39);
+            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringCode39(code)));            
             out.write(new byte[]{0x00});
             out.write(getNewLine());
         } else if (DevicePrinter.BARCODE_CODE128.equals(type)) {
@@ -91,14 +108,9 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_CODE128);
-            if (code.length() < 2) {
-                code = '0' + code;
-            }
-            if (code.length() > 255) {
-                code.substring(0, 255);
-            }
-            out.write(new byte[]{(byte) code.length()});
-            out.write(DeviceTicket.transNumber(code));
+            String CompleteBarcode = BarcodeString.getBarcodeStringCode128(code);
+            out.write(new byte[]{(byte) CompleteBarcode.length()});
+            out.write(DeviceTicket.transNumber(CompleteBarcode));
             out.write(getNewLine());
         }
     }

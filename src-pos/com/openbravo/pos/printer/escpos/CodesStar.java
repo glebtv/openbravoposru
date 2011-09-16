@@ -22,6 +22,7 @@ package com.openbravo.pos.printer.escpos;
 import com.openbravo.pos.printer.DevicePrinter;
 import com.openbravo.pos.printer.DeviceTicket;
 import java.awt.image.BufferedImage;
+import com.openbravo.pos.util.BarcodeString;
 
 public class CodesStar extends Codes {
 
@@ -138,7 +139,7 @@ public class CodesStar extends Codes {
             }
             out.write(new byte[]{0x02}); // dots
             out.write(new byte[]{0x50}); // height
-            out.write(DeviceTicket.transNumber(DeviceTicket.alignBarCode(code,13).substring(0,12)));
+            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN13(code)));
             out.write(new byte[] { 0x1E }); // end char
 
             out.write(new byte[] {0x1B, 0x1D, 0x61, 0x00}); // Align left

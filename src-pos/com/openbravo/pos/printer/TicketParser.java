@@ -30,6 +30,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.util.StringUtils;
 
 public class TicketParser extends DefaultHandler {
 
@@ -257,13 +258,13 @@ public class TicketParser extends DefaultHandler {
                 if (m_iTextLength > 0) {
                     switch(m_iTextAlign) {
                     case DevicePrinter.ALIGN_RIGHT:
-                        m_oOutputPrinter.printText(m_iTextStyle, DeviceTicket.alignRight(text.toString(), m_iTextLength));
+                        m_oOutputPrinter.printText(m_iTextStyle, StringUtils.alignRight(text.toString(), m_iTextLength));
                         break;
                     case DevicePrinter.ALIGN_CENTER:
-                        m_oOutputPrinter.printText(m_iTextStyle, DeviceTicket.alignCenter(text.toString(), m_iTextLength));
+                        m_oOutputPrinter.printText(m_iTextStyle, StringUtils.alignCenter(text.toString(), m_iTextLength));
                         break;
                     default: // DevicePrinter.ALIGN_LEFT
-                        m_oOutputPrinter.printText(m_iTextStyle, DeviceTicket.alignLeft(text.toString(), m_iTextLength));
+                        m_oOutputPrinter.printText(m_iTextStyle, StringUtils.alignLeft(text.toString(), m_iTextLength));
                         break;
                     }
                 } else {
@@ -296,13 +297,13 @@ public class TicketParser extends DefaultHandler {
                 if (m_iTextLength > 0) {
                     switch(m_iTextAlign) {
                     case DevicePrinter.ALIGN_RIGHT:
-                        m_sVisorLine.append(DeviceTicket.alignRight(text.toString(), m_iTextLength));
+                        m_sVisorLine.append(StringUtils.alignRight(text.toString(), m_iTextLength));
                         break;
                     case DevicePrinter.ALIGN_CENTER:
-                        m_sVisorLine.append(DeviceTicket.alignCenter(text.toString(), m_iTextLength));
+                        m_sVisorLine.append(StringUtils.alignCenter(text.toString(), m_iTextLength));
                         break;
                     default: // DevicePrinter.ALIGN_LEFT
-                        m_sVisorLine.append(DeviceTicket.alignLeft(text.toString(), m_iTextLength));
+                        m_sVisorLine.append(StringUtils.alignLeft(text.toString(), m_iTextLength));
                         break;
                     }
                 } else {

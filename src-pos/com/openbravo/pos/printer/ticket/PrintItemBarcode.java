@@ -22,11 +22,14 @@ package com.openbravo.pos.printer.ticket;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import com.openbravo.pos.printer.DevicePrinter;
+import com.openbravo.pos.util.BarcodeString;
 import org.krysalis.barcode4j.BarcodeDimension;
 import org.krysalis.barcode4j.HumanReadablePlacement;
 import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
+import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
+import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.output.java2d.Java2DCanvasProvider;
 
 public class PrintItemBarcode implements PrintItem {
@@ -42,11 +45,19 @@ public class PrintItemBarcode implements PrintItem {
 
         m_sCode = code;
         this.scale = scale;
-
+        
         if (DevicePrinter.BARCODE_CODE128.equals(type)) {
             m_barcode = new Code128Bean();
+            m_sCode = BarcodeString.getBarcodeStringCode128(m_sCode);               
+        } else if (DevicePrinter.BARCODE_CODE39.equals(type)) {
+            m_barcode = new Code39Bean();
+            m_sCode = BarcodeString.getBarcodeStringCode39(m_sCode);           
+        } else if (DevicePrinter.BARCODE_EAN8.equals(type)) {
+            m_barcode = new EAN8Bean();
+            m_sCode = BarcodeString.getBarcodeStringEAN8(m_sCode);
         } else {
             m_barcode = new EAN13Bean();
+            m_sCode = BarcodeString.getBarcodeStringEAN13(m_sCode);
         }
 
         if (m_barcode != null) {
@@ -57,6 +68,8 @@ public class PrintItemBarcode implements PrintItem {
             m_barcode.doQuietZone(true);
             if (DevicePrinter.POSITION_NONE.equals(position)) {
                 m_barcode.setMsgPosition(HumanReadablePlacement.HRP_NONE);
+            } else if (DevicePrinter.POSITION_TOP.equals(position)) {
+                m_barcode.setMsgPosition(HumanReadablePlacement.HRP_TOP);
             } else {
                 m_barcode.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
             }
@@ -91,4 +104,9 @@ public class PrintItemBarcode implements PrintItem {
     public int getHeight() {
         return (int) (m_iHeight * scale) + 20;
     }
+    
+//    public final String transSymbolCode39(String sCad) {
+//
+//
+//    }
 }

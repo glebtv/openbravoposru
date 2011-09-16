@@ -52,7 +52,7 @@ public class BarcodeImage {
         AbstractBarcodeBean barcode = new Code39Bean();
         barcode.setMsgPosition(HumanReadablePlacement.HRP_BOTTOM);
         return getBarcode(value, barcode);
-    } 
+    }
     
     public static Image getBarcodeInterleaved2Of5(String value) {
         AbstractBarcodeBean barcode = new Interleaved2Of5Bean();

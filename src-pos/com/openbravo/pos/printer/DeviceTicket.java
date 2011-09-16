@@ -298,60 +298,6 @@ public class DeviceTicket {
         return m_deviceprinterslist;
     }
     // Utilidades
-    public static String getWhiteString(int iSize, char cWhiteChar) {
-
-        char[] cFill = new char[iSize];
-        for (int i = 0; i < iSize; i++) {
-            cFill[i] = cWhiteChar;
-        }
-        return new String(cFill);
-    }
-
-    public static String getWhiteString(int iSize) {
-
-        return getWhiteString(iSize, ' ');
-    }
-
-    public static String alignBarCode(String sLine, int iSize) {
-
-        if (sLine.length() > iSize) {
-            return sLine.substring(0, iSize);
-        } else {
-            return getWhiteString(iSize - sLine.length(), '0') + sLine;
-        }
-    }
-
-    public static String alignLeft(String sLine, int iSize) {
-
-        if (sLine.length() > iSize) {
-            return sLine.substring(0, iSize);
-        } else {
-            return sLine + getWhiteString(iSize - sLine.length());
-        }
-    }
-
-    public static String alignRight(String sLine, int iSize) {
-
-        if (sLine.length() > iSize) {
-            return sLine.substring(sLine.length() - iSize);
-        } else {
-            return getWhiteString(iSize - sLine.length()) + sLine;
-        }
-    }
-
-    public static String alignCenter(String sLine, int iSize) {
-
-        if (sLine.length() > iSize) {
-            return alignRight(sLine.substring(0, (sLine.length() + iSize) / 2), iSize);
-        } else {
-            return alignRight(sLine + getWhiteString((iSize - sLine.length()) / 2), iSize);
-        }
-    }
-
-    public static String alignCenter(String sLine) {
-        return alignCenter(sLine, 42);
-    }
-
     public static final byte[] transNumber(String sCad) {
 
         if (sCad == null) {

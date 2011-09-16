@@ -39,6 +39,7 @@ public interface DevicePrinter {
     
     public static final String BARCODE_EAN8 = "EAN8";
     public static final String BARCODE_EAN13 = "EAN13";
+    public static final String BARCODE_CODE39 = "CODE39";
     public static final String BARCODE_CODE128 = "CODE128";
 
     public static final String POSITION_TOP = "top";
