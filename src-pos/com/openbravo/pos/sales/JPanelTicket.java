@@ -119,6 +119,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     protected DataLogicCustomers dlCustomers;
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
+    
+    protected javax.swing.JPanel refundcatcontainer;
 
     private Boolean bTypeDiscount;
 

@@ -57,9 +57,10 @@ public class JPanelTicketEdits extends JPanelTicket {
         // anado las lineas de refund
         // m_reflines.setLines(aRefundLines);
         m_jbtnconfig.setVisible(false);
-        if (!"false".equals(panelconfig.getProperty("catvisible"))) {
-            m_catandlines.showRefundLines(aRefundLines);
+        if (m_catandlines == null) {
+            refundcatcontainer.add(getSouthComponent(), BorderLayout.CENTER);
         }
+        m_catandlines.showRefundLines(aRefundLines);
     }
     
     protected JTicketsBag getJTicketsBag() {
