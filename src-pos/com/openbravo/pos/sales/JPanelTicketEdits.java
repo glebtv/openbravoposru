@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import com.openbravo.basic.BasicException;
 import com.openbravo.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 public class JPanelTicketEdits extends JPanelTicket {
@@ -40,11 +41,11 @@ public class JPanelTicketEdits extends JPanelTicket {
     }
     
     @Override
-    public void activate() throws BasicException {      
+    public void activate() throws BasicException {
         super.activate();
-        if ("false".equals(panelconfig.getProperty("catvisible")) == false) {
-        m_catandlines.loadCatalog();
-    }
+        if (!"false".equals(panelconfig.getProperty("catvisible"))) {
+            m_catandlines.loadCatalog();
+        }
     }
 
     public void showCatalog() {
@@ -56,7 +57,9 @@ public class JPanelTicketEdits extends JPanelTicket {
         // anado las lineas de refund
         // m_reflines.setLines(aRefundLines);
         m_jbtnconfig.setVisible(false);
-        m_catandlines.showRefundLines(aRefundLines);
+        if (!"false".equals(panelconfig.getProperty("catvisible"))) {
+            m_catandlines.showRefundLines(aRefundLines);
+        }
     }
     
     protected JTicketsBag getJTicketsBag() {

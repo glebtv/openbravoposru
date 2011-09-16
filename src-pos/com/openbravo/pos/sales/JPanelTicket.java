@@ -531,7 +531,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 Toolkit.getDefaultToolkit().beep();
                 new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.noproduct")).show(this);
                 stateToZero();
-            } else {
+            } else if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                incProduct(-1.0, oProduct);
+            } else {    
                 // Se anade directamente una unidad con el precio y todo
                 incProduct(oProduct);
              }
