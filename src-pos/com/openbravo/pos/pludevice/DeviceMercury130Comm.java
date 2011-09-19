@@ -238,91 +238,23 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
         }
     }
 
-    private static byte[] convertASCII(String sdata) {
+    private static byte[] convertASCII(String sdata) throws UnsupportedEncodingException {
         byte[] result = new byte[sdata.length()];
         for (int i = 0; i < sdata.length(); i++) {
             char c = sdata.charAt(i);
             if ((c >= 0x0020) && (c < 0x0080)) {
                 result[i] = (byte) c;
+            } else if (c >= '\u0410' && c <= '\u044F') {
+                result[i] = Character.toString(c).getBytes("CP866")[0]; // CP866 Cyrillic 
+            } else if (c == '\u0401') {
+                result[i] = (byte) 0x85; // Ё -> Е
+            } else if (c == '\u0451') {
+                result[i] = (byte) 0xA5; // ё -> е
             } else {
-                result[i] = convertCyrillic(c);
+                result[i] = (byte) 0x3F; // ? Not valid character.
             }
         }
         return result;
-    }
-
-    private static byte convertCyrillic(char sdata) {
-        switch (sdata) {
-
-            case '\u0410': return (byte) 0x80;// A
-            case '\u0411': return (byte) 0x81;// Б
-            case '\u0412': return (byte) 0x82;// В
-            case '\u0413': return (byte) 0x83;// Г
-            case '\u0414': return (byte) 0x84;// Д
-            case '\u0415': return (byte) 0x85;// Е
-            case '\u0401': return (byte) 0x85;// Ё
-            case '\u0416': return (byte) 0x86;// Ж
-            case '\u0417': return (byte) 0x87;// З
-            case '\u0418': return (byte) 0x88;// И
-            case '\u0419': return (byte) 0x89;// Й
-            case '\u041A': return (byte) 0x8A;// К
-            case '\u041B': return (byte) 0x8B;// Л
-            case '\u041C': return (byte) 0x8C;// М
-            case '\u041D': return (byte) 0x8D;// Н
-            case '\u041E': return (byte) 0x8E;// О
-            case '\u041F': return (byte) 0x8F;// П
-            case '\u0420': return (byte) 0x90;// Р
-            case '\u0421': return (byte) 0x91;// С
-            case '\u0422': return (byte) 0x92;// Т
-            case '\u0423': return (byte) 0x93;// У
-            case '\u0424': return (byte) 0x94;// Ф
-            case '\u0425': return (byte) 0x95;// Х
-            case '\u0426': return (byte) 0x96;// Ц
-            case '\u0427': return (byte) 0x97;// Ч
-            case '\u0428': return (byte) 0x98;// Ш
-            case '\u0429': return (byte) 0x99;// Щ
-            case '\u042A': return (byte) 0x9A;// Ъ
-            case '\u042B': return (byte) 0x9B;// Ы
-            case '\u042C': return (byte) 0x9C;// Ь
-            case '\u042D': return (byte) 0x9D;// Э
-            case '\u042E': return (byte) 0x9E;// Ю
-            case '\u042F': return (byte) 0x9F;// Я
-            case '\u0430': return (byte) 0xA0;// a
-            case '\u0431': return (byte) 0xA1;// б
-            case '\u0432': return (byte) 0xA2;// в
-            case '\u0433': return (byte) 0xA3;// г
-            case '\u0434': return (byte) 0xA4;// д
-            case '\u0435': return (byte) 0xA5;// е
-            case '\u0451': return (byte) 0xA5;// ё
-            case '\u0436': return (byte) 0xA6;// ж
-            case '\u0437': return (byte) 0xA7;// з
-            case '\u0438': return (byte) 0xA8;// и
-            case '\u0439': return (byte) 0xA9;// й
-            case '\u043A': return (byte) 0xAA;// к
-            case '\u043B': return (byte) 0xAB;// л
-            case '\u043C': return (byte) 0xAC;// м
-            case '\u043D': return (byte) 0xAD;// н
-            case '\u043E': return (byte) 0xAE;// о
-            case '\u043F': return (byte) 0xAF;// п
-            case '\u0440': return (byte) 0xB0;// р
-            case '\u0441': return (byte) 0xB1;// с
-            case '\u0442': return (byte) 0xB2;// т
-            case '\u0443': return (byte) 0xB3;// у
-            case '\u0444': return (byte) 0xB4;// ф
-            case '\u0445': return (byte) 0xB5;// х
-            case '\u0446': return (byte) 0xB6;// ц
-            case '\u0447': return (byte) 0xB7;// ч
-            case '\u0448': return (byte) 0xB8;// ш
-            case '\u0449': return (byte) 0xB9;// щ
-            case '\u044A': return (byte) 0xBA;// ъ
-            case '\u044B': return (byte) 0xBB;// ы
-            case '\u044C': return (byte) 0xBC;// ь
-            case '\u044D': return (byte) 0xBD;// ы
-            case '\u044E': return (byte) 0xBE;// ю
-            case '\u044F': return (byte) 0xBF;// я
-
-            default: return (byte) 0x3F; // ? Not valid character.
-        }
     }
 
     private static byte[] convertBCD(String sdata) {
