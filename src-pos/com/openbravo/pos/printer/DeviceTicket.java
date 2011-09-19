@@ -143,6 +143,8 @@ public class DeviceTicket {
                 m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorEur());
             } else if ("cd5220rus".equals(sDisplayType)) {
                 m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorCD5220rus());
+            } else if ("vfd866cyr".equals(sDisplayType)) {
+                m_deviceDisplay = new DeviceDisplayESCPOS(pws.getPrinterWritter(sDisplayParam1, sDisplayParam2, iDisplaySerialPortSpeed, iDisplaySerialPortDataBits, iDisplaySerialPortStopBits, iDisplaySerialPortParity), new UnicodeTranslatorVFD866Cyr());
             } else if ("javapos".equals(sDisplayType)) {
                 m_deviceDisplay = new DeviceDisplayJavaPOS(sDisplayParam1);
             } else {

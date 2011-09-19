@@ -50,6 +50,15 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
 //    private ParametersConfig fiscalprinterparams;
 
+    String[] modelDisplayName = {"screen",
+                                 "window",
+                                 "javapos",
+                                 "epson",
+                                 "ld200",
+                                 "surepos",
+                                 "cd5220rus",
+                                 "vfd866cyr",
+                                 "Not defined"};
     String[] modelPrinterName = {"screen",
                                  "printer",
                                  "epson",
@@ -203,16 +212,6 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
 //        jcboSerialLabelPrinter.addItem("/dev/usb/lp0");
         
-        // Display
-        jcboMachineDisplay.addItem("screen");
-        jcboMachineDisplay.addItem("window");
-        jcboMachineDisplay.addItem("javapos");
-        jcboMachineDisplay.addItem("epson");
-        jcboMachineDisplay.addItem("ld200");
-        jcboMachineDisplay.addItem("surepos");
-        jcboMachineDisplay.addItem("cd5220rus");
-        jcboMachineDisplay.addItem("Not defined");
-
         jcboConnDisplay.addItem("serial");
         jcboConnDisplay.addItem("file");
 
@@ -602,7 +601,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
         String sMachineDisplayMode =  comboValue(jcboConnDisplay.getSelectedItem());
         
-        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "cd5220rus".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
+        if ("epson".equals(sMachineDisplay) 
+                || "ld200".equals(sMachineDisplay) 
+                || "cd5220rus".equals(sMachineDisplay) 
+                || "surepos".equals(sMachineDisplay)
+                || "vfd866cyr".equals(sMachineDisplay)
+                ) {
             if ("serial".equals(sMachineDisplayMode)){
                 config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()) + "," + comboValue(jcboDisplaySerialPortSpeed.getSelectedItem())+ "," + comboValue(jcboDisplaySerialPortDataBits.getSelectedItem())+ "," + comboValue(jcboDisplaySerialPortStopBits.getSelectedItem())+ "," + comboValue(jcboDisplaySerialPortParity.getSelectedItem()));                
             } else {
@@ -889,6 +893,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
         jLabel15.setText(AppLocal.getIntString("Label.MachineDisplay")); // NOI18N
 
+        jcboMachineDisplay.setModel(new javax.swing.DefaultComboBoxModel(modelDisplayName));
         jcboMachineDisplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcboMachineDisplayActionPerformed(evt);
@@ -1012,7 +1017,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(2, 2, 2)
                     .addComponent(m_jDisplayPortParams, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(57, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         m_jDisplayParams.add(jPanel1, "comm");
@@ -1493,7 +1498,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                     .addComponent(m_jPrinterPortParams3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(125, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         m_jPrinterParams3.add(jPanel10, "comm");
@@ -2075,7 +2080,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private void jcboMachineDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcboMachineDisplayActionPerformed
         CardLayout cl = (CardLayout) (m_jDisplayParams.getLayout());
 
-        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) || "ld200".equals(jcboMachineDisplay.getSelectedItem()) || "cd5220rus".equals(jcboMachineDisplay.getSelectedItem()) || "surepos".equals(jcboMachineDisplay.getSelectedItem())) {
+        if ("epson".equals(jcboMachineDisplay.getSelectedItem()) 
+                || "ld200".equals(jcboMachineDisplay.getSelectedItem()) 
+                || "cd5220rus".equals(jcboMachineDisplay.getSelectedItem()) 
+                || "surepos".equals(jcboMachineDisplay.getSelectedItem())
+                || "vfd866cyr".equals(jcboMachineDisplay.getSelectedItem())
+                ) {
             cl.show(m_jDisplayParams, "comm");
         } else if ("javapos".equals(jcboMachineDisplay.getSelectedItem())) {
             cl.show(m_jDisplayParams, "javapos");
