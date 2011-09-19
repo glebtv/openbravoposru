@@ -46,9 +46,6 @@ public class BarcodeString {
     }
 
     public static String getBarcodeStringCode128(String message) {
-//        if (message.length() < 2) {
-//            message = '0' + message;
-//        }
         if (message.length() > 255) {
             message.substring(0, 255);
         }
@@ -90,7 +87,7 @@ public class BarcodeString {
         } else {
             for (int i = 0; i < value.length(); i++) {
                 char c = value.charAt(i);
-                if (c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c == 45 || c == 46) {
+                if (c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c == '$' || c == '%'|| c == '+'|| c == '-'|| c == '.'|| c == '/') {
                     m_sResult = m_sResult.concat(Character.toString(c));
                 } else {
                     m_sResult = m_sResult.concat(Character.toString('-'));

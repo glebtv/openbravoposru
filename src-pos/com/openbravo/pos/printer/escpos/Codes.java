@@ -104,13 +104,16 @@ public abstract class Codes {
             out.write(ESCPOS.BAR_HEIGHT);
             if (DevicePrinter.POSITION_NONE.equals(position)) {
                 out.write(ESCPOS.BAR_POSITIONNONE);
+            } else if (DevicePrinter.POSITION_TOP.equals(position)) {
+                out.write(ESCPOS.BAR_POSITIONUP);
             } else {
                 out.write(ESCPOS.BAR_POSITIONDOWN);
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_CODE128);
             String CompleteBarcode = BarcodeString.getBarcodeStringCode128(code);
-            out.write(new byte[]{(byte) CompleteBarcode.length()});
+            out.write(new byte[]{(byte) (CompleteBarcode.length() + 2)}); // 2 bytes extra for code set selection
+            out.write(ESCPOS.BAR_CODE_CODE128_A);            
             out.write(CompleteBarcode.getBytes("ASCII"));
             out.write(getNewLine());
         }

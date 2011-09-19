@@ -46,7 +46,11 @@ public class ESCPOS {
     public static final byte[] BAR_EAN8 = {0x1D, 0x6B, 0x03}; // 7 numbers
     public static final byte[] BAR_CODE39 = {0x1D, 0x6B, 0x04}; // numbers and upper latin symbols
     public static final byte[] BAR_CODE128 = {0x1D, 0x6B, 0x49}; // 128 numbers and latin symbols
-    
+
+    public static final byte[] BAR_CODE_CODE128_A = {0x7B, 0x41}; // SET A
+    public static final byte[] BAR_CODE_CODE128_B = {0x7B, 0x42}; // SET B
+    public static final byte[] BAR_CODE_CODE128_C = {0x7B, 0x43}; // SET C   
+
     public static final byte[] VISOR_HIDE_CURSOR = {0x1F, 0x43, 0x00};
     public static final byte[] VISOR_SHOW_CURSOR = {0x1F, 0x43, 0x01};
     public static final byte[] VISOR_HOME = {0x0B};
