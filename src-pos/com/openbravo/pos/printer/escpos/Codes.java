@@ -24,6 +24,7 @@ import com.openbravo.pos.printer.DeviceTicket;
 import java.awt.image.BufferedImage;
 import com.openbravo.pos.util.StringUtils;
 import com.openbravo.pos.util.BarcodeString;
+import java.io.UnsupportedEncodingException;
 
 public abstract class Codes {
 
@@ -49,7 +50,7 @@ public abstract class Codes {
     public abstract byte[] getImageHeader();
     public abstract int getImageWidth();
 
-    public void printBarcode(PrinterWritter out, String type, String position, String code) {
+    public void printBarcode(PrinterWritter out, String type, String position, String code) throws UnsupportedEncodingException {
 
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
 
@@ -65,7 +66,7 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_EAN13);
-            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN13(code)));
+            out.write(BarcodeString.getBarcodeStringEAN13(code).getBytes("ASCII"));
             out.write(new byte[]{0x00});
             out.write(getNewLine());
         } else if (DevicePrinter.BARCODE_EAN8.equals(type)) {
@@ -80,7 +81,7 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_EAN8);
-            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN8(code)));            
+            out.write(BarcodeString.getBarcodeStringEAN8(code).getBytes("ASCII"));
             out.write(new byte[]{0x00});
             out.write(getNewLine());
         } else if (DevicePrinter.BARCODE_CODE39.equals(type)) {
@@ -95,7 +96,7 @@ public abstract class Codes {
             }
             out.write(ESCPOS.BAR_HRIFONT1);
             out.write(ESCPOS.BAR_CODE39);
-            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringCode39(code)));            
+            out.write(BarcodeString.getBarcodeStringCode39(code).getBytes("ASCII"));            
             out.write(new byte[]{0x00});
             out.write(getNewLine());
         } else if (DevicePrinter.BARCODE_CODE128.equals(type)) {
@@ -110,7 +111,7 @@ public abstract class Codes {
             out.write(ESCPOS.BAR_CODE128);
             String CompleteBarcode = BarcodeString.getBarcodeStringCode128(code);
             out.write(new byte[]{(byte) CompleteBarcode.length()});
-            out.write(DeviceTicket.transNumber(CompleteBarcode));
+            out.write(CompleteBarcode.getBytes("ASCII"));
             out.write(getNewLine());
         }
     }

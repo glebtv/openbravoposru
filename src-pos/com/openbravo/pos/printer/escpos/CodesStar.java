@@ -23,6 +23,7 @@ import com.openbravo.pos.printer.DevicePrinter;
 import com.openbravo.pos.printer.DeviceTicket;
 import java.awt.image.BufferedImage;
 import com.openbravo.pos.util.BarcodeString;
+import java.io.UnsupportedEncodingException;
 
 public class CodesStar extends Codes {
 
@@ -123,7 +124,7 @@ public class CodesStar extends Codes {
     }
 
     @Override
-    public void printBarcode(PrinterWritter out, String type, String position, String code) {
+    public void printBarcode(PrinterWritter out, String type, String position, String code) throws UnsupportedEncodingException {
 
         if (DevicePrinter.BARCODE_EAN13.equals(type)) {
 
@@ -139,7 +140,7 @@ public class CodesStar extends Codes {
             }
             out.write(new byte[]{0x02}); // dots
             out.write(new byte[]{0x50}); // height
-            out.write(DeviceTicket.transNumber(BarcodeString.getBarcodeStringEAN13(code)));
+            out.write(BarcodeString.getBarcodeStringEAN13(code).getBytes("ASCII"));
             out.write(new byte[] { 0x1E }); // end char
 
             out.write(new byte[] {0x1B, 0x1D, 0x61, 0x00}); // Align left

@@ -20,6 +20,9 @@
 package com.openbravo.pos.printer.escpos;
 
 import java.awt.image.BufferedImage;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import com.openbravo.pos.printer.*;
@@ -76,7 +79,10 @@ public class DevicePrinterESCPOS implements DevicePrinter  {
     public void printBarCode(String type, String position, String code) {
 
         m_CommOutputPrinter.write(ESCPOS.SELECT_PRINTER);
-        m_codes.printBarcode(m_CommOutputPrinter, type, position, code);
+        try {
+            m_codes.printBarcode(m_CommOutputPrinter, type, position, code);
+        } catch (UnsupportedEncodingException ex) {
+        }
     }
 
     public void beginLine(int iTextSize) {

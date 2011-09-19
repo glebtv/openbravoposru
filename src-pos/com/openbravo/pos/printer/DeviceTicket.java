@@ -279,8 +279,7 @@ public class DeviceTicket {
             return pw;
         }
     }
-    
-        
+            
     // Impresora fiscal
     public DeviceFiscalPrinter getFiscalPrinter() {
         return m_deviceFiscal;
@@ -298,34 +297,5 @@ public class DeviceTicket {
 
     public List<DevicePrinter> getDevicePrinterAll() {
         return m_deviceprinterslist;
-    }
-    // Utilidades
-    public static final byte[] transNumber(String sCad) {
-
-        if (sCad == null) {
-            return null;
-        } else {
-            byte bAux[] = new byte[sCad.length()];
-            for( int i = 0; i < sCad.length(); i++) {
-                bAux[i] = transNumberChar(sCad.charAt(i));
-            }
-            return bAux;
-        }
-    }
-
-    public static byte transNumberChar(char sChar) {
-        switch (sChar) {
-        case '0' : return 0x30;
-        case '1' : return 0x31;
-        case '2' : return 0x32;
-        case '3' : return 0x33;
-        case '4' : return 0x34;
-        case '5' : return 0x35;
-        case '6' : return 0x36;
-        case '7' : return 0x37;
-        case '8' : return 0x38;
-        case '9' : return 0x39;
-        default: return 0x30;
-        }
     }
 }
