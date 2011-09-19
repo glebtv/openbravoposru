@@ -25,6 +25,7 @@ package com.openbravo.pos.pludevice;
 import com.openbravo.pos.pludevice.DevicePLUs;
 import com.openbravo.pos.pludevice.DevicePLUsException;
 import com.openbravo.pos.pludevice.ProductDownloaded;
+import com.openbravo.pos.util.ByteArrayUtils;
 import gnu.io.*;
 import java.io.*;
 import java.util.LinkedList;
@@ -138,7 +139,7 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
         try{
             //Номер товара в диапозоне. Смещение 0. Длина 2 байта.
             if (m_iProductOrder > 0 || m_iProductOrder <= 9999) {
-                lineout.write(convertHEX(m_iProductOrder), 0, 2);
+                lineout.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(m_iProductOrder), 2, true));
             } else {
                 lineout.write(0x00);
                 lineout.write(0x00);
@@ -154,7 +155,7 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
             lineout.write(convertASCII(sName), 0, 24);
 
             // Цена товара. Смещение 28. Длина 4.
-            lineout.write(convertHEX((long) (dPriceSell * 100)), 0, 4);
+            lineout.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes((int) (dPriceSell * 100)), 4, true));
 
             // Налоговая группа товара. Смещение 32. Длина 1.
             lineout.write(0x01);
@@ -235,23 +236,6 @@ public class DeviceMercury130Comm implements DevicePLUs, SerialPortEventListener
                 return m_aLines.poll();
             }
         }
-    }
-
-    private static byte[] convertHEX(long sdata) {
-
-        byte[] result = new byte[24];
-
-        if (sdata <= 255.00 && sdata >= 0) {
-            result[0] = (byte) sdata;
-        } else {
-            int j = 0;
-            String buff = Long.toHexString(Long.reverseBytes(sdata));
-            for (int i = 0; i < buff.length() / 2; i++) {
-                result[i] = (byte) Integer.parseInt(buff.substring(j, j + 2), 16);
-                j = j + 2;
-            }
-        }
-        return result;
     }
 
     private static byte[] convertASCII(String sdata) {

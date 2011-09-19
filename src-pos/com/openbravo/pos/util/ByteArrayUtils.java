@@ -38,18 +38,41 @@ public class ByteArrayUtils {
         }
         return result;
     }
-
-    public static final byte[] convertIntegerToByteArray(int value) {
-        return new byte[]{
-                    (byte) (value >>> 24),
-                    (byte) (value >>> 16),
-                    (byte) (value >>> 8),
-                    (byte) value};
-    }
-
-    public static final byte[] convertShortIntegerToByteArray(int value) {
-        return new byte[]{
-                    (byte) (value >>> 24),
-                    (byte) (value >>> 16)};
+    
+        public static final byte[] convertIntegerToByteArray(int value, int bytes, boolean revers) {
+        if (bytes == 1 && !revers) {
+            return new byte[]{
+                        (byte) value
+                    };
+        } else if (bytes == 1 && revers) {
+            return new byte[]{
+                        (byte) (value >>> 24)
+                    };
+        } else if (bytes == 2 && !revers) {
+            return new byte[]{
+                        (byte) (value >>> 8),
+                        (byte) value};
+        } else if (bytes == 2 && revers) {
+            return new byte[]{
+                        (byte) (value >>> 24),
+                        (byte) (value >>> 16)
+                    };
+        } else if (bytes == 3 && !revers) {
+            return new byte[]{
+                        (byte) (value >>> 16),
+                        (byte) (value >>> 8),
+                        (byte) value};
+        } else if (bytes == 3 && revers) {
+            return new byte[]{
+                        (byte) (value >>> 24),
+                        (byte) (value >>> 16),
+                        (byte) (value >>> 8)};
+        } else {
+            return new byte[]{
+                        (byte) (value >>> 24),
+                        (byte) (value >>> 16),
+                        (byte) (value >>> 8),
+                        (byte) value};
+        }
     }
 }

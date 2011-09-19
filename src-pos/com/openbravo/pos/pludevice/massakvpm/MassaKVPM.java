@@ -58,16 +58,16 @@ public class MassaKVPM {
 
     public static byte[] CreatePLUMessage(String sBarcode, Double dPrice, String sName) throws IOException {
         ByteArrayOutputStream productmessage = new ByteArrayOutputStream();
-        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(Integer.parseInt(sBarcode.substring(3))))); // Номер PLU
-        productmessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(38+sName.length()+3+STRING_CONSISTATION.length+STRING_INFORMATION.length))); // Длина записи данных
+        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(Integer.parseInt(sBarcode.substring(3))), 4, false)); // Номер PLU
+        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(38+sName.length()+3+STRING_CONSISTATION.length+STRING_INFORMATION.length), 2, true)); // Длина записи данных
         productmessage.write(STATUS_PLU_VALUE); // Статус PLU - Наличие параметров в записи PLU
         productmessage.write(STATUS_PLU_COUNTRY); // Статус PLU - Код страны
         productmessage.write(FORMAT_LABEL); // Номер формата этикетки
         productmessage.write(FORMAT_BARCODE); // Номер формата штрихкода
         productmessage.write(Integer.parseInt(sBarcode.substring(0,2)));// Префикс штрихкода        
-        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes((int)(dPrice * 100)))); // Цена за единицу веса
+        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes((int)(dPrice * 100)), 4, false)); // Цена за единицу веса
         productmessage.write(WEIGHT_CONTAINER); // Вес тары
-        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(Integer.parseInt(sBarcode.substring(2))))); // Код товара
+        productmessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(Integer.parseInt(sBarcode.substring(2))), 4, false)); // Код товара
         productmessage.write(DATA_REALIZATION); // Дата реализации
         productmessage.write(DATA_VALIDITY); // Срок годности
         productmessage.write(CODE_SERTIFICATION); // Код органа сертификации
@@ -89,23 +89,23 @@ public class MassaKVPM {
 //        System.out.println(iCurrentRow+" of " + iRows);
         ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
         datamessage.write(HEADER); // Заголовочная последовательность
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(8 + bData.length))); // Длина тела сообщения
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(8 + bData.length), 2, true)); // Длина тела сообщения
         datamessage.write(bCommand); // Управляющая команда
         datamessage.write(TYPE_FILE); // Тип файла
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(iRows))); // Число записей в файле
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(iCurrentRow))); // Номер текущей записи
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(bData.length))); // Длина записи
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(iRows), 2, true)); // Число записей в файле
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(iCurrentRow), 2, true)); // Номер текущей записи
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(bData.length), 2, true)); // Длина записи
         datamessage.write(bData); // Данные
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)))); //CRC
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)), 2, true)); //CRC
         return datamessage.toByteArray();
     }
 
     public static byte[] CreateUDPMessage(byte bCommand) throws IOException {
         ByteArrayOutputStream datamessage = new ByteArrayOutputStream();
         datamessage.write(HEADER); // Заголовочная последовательность
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(1))); // Длина тела сообщения
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(1), 2, true)); // Длина тела сообщения
         datamessage.write(bCommand); // Управляющая команда
-        datamessage.write(ByteArrayUtils.convertShortIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)))); //CRC
+        datamessage.write(ByteArrayUtils.convertIntegerToByteArray(Integer.reverseBytes(CalcCRC16MassaK((short) 0, datamessage.toByteArray(), 5)), 2, true)); //CRC
         return datamessage.toByteArray();
     }
 
