@@ -80,7 +80,7 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
             if (dprice >= 0 && dunits >= 0 && m_sTicketType.equals("sale")) {
                 m_CommOutputFiscal.sendRegistrationLine(0, dprice / dunits, dunits, taxinfo);
             } else if (dprice < 0 && dunits < 0 && m_sTicketType.equals("refund")) {
-                m_CommOutputFiscal.sendRefundLine(0, dprice / dunits, dunits);
+                m_CommOutputFiscal.sendRefundLine(2, dprice / dunits, dunits);
             } else {
                 m_CommOutputFiscal.sendTextMessage("Error in ticket line.");
             }
