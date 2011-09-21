@@ -144,56 +144,64 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
     //Команды обмена с принтером
     //Проверка состояния принтера
     public void sendInitMessage() throws TicketPrinterException {
-        sendMessage(m_FR.InitMessage(), 1);
+        sendMessage(m_FR.InitMessage(), true);
     }
 
     //Вывод звукового сигнала
     public void sendBeepMessage() throws TicketPrinterException {
-        sendMessage(m_FR.BeepMessage(), 0);
+        sendMessage(m_FR.BeepMessage(), false);
     }
 
     public void sendCutTicketMessage(int iFlag) throws TicketPrinterException {
-        sendMessage(m_FR.CutTicketMessage(iFlag), 1);
+        sendMessage(m_FR.CutTicketMessage(iFlag), true);
     }
 
     public void sendTextMessage(String sText) throws TicketPrinterException {
-        sendMessage(m_FR.TextMessage(sText), 1);
+        sendMessage(m_FR.TextMessage(sText), true);
     }
 
     public void sendStampTitleReportMessage() throws TicketPrinterException {
-        sendMessage(m_FR.StampTitleReportMessage(), 1);
+        sendMessage(m_FR.StampTitleReportMessage(), true);
     }
 
     public void sendOpenDrawerMessage() throws TicketPrinterException {
-        sendMessage(m_FR.OpenDrawerMessage(), 1);
+        sendMessage(m_FR.OpenDrawerMessage(), true);
     }
 
-    public void sendOpenTicket(int iFlag, int iTypeTicket) throws TicketPrinterException {
-        sendMessage(m_FR.OpenTicket(iFlag, iTypeTicket), 1);
+    public void sendOpenTicket(int iFlag, String sTypeTicket) throws TicketPrinterException {
+        if (sTypeTicket.equals("refund")) {
+            sendMessage(m_FR.OpenTicket(iFlag, 2), true);
+        } else {
+            sendMessage(m_FR.OpenTicket(iFlag, 1), true);
+        }
     }
 
     public void sendSelectModeMessage(int iMode) throws TicketPrinterException {
-        sendMessage(m_FR.SelectMode(iMode), 1);
+        sendMessage(m_FR.SelectMode(iMode), true);
     }
 
     public void sendCancelModeMessage() throws TicketPrinterException {
-        sendMessage(m_FR.CancelMode(), 1);
+        sendMessage(m_FR.CancelMode(), true);
     }
 
     public void sendCloseTicketMessage(int iFlag, int iType, double dPaid) throws TicketPrinterException {
-        sendMessage(m_FR.CloseTicket(iFlag, iType, dPaid), 1);
+        sendMessage(m_FR.CloseTicket(iFlag, iType, dPaid), true);
     }
 
     public void sendRegistrationLine(int iFlag, double dProductPrice, double dSaleUnits, int iProductSection) throws TicketPrinterException {
-        sendMessage(m_FR.RegistrationLine(iFlag, dProductPrice, dSaleUnits, iProductSection), 1);
+        sendMessage(m_FR.RegistrationLine(iFlag, dProductPrice, dSaleUnits, iProductSection), true);
     }
+    
+    public void sendRefundLine(int iFlag, double dProductPrice, double dSaleUnits) throws TicketPrinterException {
+        sendMessage(m_FR.RefundLine(iFlag, dProductPrice, dSaleUnits), true);
+    }    
 
     public void printXReport(int iType) throws TicketPrinterException {
-        sendMessage(m_FR.XReport(iType), 1);
+        sendMessage(m_FR.XReport(iType), true);
     }
 
     public void printZReport() throws TicketPrinterException {
-        sendMessage(m_FR.ZReport(), 1);
+        sendMessage(m_FR.ZReport(), true);
     }
 
 //    private void readCommand(byte[] cmd) throws TicketPrinterException {
@@ -203,7 +211,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
 //        }
 //    }
 
-    private void sendMessage(byte[] bMessage, int iGetAnswer) throws TicketPrinterException {
+    private void sendMessage(byte[] bMessage, boolean GetAnswer) throws TicketPrinterException {
         writeLine(ENQ);
         System.out.println("ReadLine: " + readLine().length);
 //        readCommand(ACK);
@@ -211,7 +219,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
         System.out.println("ReadLine: " + readLine().length);
 //        readCommand(ACK);
         writeLine(EOT);
-        if (iGetAnswer == 1) {
+        if (GetAnswer) {
             System.out.println("ReadLine: " + readLine().length);
 //        readCommand(ENQ);
             writeLine(ACK);

@@ -32,8 +32,9 @@ public interface AuraFRReaderWritter {
      public void sendCutTicketMessage(int iFlag) throws TicketPrinterException;
      public void sendStampTitleReportMessage() throws TicketPrinterException;
      public void sendOpenDrawerMessage() throws TicketPrinterException;
-     public void sendOpenTicket(int iFlag, int iTypeTicket) throws TicketPrinterException;
+     public void sendOpenTicket(int iFlag, String sTypeTicket) throws TicketPrinterException;
      public void sendRegistrationLine(int iFlag, double dProductPrice, double dSaleUnits, int iProductTax) throws TicketPrinterException;
+     public void sendRefundLine(int iFlag, double dProductPrice, double dSaleUnits) throws TicketPrinterException;
      public void sendSelectModeMessage(int iMode) throws TicketPrinterException;
      public void sendCancelModeMessage() throws TicketPrinterException;
      public void sendCloseTicketMessage(int iFlag, int iType, double dPaid) throws TicketPrinterException;

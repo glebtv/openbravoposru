@@ -68,7 +68,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     //
 
     // Начало печати чека
-    public void beginReceipt(String sCashier) throws TicketFiscalPrinterException {
+    public void beginReceipt(String sType, String sCashier) throws TicketFiscalPrinterException {
         logger.finer("Begin printing receipt started");
 
         try {

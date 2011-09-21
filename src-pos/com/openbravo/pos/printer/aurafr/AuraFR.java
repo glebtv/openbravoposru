@@ -42,6 +42,7 @@ public class AuraFR {
     private static final byte REGISTRATION = (byte) 0x52;
     private static final byte SELECTMODE = (byte) 0x56;
     private static final byte CANCELMODE = (byte) 0x48;
+    private static final byte REFUND = (byte) 0x57;    
 
     private static final byte XREPORT = (byte) 0x67;
     private static final byte ZREPORT = (byte) 0x5A;
@@ -176,6 +177,33 @@ public class AuraFR {
         MSG = convertDouble(dProductUnit,3);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         lineout.write(iSection);
+        byte[] bData = new byte[lineout.size()];
+        bData = lineout.toByteArray();
+        lineout.reset();
+        for (int i = 0; i < 4; i++) lineout.write(bData[i]);;
+        for (int i = 4; i < bData.length; i++) {
+            if (bData[i] == ETX || bData[i] == DLE) {
+                lineout.write(DLE);
+            }
+            lineout.write(bData[i]);
+        }
+        lineout.write(ETX);
+        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
+        return lineout.toByteArray();
+    }
+    
+    public byte[] RefundLine(int iFlag, double dProductPrice, double dProductUnit) {
+        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
+        lineout.write(STX);
+        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
+        lineout.write(REFUND);
+        lineout.write(iFlag);
+        byte[] MSG = new byte[5];
+        MSG = convertDouble(dProductPrice,2);
+        for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
+        MSG = null;
+        MSG = convertDouble(dProductUnit,3);
+        for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         byte[] bData = new byte[lineout.size()];
         bData = lineout.toByteArray();
         lineout.reset();

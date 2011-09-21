@@ -36,7 +36,7 @@ public class DeviceFiscalPrinterNull implements DeviceFiscalPrinter {
         return null;
     }
 
-    public void beginReceipt(String sCashier) {
+    public void beginReceipt(String sType, String sCashier) {
     }
     public void endReceipt() {
     }

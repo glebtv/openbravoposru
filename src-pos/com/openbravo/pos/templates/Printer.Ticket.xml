@@ -282,7 +282,13 @@
     #end
 
     #if (${ticket.ticketType} == 0)﻿
-    <fiscalreceipt>
+       #set ($fiscaltickettype = "sale")
+    #elseif (${ticket.ticketType} == 1)
+       #set ($fiscaltickettype = "refund")    
+    #end
+    
+    #if ($fiscaltickettype == "sale" || $fiscaltickettype == "refund")
+    <fiscalreceipt type="${fiscaltickettype}">
       #foreach ($ticketline in $ticket.getLines())
             #if (${ticketline.getTaxInfo().getRate()}==0.1)
                     #set ($vatinfo ="2")
@@ -303,13 +309,19 @@
             #end
       #end
       <message>========================================</message>
-      <message>Кол-во продаж: ${ticket.printArticlesCount()}</message>
+      #if ($fiscaltickettype == "sale")
+            <message>Кол-во продаж: ${ticket.printArticlesCount()}</message>
+      #elseif ($fiscaltickettype == "refund")
+            <message>Кол-во возвратов: ${ticket.printArticlesCount()}</message>
+      #end
       #foreach ($paymentline in $ticket.payments)
             #if ($paymentline.name == "cash")
                 <total paid="${paymentline.getPaid()}">К оплате по чеку:</total>
+            #elseif ($paymentline.name == "cashrefund")
+                <total paid="${paymentline.getTotal()}">Возврат по чеку:</total>            
             #end
       #end
     </fiscalreceipt>
     #end
-    
+
 </output>

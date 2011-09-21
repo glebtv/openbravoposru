@@ -144,14 +144,14 @@ public class TicketParser extends DefaultHandler {
                 m_oOutputPrinter = null;
             } else if ("fiscalreceipt".equals(qName)) {
                 m_iOutputType = OUTPUT_FISCAL;
-                m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("cashier"), "Администратор"));
+                m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("type"), "sale"), readString(attributes.getValue("cashier"), "Администратор"));
             } else if ("fiscalzreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printZReport();
                 m_printer.getFiscalPrinter().cutPaper(true);
             } else if ("fiscalxreport".equals(qName)) {
                 m_printer.getFiscalPrinter().printXReport();
                 m_printer.getFiscalPrinter().cutPaper(true);
-            }
+            }  
 //            } else if ("cutpaper".equals(qName)) {
 //                m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
 //            }
@@ -208,7 +208,6 @@ public class TicketParser extends DefaultHandler {
                 m_dValue1 = parseDouble(attributes.getValue("price"));
                 m_dValue2 = parseDouble(attributes.getValue("units"), 1.0);
                 attribute3 = parseInt(attributes.getValue("tax"));
-
             } else if ("message".equals(qName)) {
                 text = new StringBuffer();
             } else if ("total".equals(qName)) {
@@ -218,8 +217,8 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
             break;
+            }
         }
-    }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -334,8 +333,8 @@ public class TicketParser extends DefaultHandler {
                 text = null;
             }
             break;
-        }
-    }
+            }
+}            
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {

@@ -35,6 +35,7 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
 
     private AuraFRReaderWritter m_CommOutputFiscal;
     private String m_sName;
+    private String m_sTicketType;
 
     // Creates new TicketPrinter
     public DeviceFiscalPrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketPrinterException {
@@ -60,26 +61,28 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
     }
 
     //Начало печати чека
-    public void beginReceipt(String sCashier) {
-        try {
+    public void beginReceipt(String sType, String sCashier) {
+        m_sTicketType = sType;
+        try {            
             m_CommOutputFiscal.connectDevice();
 //            m_CommOutputFiscal.sendInitMessage();
             m_CommOutputFiscal.sendSelectModeMessage(1);
             m_CommOutputFiscal.sendBeepMessage();
-            m_CommOutputFiscal.sendOpenTicket(0,1);
+            m_CommOutputFiscal.sendOpenTicket(0, m_sTicketType);
         } catch (TicketPrinterException e) {
         }
-
     }
 
-    // Печать строки продажи по товару
+    // Печать строки продажи или возврата по товару
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) {
         try {
-            if (dprice >= 0 && dunits >= 0) {
-                m_CommOutputFiscal.sendTextMessage(sproduct);
+            m_CommOutputFiscal.sendTextMessage(sproduct);
+            if (dprice >= 0 && dunits >= 0 && m_sTicketType.equals("sale")) {
                 m_CommOutputFiscal.sendRegistrationLine(0, dprice / dunits, dunits, taxinfo);
+            } else if (dprice < 0 && dunits < 0 && m_sTicketType.equals("refund")) {
+                m_CommOutputFiscal.sendRefundLine(0, -1.0 * (dprice / dunits), -1.0 * dunits);
             } else {
-                m_CommOutputFiscal.sendTextMessage("Error in ticket line for sale");
+                m_CommOutputFiscal.sendTextMessage("Error in ticket line.");
             }
         } catch (TicketPrinterException e) {
         }
@@ -111,7 +114,13 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
     public void printTotal(String sPayment, double dpaid) {
         try {
             m_CommOutputFiscal.sendTextMessage(sPayment);
-            m_CommOutputFiscal.sendCloseTicketMessage(0, 1, dpaid);
+            if (dpaid >= 0 && m_sTicketType.equals("sale")) {
+                m_CommOutputFiscal.sendCloseTicketMessage(0, 1, dpaid);
+            } else if (dpaid >= 0 && m_sTicketType.equals("refund")) {
+                m_CommOutputFiscal.sendCloseTicketMessage(0, 1, 0);
+            } else {
+                m_CommOutputFiscal.sendTextMessage("Error in ticket total.");
+            }
         } catch (TicketPrinterException e) {
         }
     }

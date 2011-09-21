@@ -26,7 +26,7 @@ public interface DeviceFiscalPrinter {
     public String getFiscalName();
     public JComponent getFiscalComponent();
 
-    public void beginReceipt(String sCashier) throws TicketFiscalPrinterException;
+    public void beginReceipt(String sType, String sCashier) throws TicketFiscalPrinterException;
     public void endReceipt() throws TicketFiscalPrinterException;
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) throws TicketFiscalPrinterException;
     public void printMessage(String smessage) throws TicketFiscalPrinterException;
