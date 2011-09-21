@@ -316,9 +316,15 @@
       #end
       #foreach ($paymentline in $ticket.payments)
             #if ($paymentline.name == "cash")
-                <total paid="${paymentline.getPaid()}">К оплате по чеку:</total>
+                <total type="$paymentline.name" paid="${paymentline.getPaid()}">К оплате по чеку:</total>
             #elseif ($paymentline.name == "cashrefund")
-                <total paid="${paymentline.getTotal()}">Возврат по чеку:</total>            
+                <total type="$paymentline.name" paid="${paymentline.getTotal()}">Возврат по чеку:</total>            
+            #elseif ($paymentline.name == "debt")
+                <total type="$paymentline.name" paid="${paymentline.getPaid()}">Продажа в кредит:</total>
+            #elseif ($paymentline.name == "magcard")            
+                <total type="$paymentline.name" paid="${paymentline.getPaid()}">К оплате по карте:</total>
+            #elseif ($paymentline.name == "magcardrefund")
+                <total type="$paymentline.name" paid="${paymentline.getTotal()}">Возврат по карте:</total>            
             #end
       #end
     </fiscalreceipt>

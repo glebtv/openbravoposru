@@ -30,7 +30,7 @@ public interface DeviceFiscalPrinter {
     public void endReceipt() throws TicketFiscalPrinterException;
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) throws TicketFiscalPrinterException;
     public void printMessage(String smessage) throws TicketFiscalPrinterException;
-    public void printTotal(String sPayment, double dpaid) throws TicketFiscalPrinterException;
+    public void printTotal(String sPayment, double dpaid, String sPaymentType) throws TicketFiscalPrinterException;
 
     public void cutPaper(boolean complete) throws TicketFiscalPrinterException;
 

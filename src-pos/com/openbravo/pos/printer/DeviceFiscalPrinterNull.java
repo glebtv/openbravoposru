@@ -44,7 +44,7 @@ public class DeviceFiscalPrinterNull implements DeviceFiscalPrinter {
     }
     public void printMessage(String smessage) {
     }
-    public void printTotal(String sPayment, double dpaid) {
+    public void printTotal(String sPayment, double dpaid, String sPaymentType) {
     }
 
     public void cutPaper(boolean complete) {

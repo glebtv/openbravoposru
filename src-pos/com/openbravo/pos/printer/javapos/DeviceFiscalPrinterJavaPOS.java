@@ -89,7 +89,7 @@ public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements De
         }
     }
 
-    public void printTotal(String sPayment, double dpaid) {
+    public void printTotal(String sPayment, double dpaid, String sPaymentType) {
         try {
             // el primer valor es el total calculado por la aplicacion.
             // al poner 0 no se debe chequear: CAPCHECKTOTAL = false.

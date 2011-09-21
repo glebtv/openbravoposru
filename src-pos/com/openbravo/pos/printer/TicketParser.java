@@ -55,6 +55,8 @@ public class TicketParser extends DefaultHandler {
     private double m_dValue1;
     private double m_dValue2;
     private int attribute3;
+    
+    private String m_sPaymentType;
 
     private int m_iOutputType;
     private static final int OUTPUT_NONE = 0;
@@ -213,6 +215,7 @@ public class TicketParser extends DefaultHandler {
             } else if ("total".equals(qName)) {
                 text = new StringBuffer();
                 m_dValue1 = parseDouble(attributes.getValue("paid"));
+                m_sPaymentType = readString(attributes.getValue("type"),"cash");                
             } else if ("cutpaper".equals(qName)) {
                 m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
             }
@@ -329,7 +332,7 @@ public class TicketParser extends DefaultHandler {
                 m_printer.getFiscalPrinter().printMessage(text.toString());
                 text = null;
             } else if ("total".equals(qName)) {
-                m_printer.getFiscalPrinter().printTotal(text.toString(), m_dValue1);
+                m_printer.getFiscalPrinter().printTotal(text.toString(), m_dValue1, m_sPaymentType);
                 text = null;
             }
             break;

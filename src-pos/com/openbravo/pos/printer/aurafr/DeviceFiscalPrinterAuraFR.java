@@ -111,13 +111,25 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
     }
 
     //Печать итоговой оплаты по чеку
-    public void printTotal(String sPayment, double dpaid) {
+    public void printTotal(String sPayment, double dpaid, String sPaymentType) {
         try {
             m_CommOutputFiscal.sendTextMessage(sPayment);
-            if (dpaid >= 0 && m_sTicketType.equals("sale")) {
-                m_CommOutputFiscal.sendCloseTicketMessage(0, 1, dpaid);
-            } else if (dpaid < 0 && m_sTicketType.equals("refund")) {
-                m_CommOutputFiscal.sendCloseTicketMessage(0, 1, 0);
+            int iType = 0;
+            
+            if (sPaymentType.equals("cash") || sPaymentType.equals("cashrefund")) {
+                iType = 1;
+            } else if (sPaymentType.equals("debt")) {
+                iType = 2;
+            } else if (sPaymentType.equals("magcard") || sPaymentType.equals("magcardrefund")) {
+                iType = 4;
+            } else {
+                m_CommOutputFiscal.sendTextMessage("Not support payment type.");                
+            }
+                    
+            if (dpaid >= 0 && m_sTicketType.equals("sale") && iType != 0) {
+                m_CommOutputFiscal.sendCloseTicketMessage(0, iType, dpaid);
+            } else if (dpaid < 0 && m_sTicketType.equals("refund") && iType != 0) {
+                m_CommOutputFiscal.sendCloseTicketMessage(0, iType, 0);
             } else {
                 m_CommOutputFiscal.sendTextMessage("Error close ticket.");
             }

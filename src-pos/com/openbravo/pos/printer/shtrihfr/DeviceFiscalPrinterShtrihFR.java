@@ -233,7 +233,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     }
 
     // Печать итоговой оплаты по чеку
-    public void printTotal(String sPayment, double dpaid) throws TicketFiscalPrinterException {
+    public void printTotal(String sPayment, double dpaid, String sPaymentType) throws TicketFiscalPrinterException {
         logger.finer("Printing total started");
 
         try {
