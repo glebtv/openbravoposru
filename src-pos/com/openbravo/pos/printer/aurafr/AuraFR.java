@@ -171,10 +171,10 @@ public class AuraFR {
         lineout.write(REGISTRATION);
         lineout.write(iFlag);
         byte[] MSG = new byte[5];
-        MSG = convertDouble(dProductPrice,2);
+        MSG = convertDouble(Math.abs(dProductPrice),2);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         MSG = null;
-        MSG = convertDouble(dProductUnit,3);
+        MSG = convertDouble(Math.abs(dProductUnit),3);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         lineout.write(iSection);
         byte[] bData = new byte[lineout.size()];
@@ -192,17 +192,17 @@ public class AuraFR {
         return lineout.toByteArray();
     }
     
-    public byte[] RefundLine(int iFlag, double dProductPrice, double dProductUnit) {
+public byte[] RefundLine(int iFlag, double dProductPrice, double dProductUnit) {
         ByteArrayOutputStream lineout = new ByteArrayOutputStream();
         lineout.write(STX);
         for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
         lineout.write(REFUND);
         lineout.write(iFlag);
         byte[] MSG = new byte[5];
-        MSG = convertDouble(dProductPrice,2);
+        MSG = convertDouble(Math.abs(dProductPrice),2);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         MSG = null;
-        MSG = convertDouble(dProductUnit,3);
+        MSG = convertDouble(Math.abs(dProductUnit),3);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         byte[] bData = new byte[lineout.size()];
         bData = lineout.toByteArray();
@@ -259,7 +259,7 @@ public class AuraFR {
         lineout.write(iFlag);
         lineout.write(iPaidType);
         byte[] MSG = new byte[5];
-        MSG = convertDouble(dTotalPaid,2);
+        MSG = convertDouble(Math.abs(dTotalPaid),2);
         for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
         byte[] bData = new byte[lineout.size()];
         bData = lineout.toByteArray();

@@ -80,7 +80,7 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
             if (dprice >= 0 && dunits >= 0 && m_sTicketType.equals("sale")) {
                 m_CommOutputFiscal.sendRegistrationLine(0, dprice / dunits, dunits, taxinfo);
             } else if (dprice < 0 && dunits < 0 && m_sTicketType.equals("refund")) {
-                m_CommOutputFiscal.sendRefundLine(0, -1.0 * (dprice / dunits), -1.0 * dunits);
+                m_CommOutputFiscal.sendRefundLine(0, dprice / dunits, dunits);
             } else {
                 m_CommOutputFiscal.sendTextMessage("Error in ticket line.");
             }
@@ -116,10 +116,10 @@ public class DeviceFiscalPrinterAuraFR implements DeviceFiscalPrinter {
             m_CommOutputFiscal.sendTextMessage(sPayment);
             if (dpaid >= 0 && m_sTicketType.equals("sale")) {
                 m_CommOutputFiscal.sendCloseTicketMessage(0, 1, dpaid);
-            } else if (dpaid >= 0 && m_sTicketType.equals("refund")) {
+            } else if (dpaid < 0 && m_sTicketType.equals("refund")) {
                 m_CommOutputFiscal.sendCloseTicketMessage(0, 1, 0);
             } else {
-                m_CommOutputFiscal.sendTextMessage("Error in ticket total.");
+                m_CommOutputFiscal.sendTextMessage("Error close ticket.");
             }
         } catch (TicketPrinterException e) {
         }
