@@ -34,6 +34,7 @@ import java.util.Properties;
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class TicketLineInfo implements SerializableWrite, SerializableRead, Serializable {
 
@@ -240,21 +241,19 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public double getPrice() {
-        return price;
+        return RoundUtils.round(price);
     }
 
     public void setPrice(double dValue) {
-        price = dValue;
+        price = RoundUtils.round(dValue);
     }
 
     public double getPriceTax() {
         return RoundUtils.round(price * (1.0 + getTaxRate()));
-//        return price * (1.0 + getTaxRate());
     }
 
     public void setPriceTax(double dValue) {
         price = RoundUtils.round(dValue / (1.0 + getTaxRate()));
-//        price = dValue / (1.0 + getTaxRate());
     }
 
     public TaxInfo getTaxInfo() {
@@ -286,15 +285,15 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public double getSubValue() {
-        return price * multiply;
+        return RoundUtils.round(price * multiply);
     }
 
     public double getTax() {
-        return price * multiply * getTaxRate();
+        return RoundUtils.round(price * multiply * getTaxRate());
     }
 
     public double getValue() {
-        return price * multiply * (1.0 + getTaxRate());
+        return RoundUtils.round(price * multiply * (1.0 + getTaxRate()));
     }
 
     public String printName() {
