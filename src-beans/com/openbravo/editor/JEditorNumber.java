@@ -87,7 +87,11 @@ public abstract class JEditorNumber extends JEditorAbstract {
             return null; 
         } else {
             try {
+                if (getMode() == EditorKeys.MODE_PERCENT) {
+                    return Double.parseDouble(text)/100;
+                } else {
                 return Double.parseDouble(text);
+                }
             } catch (NumberFormatException e) {
                 return null;
             }

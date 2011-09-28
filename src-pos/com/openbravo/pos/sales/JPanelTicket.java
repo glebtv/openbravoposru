@@ -34,6 +34,7 @@ import com.openbravo.pos.panels.JProductFinder;
 import com.openbravo.pos.scale.ScaleException;
 import com.openbravo.pos.payment.JPaymentSelect;
 import com.openbravo.basic.BasicException;
+import com.openbravo.beans.JPercentDialog;
 import com.openbravo.data.gui.ListKeyed;
 import com.openbravo.data.loader.SentenceList;
 import com.openbravo.data.loader.Session;
@@ -120,6 +121,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
     
+    private Double m_dDiscountRate1;
+    private Double m_dDiscountRate2;
+    private Double m_dDiscountRate3;
+    
     protected javax.swing.JPanel refundcatcontainer;
 
     private Boolean bTypeDiscount;
@@ -173,7 +178,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else {
             m_jDiscountPanel.setVisible(false);
         }
-
+        
+        m_dDiscountRate1 = Double.parseDouble(panelconfig.getProperty("discount-1"))/100;
+        m_dDiscountRate2 = Double.parseDouble(panelconfig.getProperty("discount-2"))/100;
+        m_dDiscountRate3 = Double.parseDouble(panelconfig.getProperty("discount-3"))/100;        
+        
         // El modelo de impuestos
         senttax = dlSales.getTaxList();
         senttaxcategories = dlSales.getTaxCategoriesList();
@@ -254,9 +263,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount") || m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
 
         // Valores para descontos
-        m_jDiscount1.setText(panelconfig.getProperty("discount-1") + " %");
-        m_jDiscount2.setText(panelconfig.getProperty("discount-2") + " %");
-        m_jDiscount3.setText(panelconfig.getProperty("discount-3") + " %");
+        m_jDiscount1.setText(Formats.PERCENT.formatValue(m_dDiscountRate1));
+        m_jDiscount2.setText(Formats.PERCENT.formatValue(m_dDiscountRate2));
+        m_jDiscount3.setText(Formats.PERCENT.formatValue(m_dDiscountRate3));
+        m_jDisableDiscount.setText(Formats.PERCENT.formatValue(0.0));
 
         m_ticketsbag.activate();
     }
@@ -1203,48 +1213,45 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    private void performDiscount(String button) {
+    private void performDiscount(Double discountrate) {
         int index = m_ticketlines.getSelectedIndex();
         double total = m_oTicket.getTotal();
-        double discountrate = 0.0;
-
-        if (button != null) {
-            discountrate = Double.parseDouble(panelconfig.getProperty(button));
-        } else {
-            String discountperc = JOptionPane.showInputDialog(null, AppLocal.getIntString("message.setdiscountrate"));
-            if (!discountperc.equals("") || !(discountperc == null)) {
-                discountrate = Double.parseDouble(discountperc);
-            }
-        }
 
         if (bTypeDiscount == true) {
             if (index >= 0) {
-                TicketLineInfo line = m_oTicket.getLine(index);
-                if (line.getPrice() > 0.0 && discountrate > 0.0 && line.getProperty("discountrate") == null || Double.parseDouble(line.getProperty("discountrate")) != discountrate) {
-                    line.setPrice(RoundUtils.getValue(line.getPrice() - line.getPrice() * discountrate / 100.00));
-                    line.setProperty("discountrate", Double.toString(discountrate));
-                } else {
-                    java.awt.Toolkit.getDefaultToolkit().beep();
-                }
+                CalculationLineDiscount(m_oTicket.getLine(index), discountrate);
             } else {
                 java.awt.Toolkit.getDefaultToolkit().beep();
             }
         } else if (bTypeDiscount == false) {
             if (total > 0.0) {
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
+                    CalculationLineDiscount(m_oTicket.getLine(i), discountrate);
                     TicketLineInfo row = m_oTicket.getLine(i);
-                    if ((row.getProperty("discountrate") == null || Double.parseDouble(row.getProperty("discountrate")) != discountrate)) {
-                        row.setPrice(RoundUtils.getValue(row.getPrice() - row.getPrice() * discountrate / 100.00));
-                        row.setProperty("discountrate", Double.toString(discountrate));
-                    }
                 }
             } else {
                 java.awt.Toolkit.getDefaultToolkit().beep();
             }
+        } else {
+            java.awt.Toolkit.getDefaultToolkit().beep();
         }
         refreshTicket();
     }
 
+    private void CalculationLineDiscount(TicketLineInfo m_TicketLine, Double dDiscount) {
+        double linediscount = m_TicketLine.getDiscountRate();
+        double lineprice = m_TicketLine.getPrice();
+        if (linediscount == 0.0 || linediscount != dDiscount) {
+            if (linediscount != 0.0) {
+                m_TicketLine.setPrice(RoundUtils.getValue(lineprice / (1 - linediscount) - lineprice / (1 - linediscount) * dDiscount));
+            } else {
+                m_TicketLine.setPrice(RoundUtils.getValue(lineprice - lineprice * dDiscount));
+            }
+            m_TicketLine.setProperty("discountrate", Double.toString(dDiscount));
+        } else {
+            java.awt.Toolkit.getDefaultToolkit().beep();
+        }
+    }
 
     public static class ScriptArg {
 
@@ -1389,6 +1396,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jEditAttributes = new javax.swing.JButton();
         m_jDiscountPanel = new javax.swing.JPanel();
         m_jbtnDiscount = new javax.swing.JButton();
+        m_jDisableDiscount = new javax.swing.JButton();
         m_jDiscount1 = new javax.swing.JButton();
         m_jDiscount2 = new javax.swing.JButton();
         m_jDiscount3 = new javax.swing.JButton();
@@ -1423,7 +1431,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jOptions.setLayout(new java.awt.BorderLayout());
 
-        m_jTicketId.setBackground(java.awt.Color.white);
         m_jTicketId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         m_jTicketId.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jTicketId.setOpaque(true);
@@ -1488,7 +1495,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanTicket.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         m_jPanTicket.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         jPanel2.setLayout(new java.awt.GridLayout(6, 1, 5, 5));
@@ -1497,6 +1504,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jUp.setFocusPainted(false);
         m_jUp.setFocusable(false);
         m_jUp.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jUp.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jUp.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jUp.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jUp.setRequestFocusEnabled(false);
         m_jUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1509,6 +1519,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDown.setFocusPainted(false);
         m_jDown.setFocusable(false);
         m_jDown.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jDown.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDown.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDown.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jDown.setRequestFocusEnabled(false);
         m_jDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1521,6 +1534,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDelete.setFocusPainted(false);
         m_jDelete.setFocusable(false);
         m_jDelete.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jDelete.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDelete.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDelete.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jDelete.setRequestFocusEnabled(false);
         m_jDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1533,6 +1549,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jList.setFocusPainted(false);
         m_jList.setFocusable(false);
         m_jList.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jList.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jList.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jList.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jList.setRequestFocusEnabled(false);
         m_jList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1545,6 +1564,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jEditLine.setFocusPainted(false);
         m_jEditLine.setFocusable(false);
         m_jEditLine.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        m_jEditLine.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jEditLine.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jEditLine.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jEditLine.setRequestFocusEnabled(false);
         m_jEditLine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1557,6 +1579,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jEditAttributes.setFocusPainted(false);
         jEditAttributes.setFocusable(false);
         jEditAttributes.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        jEditAttributes.setMaximumSize(new java.awt.Dimension(62, 50));
+        jEditAttributes.setMinimumSize(new java.awt.Dimension(62, 50));
+        jEditAttributes.setPreferredSize(new java.awt.Dimension(62, 50));
         jEditAttributes.setRequestFocusEnabled(false);
         jEditAttributes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1568,18 +1593,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel5.add(jPanel2);
 
         m_jDiscountPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        m_jDiscountPanel.setMinimumSize(new java.awt.Dimension(74, 300));
-        m_jDiscountPanel.setPreferredSize(new java.awt.Dimension(74, 300));
-        m_jDiscountPanel.setLayout(new java.awt.GridLayout(5, 1, 5, 5));
+        m_jDiscountPanel.setMinimumSize(new java.awt.Dimension(72, 325));
+        m_jDiscountPanel.setPreferredSize(new java.awt.Dimension(72, 325));
+        m_jDiscountPanel.setLayout(new java.awt.GridLayout(6, 1, 5, 5));
 
-        m_jbtnDiscount.setText(AppLocal.getIntString("button.rowdiscount"));
+        m_jbtnDiscount.setText("ROW");
         m_jbtnDiscount.setFocusPainted(false);
         m_jbtnDiscount.setFocusable(false);
-        m_jbtnDiscount.setInheritsPopupMenu(true);
         m_jbtnDiscount.setMargin(new java.awt.Insets(8, 5, 8, 5));
-        m_jbtnDiscount.setMaximumSize(new java.awt.Dimension(62, 50));
-        m_jbtnDiscount.setMinimumSize(new java.awt.Dimension(62, 50));
-        m_jbtnDiscount.setPreferredSize(new java.awt.Dimension(62, 50));
+        m_jbtnDiscount.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jbtnDiscount.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jbtnDiscount.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jbtnDiscount.setRequestFocusEnabled(false);
         m_jbtnDiscount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1588,12 +1612,27 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
         m_jDiscountPanel.add(m_jbtnDiscount);
 
+        m_jDisableDiscount.setFocusPainted(false);
+        m_jDisableDiscount.setFocusable(false);
+        m_jDisableDiscount.setLabel("0 %");
+        m_jDisableDiscount.setMargin(new java.awt.Insets(8, 5, 8, 5));
+        m_jDisableDiscount.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDisableDiscount.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDisableDiscount.setPreferredSize(new java.awt.Dimension(62, 44));
+        m_jDisableDiscount.setRequestFocusEnabled(false);
+        m_jDisableDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jDisableDiscountActionPerformed(evt);
+            }
+        });
+        m_jDiscountPanel.add(m_jDisableDiscount);
+
         m_jDiscount1.setFocusPainted(false);
         m_jDiscount1.setFocusable(false);
         m_jDiscount1.setMargin(new java.awt.Insets(8, 5, 8, 5));
-        m_jDiscount1.setMaximumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount1.setMinimumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount1.setPreferredSize(new java.awt.Dimension(62, 50));
+        m_jDiscount1.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount1.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount1.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jDiscount1.setRequestFocusEnabled(false);
         m_jDiscount1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1605,9 +1644,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDiscount2.setFocusPainted(false);
         m_jDiscount2.setFocusable(false);
         m_jDiscount2.setMargin(new java.awt.Insets(8, 5, 8, 5));
-        m_jDiscount2.setMaximumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount2.setMinimumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount2.setPreferredSize(new java.awt.Dimension(62, 50));
+        m_jDiscount2.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount2.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount2.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jDiscount2.setRequestFocusEnabled(false);
         m_jDiscount2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1619,9 +1658,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDiscount3.setFocusPainted(false);
         m_jDiscount3.setFocusable(false);
         m_jDiscount3.setMargin(new java.awt.Insets(8, 5, 8, 5));
-        m_jDiscount3.setMaximumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount3.setMinimumSize(new java.awt.Dimension(62, 50));
-        m_jDiscount3.setPreferredSize(new java.awt.Dimension(62, 50));
+        m_jDiscount3.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount3.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jDiscount3.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jDiscount3.setRequestFocusEnabled(false);
         m_jDiscount3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1634,9 +1673,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jKeypadDiscount.setFocusPainted(false);
         m_jKeypadDiscount.setFocusable(false);
         m_jKeypadDiscount.setMargin(new java.awt.Insets(8, 5, 8, 5));
-        m_jKeypadDiscount.setMaximumSize(new java.awt.Dimension(62, 50));
-        m_jKeypadDiscount.setMinimumSize(new java.awt.Dimension(62, 50));
-        m_jKeypadDiscount.setPreferredSize(new java.awt.Dimension(62, 50));
+        m_jKeypadDiscount.setMaximumSize(new java.awt.Dimension(62, 44));
+        m_jKeypadDiscount.setMinimumSize(new java.awt.Dimension(62, 44));
+        m_jKeypadDiscount.setPreferredSize(new java.awt.Dimension(62, 44));
         m_jKeypadDiscount.setRequestFocusEnabled(false);
         m_jKeypadDiscount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1655,7 +1694,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jPanTotals.setLayout(new java.awt.GridBagLayout());
 
-        m_jTotalEuros.setBackground(java.awt.Color.white);
         m_jTotalEuros.setFont(new java.awt.Font("Dialog", 1, 14));
         m_jTotalEuros.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         m_jTotalEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
@@ -1679,7 +1717,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         m_jPanTotals.add(m_jLblTotalEuros1, gridBagConstraints);
 
-        m_jSubtotalEuros.setBackground(java.awt.Color.white);
         m_jSubtotalEuros.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         m_jSubtotalEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jSubtotalEuros.setOpaque(true);
@@ -1694,7 +1731,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         m_jPanTotals.add(m_jSubtotalEuros, gridBagConstraints);
 
-        m_jTaxesEuros.setBackground(java.awt.Color.white);
         m_jTaxesEuros.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         m_jTaxesEuros.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jTaxesEuros.setOpaque(true);
@@ -1749,7 +1785,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        m_jPrice.setBackground(java.awt.Color.white);
         m_jPrice.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         m_jPrice.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jPrice.setOpaque(true);
@@ -1764,7 +1799,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         gridBagConstraints.weighty = 1.0;
         jPanel9.add(m_jPrice, gridBagConstraints);
 
-        m_jPor.setBackground(java.awt.Color.white);
         m_jPor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         m_jPor.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
         m_jPor.setOpaque(true);
@@ -2002,20 +2036,25 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 }//GEN-LAST:event_m_jbtnDiscountActionPerformed
 
     private void m_jDiscount1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDiscount1ActionPerformed
-        performDiscount("discount-1");
+        performDiscount(m_dDiscountRate1);
 }//GEN-LAST:event_m_jDiscount1ActionPerformed
 
     private void m_jDiscount2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDiscount2ActionPerformed
-        performDiscount("discount-2");
+        performDiscount(m_dDiscountRate2);
     }//GEN-LAST:event_m_jDiscount2ActionPerformed
 
     private void m_jDiscount3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDiscount3ActionPerformed
-        performDiscount("discount-3");
+        performDiscount(m_dDiscountRate3);
     }//GEN-LAST:event_m_jDiscount3ActionPerformed
 
     private void m_jKeypadDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jKeypadDiscountActionPerformed
-        performDiscount(null);
+        Double dPercent = JPercentDialog.showEditPercent(this, AppLocal.getIntString("message.setdiscountrate"));
+        performDiscount(dPercent);
 }//GEN-LAST:event_m_jKeypadDiscountActionPerformed
+
+    private void m_jDisableDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDisableDiscountActionPerformed
+        performDiscount(0.0);
+    }//GEN-LAST:event_m_jDisableDiscountActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
@@ -2031,6 +2070,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JPanel m_jButtonsExt;
     private javax.swing.JPanel m_jContEntries;
     private javax.swing.JButton m_jDelete;
+    private javax.swing.JButton m_jDisableDiscount;
     private javax.swing.JButton m_jDiscount1;
     private javax.swing.JButton m_jDiscount2;
     private javax.swing.JButton m_jDiscount3;

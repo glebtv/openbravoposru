@@ -113,7 +113,12 @@
         </line>
         #end
         <line>
-            <text align ="left" length="17"></text>
+            #if ($ticketline.getDiscountRate() != 0.0)
+                <text align ="left" length="12">Discount</text>
+                <text align ="center" length="5">${ticketline.printDiscountRate()}</text>            
+            #else
+                <text length="17"></text>            
+            #end
             <text align ="right" length="10">${ticketline.printPrice()}</text>
             <text align ="left" length="5">x${ticketline.printMultiply()}</text>
             <text align ="right" length="10">${ticketline.printSubValue()}</text>
