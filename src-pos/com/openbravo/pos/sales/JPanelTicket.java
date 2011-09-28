@@ -1669,9 +1669,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         });
         m_jDiscountPanel.add(m_jDiscount3);
 
-        m_jKeypadDiscount.setText("__ %");
         m_jKeypadDiscount.setFocusPainted(false);
         m_jKeypadDiscount.setFocusable(false);
+        m_jKeypadDiscount.setLabel("... %");
         m_jKeypadDiscount.setMargin(new java.awt.Insets(8, 5, 8, 5));
         m_jKeypadDiscount.setMaximumSize(new java.awt.Dimension(62, 44));
         m_jKeypadDiscount.setMinimumSize(new java.awt.Dimension(62, 44));

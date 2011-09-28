@@ -498,9 +498,9 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="m_jKeypadDiscount">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="__ %"/>
                         <Property name="focusPainted" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
+                        <Property name="label" type="java.lang.String" value="... %"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                           <Insets value="[8, 5, 8, 5]"/>
                         </Property>
