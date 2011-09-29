@@ -125,7 +125,6 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Double m_dDiscountRate2;
     private Double m_dDiscountRate3;
     
-    protected javax.swing.JPanel refundcatcontainer;
 
     private Boolean bTypeDiscount;
 
@@ -1228,7 +1227,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     CalculationLineDiscount(m_oTicket.getLine(i), discountrate);
                     TicketLineInfo row = m_oTicket.getLine(i);
-                }
+                        }
             } else {
                 java.awt.Toolkit.getDefaultToolkit().beep();
             }
@@ -2059,7 +2058,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnSplit;
-    private javax.swing.JPanel catcontainer;
+    protected javax.swing.JPanel catcontainer;
     private javax.swing.JButton jEditAttributes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
