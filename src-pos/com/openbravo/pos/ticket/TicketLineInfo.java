@@ -196,6 +196,10 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
         return attributes.getProperty("product.code");
     }
 
+    public Double getDiscountRate() {
+        return Double.parseDouble(attributes.getProperty("discountrate", "0.0"));
+    }
+
     public String getProductAttSetId() {
         return attributes.getProperty("product.attsetid");
     }
@@ -330,5 +334,9 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
 
     public String printValue() {
         return Formats.CURRENCY.formatValue(getValue());
+    }
+    
+    public String printDiscountRate() {
+        return Formats.PERCENT.formatValue(getDiscountRate());
     }
 }
