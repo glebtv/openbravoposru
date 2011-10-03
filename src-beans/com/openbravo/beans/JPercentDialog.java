@@ -19,7 +19,6 @@
 
 package com.openbravo.beans;
 
-import com.openbravo.basic.BasicException;
 import java.awt.*;
 import javax.swing.*;
 
@@ -53,16 +52,12 @@ public class JPercentDialog extends javax.swing.JDialog {
         m_jpercent.reset();        
         m_jpercent.setDoubleValue(0.0);
         m_jpercent.activate();
-        
-        m_jPanelTitle.setBorder(RoundedBorder.createGradientBorder());
 
         m_dPercent = null;
     }
     
     private void setTitle(String title, String message, Icon icon) {
         setTitle(title);
-        m_lblMessage.setText(message);
-        m_lblMessage.setIcon(icon);
     }
     
     private static Window getWindow(Component parent) {
@@ -114,8 +109,6 @@ public class JPercentDialog extends javax.swing.JDialog {
         m_jKeys = new com.openbravo.editor.JEditorKeys();
         jPanel4 = new javax.swing.JPanel();
         m_jpercent = new com.openbravo.editor.JEditorPercent();
-        m_jPanelTitle = new javax.swing.JPanel();
-        m_lblMessage = new javax.swing.JLabel();
 
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -146,40 +139,29 @@ public class JPercentDialog extends javax.swing.JDialog {
         });
         jPanel1.add(jcmdCancel);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
-        jPanel3.add(m_jKeys);
+        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(m_jKeys, java.awt.BorderLayout.NORTH);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         jPanel4.setLayout(new java.awt.BorderLayout());
         jPanel4.add(m_jpercent, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel4);
+        jPanel3.add(jPanel4, java.awt.BorderLayout.SOUTH);
 
         jPanelGrid.add(jPanel3);
 
-        jPanel2.add(jPanelGrid, java.awt.BorderLayout.CENTER);
+        jPanel2.add(jPanelGrid, java.awt.BorderLayout.NORTH);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        m_jPanelTitle.setLayout(new java.awt.BorderLayout());
-
-        m_lblMessage.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.darkGray), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        m_jPanelTitle.add(m_lblMessage, java.awt.BorderLayout.CENTER);
-
-        getContentPane().add(m_jPanelTitle, java.awt.BorderLayout.NORTH);
-
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-258)/2, (screenSize.height-428)/2, 258, 428);
+        setBounds((screenSize.width-277)/2, (screenSize.height-390)/2, 277, 390);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jNumberKeys21KeyPerformed(com.openbravo.beans.JNumberEvent evt) {//GEN-FIRST:event_jNumberKeys21KeyPerformed
- 
-    }//GEN-LAST:event_jNumberKeys21KeyPerformed
 
     private void jcmdOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdOKActionPerformed
 
@@ -190,9 +172,7 @@ public class JPercentDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jcmdOKActionPerformed
 
     private void jcmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdCancelActionPerformed
-
-        m_dPercent = 0.0;
-        
+       
         setVisible(false);
         dispose();    
         
@@ -214,9 +194,7 @@ public class JPercentDialog extends javax.swing.JDialog {
     private javax.swing.JButton jcmdCancel;
     private javax.swing.JButton jcmdOK;
     private com.openbravo.editor.JEditorKeys m_jKeys;
-    private javax.swing.JPanel m_jPanelTitle;
     private com.openbravo.editor.JEditorPercent m_jpercent;
-    private javax.swing.JLabel m_lblMessage;
     // End of variables declaration//GEN-END:variables
     
 }
