@@ -199,6 +199,30 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     public Double getDiscountRate() {
         return Double.parseDouble(attributes.getProperty("discountrate", "0.0"));
     }
+    
+    public Double getPriceNoDiscount() {
+        return RoundUtils.round(getPrice() / (1 - getDiscountRate()));
+    }
+
+    public Double getPriceTaxNoDiscount() {
+        return RoundUtils.round(getPriceTax() / (1 - getDiscountRate()));
+    }
+
+    public Double getDiscountSubValue() {
+        return RoundUtils.round(getPriceNoDiscount() - getPrice());
+    }
+
+    public Double getDiscountValue() {
+        return RoundUtils.round(getPriceTaxNoDiscount() - getPriceTax());
+    }
+
+    public Double getDiscountSubTotalLine() {
+        return RoundUtils.round(getDiscountSubValue() * getMultiply());
+    }
+
+    public Double getDiscountTotalLine() {
+        return RoundUtils.round(getDiscountValue() * getMultiply());
+    }
 
     public String getProductAttSetId() {
         return attributes.getProperty("product.attsetid");
@@ -339,4 +363,28 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     public String printDiscountRate() {
         return Formats.PERCENT.formatValue(getDiscountRate());
     }
+
+    public String printDiscountSubValue() {
+        return Formats.CURRENCY.formatValue(getDiscountSubValue());
+    }        
+
+    public String printDiscountValue() {
+        return Formats.CURRENCY.formatValue(getDiscountValue());
+    }    
+    
+    public String printDiscountSubTotalLine() {
+        return Formats.CURRENCY.formatValue(getDiscountSubTotalLine());
+    }   
+
+    public String printDiscountTotalLine() {
+        return Formats.CURRENCY.formatValue(getDiscountTotalLine());
+    }   
+
+    public String printPriceNoDiscount() {
+        return Formats.CURRENCY.formatValue(getPriceNoDiscount());
+    }       
+    
+    public String printPriceTaxNoDiscount() {
+        return Formats.CURRENCY.formatValue(getPriceTaxNoDiscount());
+    }          
 }

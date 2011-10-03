@@ -1219,30 +1219,27 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         if (bTypeDiscount == true) {
             if (index >= 0) {
                 CalculationLineDiscount(m_oTicket.getLine(index), discountrate);
-            } else {
-                java.awt.Toolkit.getDefaultToolkit().beep();
             }
-        } else if (bTypeDiscount == false) {
+        } else {
             if (total > 0.0) {
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     CalculationLineDiscount(m_oTicket.getLine(i), discountrate);
-                    TicketLineInfo row = m_oTicket.getLine(i);
-                        }
-            } else {
-                java.awt.Toolkit.getDefaultToolkit().beep();
+                }
             }
-        } else {
-            java.awt.Toolkit.getDefaultToolkit().beep();
         }
         refreshTicket();
+        m_ticketlines.setSelectedIndex(index);
     }
 
     private void CalculationLineDiscount(TicketLineInfo m_TicketLine, Double dDiscount) {
+
         double linediscount = m_TicketLine.getDiscountRate();
         double lineprice = m_TicketLine.getPrice();
+        double linenodisount = m_TicketLine.getPriceNoDiscount();
+
         if (linediscount == 0.0 || linediscount != dDiscount) {
             if (linediscount != 0.0) {
-                m_TicketLine.setPrice(RoundUtils.getValue(lineprice / (1 - linediscount) - lineprice / (1 - linediscount) * dDiscount));
+                m_TicketLine.setPrice(RoundUtils.getValue(linenodisount - linenodisount * dDiscount));
             } else {
                 m_TicketLine.setPrice(RoundUtils.getValue(lineprice - lineprice * dDiscount));
             }
@@ -2048,7 +2045,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void m_jKeypadDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jKeypadDiscountActionPerformed
         Double dPercent = JPercentDialog.showEditPercent(this, AppLocal.getIntString("message.setdiscountrate"));
-        performDiscount(dPercent);
+        if (dPercent != null || dPercent != 0.0) {
+            performDiscount(dPercent);
+        } else {
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            
+        }
 }//GEN-LAST:event_m_jKeypadDiscountActionPerformed
 
     private void m_jDisableDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jDisableDiscountActionPerformed

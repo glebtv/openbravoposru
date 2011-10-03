@@ -30,6 +30,7 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.loader.LocalRes;
 import com.openbravo.pos.customers.CustomerInfoExt;
 import com.openbravo.pos.payment.PaymentInfoMagcard;
+import com.openbravo.pos.util.RoundUtils;
 import com.openbravo.pos.util.StringUtils;
 
 /**
@@ -320,6 +321,22 @@ public class TicketInfo implements SerializableRead, Externalizable {
         }
         return sum;
     }
+    
+    public double getDiscountTotal() {
+        double discountsum = 0.0;
+        for (TicketLineInfo line : m_aLines) {
+            discountsum += line.getDiscountTotalLine();
+        }
+        return discountsum;
+    }
+
+    public double getTotalNoDiscount() {
+        return getTotal() + getDiscountTotal();
+    }
+
+    public double getDiscountAvgRate() {
+        return getDiscountTotal() / getTotalNoDiscount();
+    }
 
     public double getTax() {
 
@@ -464,4 +481,16 @@ public class TicketInfo implements SerializableRead, Externalizable {
     public String printTotalPaid() {
         return Formats.CURRENCY.formatValue(new Double(getTotalPaid()));
     }
+    
+    public String printDiscountTotal() {
+        return Formats.CURRENCY.formatValue(new Double(getDiscountTotal()));
+    }      
+    
+    public String printTotalNoDiscount() {
+        return Formats.CURRENCY.formatValue(new Double(getTotalNoDiscount()));
+    }      
+    
+    public String printDiscountAvgRate() {
+        return Formats.PERCENT.formatValue(new Double(getDiscountAvgRate()));
+    }     
 }
