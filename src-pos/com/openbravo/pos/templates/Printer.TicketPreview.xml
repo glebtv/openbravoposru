@@ -25,8 +25,13 @@
             <text align="left" length="10">Итого</text>
             <text align="right" length="10">${ticket.printTotal()}</text>
         </line>
-        <line>
+        <line>        
+        #if ($ticketline.getDiscountTotal() != 0.0)
+            <text align="left" length="10">Скидка</text>        
+            <text align ="right" length="10">${ticket.printDiscountTotal()}</text>        
+        #else
             <text align="center" length="20">к оплате по чеку.</text>
+        #end
         </line>
     </display>
     <ticket>
@@ -98,6 +103,17 @@
             <text align ="right" length="5">x${ticketline.printMultiply()}</text>
             <text align ="right" length="10">${ticketline.printSubValue()}</text>
         </line> 
+        
+        #if ($ticketline.getDiscountRate() != 0.0)
+        <line>
+                <text align ="right" length="12">Скидка</text>
+                <text align ="center" length="5">${ticketline.printDiscountRate()}</text>            
+                <text align ="right" length="10">${ticketline.printDiscountSubValue()}</text>  
+                <text align ="center" length="5"></text>
+                <text align ="right" length="10">${ticketline.printDiscountSubTotalLine()}</text>  
+        </line>     
+        #end
+        
         #if ($ticketline.productAttSetInstId)
         <line>
 	        <text align ="left" length="42">    ${ticketline.productAttSetInstDesc}</text>
@@ -111,6 +127,15 @@
             <text align ="left" length="16">Кол-во товаров: </text>
             <text align ="left" length="26">${ticket.printArticlesCount()}</text>
         </line> 
+        
+        <line></line> 
+        <line>
+            <text align ="left" length="16">Скидка по чеку.</text>
+            <text align ="right" length="10">${ticket.printTotalNoDiscount()}</text>
+            <text align ="center" length="6">${ticket.printDiscountAvgRate()}</text>
+            <text align ="right" length="10">${ticket.printDiscountTotal()}</text>
+        </line> 
+        
         <line></line> 
         <line>
             <text align ="left" length="16">Всего.</text>

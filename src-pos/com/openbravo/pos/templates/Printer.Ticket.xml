@@ -131,6 +131,15 @@
             <text  align ="left" length="22">Кол-во товаров: </text>
             <text align ="center" length="10">${ticket.printArticlesCount()}</text>
         </line> 
+        
+        <line></line> 
+        <line>
+            <text align ="left" length="16">Скидка по чеку.</text>
+            <text align ="right" length="10">${ticket.printTotalNoDiscount()}</text>
+            <text align ="center" length="6">${ticket.printDiscountAvgRate()}</text>
+            <text align ="right" length="10">${ticket.printDiscountTotal()}</text>
+        </line> 
+        
         <line></line> 
 	#foreach ($taxinfo in $taxes)  
 	#set( $taxline = $ticket.getTaxLine($taxinfo))
