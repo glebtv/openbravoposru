@@ -145,6 +145,9 @@
         </line>  
     </ticket>
 
-    <fiscalxreport/>
+    <fiscalreport>
+        <fiscalxreport/>
+        <cutpaper complete = "false"/>
+    </fiscalreport>
 
 </output>

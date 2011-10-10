@@ -146,14 +146,26 @@
                             </xs:element>
                         </xs:sequence>
                         <xs:attribute name="type" type="FiscalReceiptType" default="sale"/>
+                        <xs:attribute name="cashier" type="xs:string"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="play" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="fiscalxreport" minOccurs="0"/>
-                <xs:element name="fiscalzreport" minOccurs="0"/>
                 <xs:element name="opendrawer" maxOccurs="1" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="printer" type="PrinterNumber"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="fiscalreport" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="fiscalxreport" minOccurs="0"/>
+                            <xs:element name="fiscalzreport" minOccurs="0"/>
+                            <xs:element name="cutpaper" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="complete" type="xs:boolean" default="true"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

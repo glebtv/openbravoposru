@@ -108,6 +108,9 @@
         </line>
     </ticket>
 
-    <fiscalzreport/>
+    <fiscalreport>
+        <fiscalzreport/>
+        <cutpaper complete = "true"/>
+    </fiscalreport>
 
 </output>
