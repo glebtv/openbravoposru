@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  *
@@ -134,6 +135,9 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         
         m_jPriceSellTax.getDocument().addDocumentListener(new PriceTaxManager());
         m_jmargin.getDocument().addDocumentListener(new MarginManager());
+        
+        txtAttributes.setAntiAliasingEnabled(true);
+        txtAttributes.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML); 
         
         writeValueEOF();
     }
@@ -669,8 +673,8 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAttributes = new javax.swing.JTextArea();
+        jScrollPane1 = new org.fife.ui.rtextarea.RTextScrollPane();
+        txtAttributes = new org.fife.ui.rsyntaxtextarea.RSyntaxTextArea();
 
         setLayout(null);
 
@@ -847,7 +851,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private org.fife.ui.rtextarea.RTextScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JComboBox m_jAtt;
     private javax.swing.JTextField m_jCatalogOrder;
@@ -868,7 +872,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     private javax.swing.JTextField m_jmargin;
     private javax.swing.JTextField m_jstockcost;
     private javax.swing.JTextField m_jstockvolume;
-    private javax.swing.JTextArea txtAttributes;
+    private org.fife.ui.rsyntaxtextarea.RSyntaxTextArea txtAttributes;
     // End of variables declaration//GEN-END:variables
     
 }
