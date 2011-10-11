@@ -205,7 +205,7 @@ public class ResourcesView extends JPanel implements EditorRecord {
         m_jGroupType = new javax.swing.ButtonGroup();
         jPanel3 = new javax.swing.JPanel();
         m_jContainer = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1 = new org.fife.ui.rtextarea.RTextScrollPane();
         m_jText = new org.fife.ui.rsyntaxtextarea.RSyntaxTextArea();
         jPanel1 = new javax.swing.JPanel();
         m_jImage = new com.openbravo.data.gui.JImageEditor();
@@ -218,9 +218,7 @@ public class ResourcesView extends JPanel implements EditorRecord {
         m_jContainer.setLayout(new java.awt.CardLayout());
 
         m_jText.setWrapStyleWord(false);
-        m_jText.setFont(new java.awt.Font("DialogInput", 0, 12));
-        m_jText.setSelectionColor(new java.awt.Color(51, 153, 255));
-
+        m_jText.setFont(new java.awt.Font("DialogInput", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(m_jText);
 
         m_jContainer.add(jScrollPane1, "text");
@@ -285,7 +283,7 @@ public class ResourcesView extends JPanel implements EditorRecord {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private org.fife.ui.rtextarea.RTextScrollPane jScrollPane1;
     private javax.swing.JPanel m_jContainer;
     private javax.swing.ButtonGroup m_jGroupType;
     private com.openbravo.data.gui.JImageEditor m_jImage;
