@@ -20,10 +20,11 @@
     along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
  -->
 
-<output>
-    <ticket>
+<output xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:noNamespaceSchemaLocation="Schema.Printer.xsd">
+    <ticket>        
         <image>Printer.Ticket.Logo</image>
-        <line></line>
+        <line></line>        
         <line></line>
         <line size="1">
             <text align ="center" length="42" bold="true">Закрытие смены</text>
@@ -107,10 +108,10 @@
             <text length="24" align="right">${payments.printDateEnd()}</text>
         </line>
     </ticket>
-
+    
     <fiscalreport>
         <fiscalzreport/>
-        <cutpaper complete = "true"/>
+        <cutpaper complete="true"/>
     </fiscalreport>
 
 </output>

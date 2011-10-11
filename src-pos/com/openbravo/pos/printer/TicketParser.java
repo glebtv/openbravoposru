@@ -96,7 +96,7 @@ public class TicketParser extends DefaultHandler {
                 spf.setValidating(false);
                 spf.setNamespaceAware(true);
                 SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-                InputStream = getClass().getResourceAsStream("/com/openbravo/pos/printer/ticket.xsd");
+                InputStream = getClass().getResourceAsStream("/com/openbravo/pos/templates/Schema.Printer.xsd");
                 spf.setSchema(schemaFactory.newSchema(new Source[]{new StreamSource(InputStream)}));
                 m_sp = spf.newSAXParser();
                 m_sr = m_sp.getXMLReader();

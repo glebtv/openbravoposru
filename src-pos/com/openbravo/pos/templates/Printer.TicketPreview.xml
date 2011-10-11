@@ -19,7 +19,8 @@
     You should have received a copy of the GNU General Public License
     along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<output>
+<output xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:noNamespaceSchemaLocation="Schema.Printer.xsd">
     <display>
         <line>
             <text align="left" length="10">Итого</text>
@@ -90,14 +91,14 @@
             <text align ="right" length="10">Сумма</text>
         </line>      
         <line>
-             <text>------------------------------------------</text>
+            <text>------------------------------------------</text>
         </line>   
         #foreach ($ticketline in $ticket.getLines())
         <line>
             #if ($ticketline.isProductCom()) 
-                <text align ="left" length="17">*${ticketline.printName()}</text>
+            <text align ="left" length="17">*${ticketline.printName()}</text>
             #else
-                <text align ="left" length="17">${ticketline.printName()}</text>
+            <text align ="left" length="17">${ticketline.printName()}</text>
             #end
             <text align ="right" length="10">${ticketline.printPrice()}</text>
             <text align ="right" length="5">x${ticketline.printMultiply()}</text>
@@ -106,22 +107,22 @@
         
         #if ($ticketline.getDiscountRate() != 0.0)
         <line>
-                <text align ="right" length="12">Скидка</text>
-                <text align ="center" length="5">${ticketline.printDiscountRate()}</text>            
-                <text align ="right" length="10">${ticketline.printDiscountSubValue()}</text>  
-                <text align ="center" length="5"></text>
-                <text align ="right" length="10">${ticketline.printDiscountSubTotalLine()}</text>  
+            <text align ="right" length="12">Скидка</text>
+            <text align ="center" length="5">${ticketline.printDiscountRate()}</text>            
+            <text align ="right" length="10">${ticketline.printDiscountSubValue()}</text>  
+            <text align ="center" length="5"></text>
+            <text align ="right" length="10">${ticketline.printDiscountSubTotalLine()}</text>  
         </line>     
         #end
         
         #if ($ticketline.productAttSetInstId)
         <line>
-	        <text align ="left" length="42">    ${ticketline.productAttSetInstDesc}</text>
+            <text align ="left" length="42">    ${ticketline.productAttSetInstDesc}</text>
         </line>
         #end
         #end
         <line>
-             <text>------------------------------------------</text>
+            <text>------------------------------------------</text>
         </line>   
         <line>
             <text align ="left" length="16">Кол-во товаров: </text>
@@ -161,7 +162,7 @@
         <line></line>
         <line>
             <text bold="true">Возврат из кассы</text>
-         </line>
+        </line>
         <line>
             <text align ="right" length="42">${paymentline.printTotal()}</text>
         </line>

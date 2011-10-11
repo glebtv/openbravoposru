@@ -19,7 +19,8 @@
     You should have received a copy of the GNU General Public License
     along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<output>
+<output xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xsi:noNamespaceSchemaLocation="Schema.Printer.xsd">
     <ticket>
         <image>Printer.Ticket.Logo</image>
         <line></line>
@@ -30,6 +31,7 @@
         <line>
             <text bold="true">Отчёт по продажам</text>
         </line>
+        <barcode type="" position="bottom">946468058</barcode>
         <line>
             <text align ="left" length="12">Наименование</text>
             <text align ="right" length="14">Цена+Налог</text>
@@ -147,7 +149,7 @@
 
     <fiscalreport>
         <fiscalxreport/>
-        <cutpaper complete = "false"/>
+        <cutpaper complete="false"/>
     </fiscalreport>
 
 </output>
