@@ -178,9 +178,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             m_jDiscountPanel.setVisible(false);
         }
         
-        m_dDiscountRate1 = Double.parseDouble(panelconfig.getProperty("discount-1"))/100;
-        m_dDiscountRate2 = Double.parseDouble(panelconfig.getProperty("discount-2"))/100;
-        m_dDiscountRate3 = Double.parseDouble(panelconfig.getProperty("discount-3"))/100;        
+        m_dDiscountRate1 = Double.parseDouble(panelconfig.getProperty("discount-1","5"))/100;
+        m_dDiscountRate2 = Double.parseDouble(panelconfig.getProperty("discount-2","10"))/100;
+        m_dDiscountRate3 = Double.parseDouble(panelconfig.getProperty("discount-3","15"))/100;        
         
         // El modelo de impuestos
         senttax = dlSales.getTaxList();
