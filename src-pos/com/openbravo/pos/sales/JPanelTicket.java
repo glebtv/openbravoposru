@@ -259,7 +259,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jDiscount2.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount"));
         m_jDiscount3.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount"));
         m_jKeypadDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.DiscountMulti"));
-        m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount") || m_App.getAppUserView().getUser().hasPermission("sales.discountmulti"));
+        //m_jbtnDiscount.setEnabled(m_App.getAppUserView().getUser().hasPermission("sales.Discount") || m_App.getAppUserView().getUser().hasPermission("sales.DiscountMulti"));
 
         // Valores para descontos
         m_jDiscount1.setText(Formats.PERCENT.formatValue(m_dDiscountRate1));
