@@ -1307,17 +1307,17 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
             ScriptEngine script = ScriptFactory.getScriptEngine(ScriptFactory.BEANSHELL);
 
-            String sDBUser = m_App.getProperties().getProperty("db.user");
-            String sDBPassword = m_App.getProperties().getProperty("db.password");
-            if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
-                AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
-                sDBPassword = cypher.decrypt(sDBPassword.substring(6));
-            }
+//            String sDBUser = m_App.getProperties().getProperty("db.user");
+//            String sDBPassword = m_App.getProperties().getProperty("db.password");
+//            if (sDBUser != null && sDBPassword != null && sDBPassword.startsWith("crypt:")) {
+//                AltEncrypter cypher = new AltEncrypter("cypherkey" + sDBUser);
+//                sDBPassword = cypher.decrypt(sDBPassword.substring(6));
+//            }
 
             script.put("hostname", m_App.getProperties().getProperty("machine.hostname"));
-            script.put("dbURL", m_App.getProperties().getProperty("db.URL"));
-            script.put("dbUser", sDBUser);
-            script.put("dbPassword", sDBPassword);
+//            script.put("dbURL", m_App.getProperties().getProperty("db.URL"));
+//            script.put("dbUser", sDBUser);
+//            script.put("dbPassword", sDBPassword);
 
             script.put("ticket", ticket);
             script.put("place", ticketext);
@@ -1325,6 +1325,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             script.put("taxeslogic", taxeslogic);
             script.put("user", m_App.getAppUserView().getUser());
             script.put("sales", this);
+            script.put("logicsales", dlSales);
+            script.put("logicsystem", dlSystem);
 
             // more arguments
             for (ScriptArg arg : args) {

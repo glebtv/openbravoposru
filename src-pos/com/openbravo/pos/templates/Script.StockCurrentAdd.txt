@@ -21,20 +21,20 @@
 //    А также на сайте <http://www.gnu.org/licenses/>.
 
 import com.openbravo.pos.ticket.TicketLineInfo;
-import com.openbravo.pos.forms.DataLogicSales;
-import com.openbravo.pos.forms.DataLogicSystem;
-import com.openbravo.data.loader.Session;
+//import com.openbravo.pos.forms.DataLogicSales;
+//import com.openbravo.pos.forms.DataLogicSystem;
+//import com.openbravo.data.loader.Session;
 import java.util.Properties;
 
     //Проверка есть у товара характеристики
     if (line.getProductAttSetId() == null) {
 
     //Подключение к базе данных
-    Session session = new Session(dbURL, dbUser, dbPassword);
-    DataLogicSales logicsale = new DataLogicSales();
-    logicsale.init(session);
-    DataLogicSystem logicsystem = new DataLogicSystem();
-    logicsystem.init(session);
+    //Session session = new Session(dbURL, dbUser, dbPassword);
+    //DataLogicSales logicsales = new DataLogicSales();
+    //logicsales.init(session);
+    //DataLogicSystem logicsystem = new DataLogicSystem();
+    //logicsystem.init(session);
 
     //Подключение к ресурсу с параметрами POS терминала
     Properties p = logicsystem.getResourceAsProperties(hostname + "/properties");
@@ -46,7 +46,7 @@ import java.util.Properties;
     product = line.getProductID();
 
     //Получение количества выбранного товара на текущем складе в базе данных Openbravo POS
-    units = logicsale.findProductStock(loc,product,null);
+    units = logicsales.findProductStock(loc,product,null);
 
     //Подсчёт количества товара данного наименования уже помещённого в чек
     multiply = 0;
