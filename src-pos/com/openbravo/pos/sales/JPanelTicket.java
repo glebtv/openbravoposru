@@ -2047,11 +2047,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void m_jKeypadDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jKeypadDiscountActionPerformed
         Double dPercent = JPercentDialog.showEditPercent(this, AppLocal.getIntString("message.setdiscountrate"));
-        if (dPercent != null || dPercent != 0.0) {
+        if (dPercent != null && dPercent != 0.0) {
             performDiscount(dPercent);
         } else {
             java.awt.Toolkit.getDefaultToolkit().beep();
-            
         }
 }//GEN-LAST:event_m_jKeypadDiscountActionPerformed
 
