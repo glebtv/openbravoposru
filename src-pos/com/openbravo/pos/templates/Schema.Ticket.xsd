@@ -37,6 +37,7 @@
                 <xs:element name="img-height" type="PixelValue"></xs:element>
                 <xs:element name="font-size" type="PointValue"></xs:element>
                 <xs:element name="catvisible" minOccurs="0" type="BooleanValue"></xs:element>
+                <xs:element name="refmultcontrol" minOccurs="0" type="BooleanValue"></xs:element>
                 <xs:element name="cat-height" type="PixelValue"></xs:element>
                 <xs:element name="pricevisible" minOccurs="0" type="BooleanValue"></xs:element>
                 <xs:element name="taxesincluded" type="BooleanValue" minOccurs="0"></xs:element>

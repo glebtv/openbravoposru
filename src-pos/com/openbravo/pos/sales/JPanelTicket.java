@@ -129,6 +129,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private Boolean bTypeDiscount;
 
     private static Logger logger = Logger.getLogger("com.openbravo.pos.sales.JPanelTicket");
+    
+    private boolean isMultiplyControl;
 
     /** Creates new form JTicketView */
     public JPanelTicket() {
@@ -194,6 +196,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // inicializamos
         m_oTicket = null;
         m_oTicketExt = null;
+        
+        isMultiplyControl = "true".equals(panelconfig.getProperty("refmultcontrol", "false"));
+
     }
 
     public Object getBean() {
@@ -321,10 +326,19 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             resetSouthComponent();
 
         } else {
-            if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
-                //Make disable Search and Edit Buttons
-                m_jEditLine.setVisible(false);
-                m_jList.setVisible(false);
+            if (isMultiplyControl) { 
+              if (m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) {
+                  //Make disable Search and Edit Buttons and other
+                  m_jDelete.setVisible(false);
+                  m_jEditLine.setVisible(false);
+                  m_jList.setVisible(false);
+                  jEditAttributes.setVisible(false);
+              } else {
+                  m_jDelete.setVisible(true);
+                  m_jEditLine.setVisible(true);
+                  m_jList.setVisible(true);
+                  jEditAttributes.setVisible(true);
+              }
             }
 
             // Refresh ticket taxes
@@ -454,7 +468,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    private void removeTicketLine(int i) {
+    protected void removeTicketLine(int i) {
 
         if (executeEventAndRefresh("ticket.removeline", new ScriptArg("index", i)) == null) {
 
@@ -638,6 +652,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
     private void stateTransition(char cTrans) {
 
+      try{  
+        if ((m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) && isMultiplyControl && !(cTrans=='=')) {
+             Toolkit.getDefaultToolkit().beep();
+             throw new BasicException(AppLocal.getIntString("message.refcontrolenabled"));            
+        } 
         if (cTrans == '\n') {
             // Codigo de barras introducido
             if (m_sBarcode.length() > 0) {
@@ -910,6 +929,15 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         }
     }
+      catch (BasicException eData) {
+                new MessageInf(eData).show(this);
+            }
+      catch (Exception ex) {
+                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+              
+    }
+      
 
     private boolean closeTicket(TicketInfo ticket, Object ticketext) {
 
@@ -1213,22 +1241,41 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     }
 
     private void performDiscount(Double discountrate) {
+      try {        
+        if ((m_oTicket.getTicketType() == TicketInfo.RECEIPT_REFUND) && isMultiplyControl) {
+             Toolkit.getDefaultToolkit().beep();
+             throw new BasicException(AppLocal.getIntString("message.refcontrolenabled"));
+        }  
         int index = m_ticketlines.getSelectedIndex();
         double total = m_oTicket.getTotal();
 
         if (bTypeDiscount == true) {
             if (index >= 0) {
                 CalculationLineDiscount(m_oTicket.getLine(index), discountrate);
+            } else {
+                java.awt.Toolkit.getDefaultToolkit().beep();
             }
-        } else {
+        } else if (bTypeDiscount == false) {
             if (total > 0.0) {
                 for (int i = 0; i < m_oTicket.getLinesCount(); i++) {
                     CalculationLineDiscount(m_oTicket.getLine(i), discountrate);
-                }
+                    TicketLineInfo row = m_oTicket.getLine(i);
+                        }
+            } else {
+                java.awt.Toolkit.getDefaultToolkit().beep();
             }
+        } else {
+            java.awt.Toolkit.getDefaultToolkit().beep();
         }
         refreshTicket();
-        m_ticketlines.setSelectedIndex(index);
+      } 
+      catch (BasicException eData) {
+                new MessageInf(eData).show(this);
+            }
+      catch (Exception ex) {
+                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
     }
 
     private void CalculationLineDiscount(TicketLineInfo m_TicketLine, Double dDiscount) {

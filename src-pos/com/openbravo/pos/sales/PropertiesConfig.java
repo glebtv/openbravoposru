@@ -65,8 +65,7 @@ public class PropertiesConfig {
                 m_sr = m_sp.getXMLReader();
                 m_sr.setContentHandler(new ConfigurationHandler());
                 }
-//                m_sp.parse(new InputSource(new StringReader(configXML)), new ConfigurationHandler());
-
+                m_sp.parse(new InputSource(new StringReader(configXML)), new ConfigurationHandler());
                 m_sr.parse(new InputSource(new StringReader(configXML)));
             } catch (ParserConfigurationException ePC) {
                 logger.log(Level.WARNING, LocalRes.getIntString("exception.parserconfig"), ePC);
