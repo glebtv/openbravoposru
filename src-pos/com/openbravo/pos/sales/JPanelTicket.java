@@ -18,58 +18,53 @@
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 package com.openbravo.pos.sales;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Date;
-
-import com.openbravo.data.gui.ComboBoxValModel;
-import com.openbravo.data.gui.MessageInf;
-import com.openbravo.pos.printer.*;
-
-import com.openbravo.pos.forms.JPanelView;
-import com.openbravo.pos.forms.AppView;
-import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.panels.JProductFinder;
-import com.openbravo.pos.scale.ScaleException;
-import com.openbravo.pos.payment.JPaymentSelect;
 import com.openbravo.basic.BasicException;
+import com.openbravo.beans.JCurrencyDialog;
 import com.openbravo.beans.JPercentDialog;
+import com.openbravo.data.gui.ComboBoxValModel;
 import com.openbravo.data.gui.ListKeyed;
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.SentenceList;
 import com.openbravo.data.loader.Session;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.customers.CustomerInfoExt;
 import com.openbravo.pos.customers.DataLogicCustomers;
 import com.openbravo.pos.customers.JCustomerFinder;
+import com.openbravo.pos.forms.*;
+import com.openbravo.pos.inventory.TaxCategoryInfo;
+import com.openbravo.pos.panels.JProductFinder;
+import com.openbravo.pos.payment.JPaymentSelect;
+import com.openbravo.pos.payment.JPaymentSelectReceipt;
+import com.openbravo.pos.payment.JPaymentSelectRefund;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.TicketParser;
+import com.openbravo.pos.printer.TicketPrinterException;
+import com.openbravo.pos.scale.ScaleException;
 import com.openbravo.pos.scripting.ScriptEngine;
 import com.openbravo.pos.scripting.ScriptException;
 import com.openbravo.pos.scripting.ScriptFactory;
-import com.openbravo.pos.forms.DataLogicSystem;
-import com.openbravo.pos.forms.DataLogicSales;
-import com.openbravo.pos.forms.BeanFactoryApp;
-import com.openbravo.pos.forms.BeanFactoryException;
-import com.openbravo.pos.inventory.TaxCategoryInfo;
-import com.openbravo.pos.payment.JPaymentSelectReceipt;
-import com.openbravo.pos.payment.JPaymentSelectRefund;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.ticket.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
-import com.openbravo.pos.ticket.TicketTaxInfo;
 import com.openbravo.pos.util.JRPrinterAWT411;
 import com.openbravo.pos.util.ReportUtils;
-import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.RoundUtils;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.PrintService;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -77,8 +72,13 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
+
+/**
+ *
+ * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
+ * @author <dmg244@gmail.com>
+ */
 
 public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFactoryApp, TicketsEditor {
 
@@ -460,6 +460,20 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     }
                 } catch (BasicException ex) {
                     // тут можно выполнять код, если у товара не установлены характеристики
+                }
+            }
+            
+            if ("true".equals(panelconfig.getProperty("price-is-zero")) == true) {
+                if (oLine.getPrice() == 0.0) {
+                    int i = m_ticketlines.getSelectedIndex();
+                    Double dPriceSet = JCurrencyDialog.showEditNumber(this, AppLocal.getIntString("message.setprice"));
+
+                    if (dPriceSet == null) {
+                        removeTicketLine(i);
+                    } else {
+                        oLine.setPrice(dPriceSet);
+                        paintTicketLine(i, oLine);
+                    }
                 }
             }
             

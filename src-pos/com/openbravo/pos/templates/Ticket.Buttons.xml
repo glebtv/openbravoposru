@@ -62,4 +62,6 @@
     <discount-1 value="5"/>
     <discount-2 value="10"/>
     <discount-3 value="15"/>
+    
+<!--    <price-is-zero value="true"/> -->
 </configuration>
