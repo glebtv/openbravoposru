@@ -19,37 +19,37 @@
 
 package com.openbravo.pos.forms;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.event.*;
-import java.lang.reflect.Constructor;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
-import javax.swing.*;
-
-import com.openbravo.pos.printer.*;
-
-import com.openbravo.beans.*;
-
 import com.openbravo.basic.BasicException;
-import com.openbravo.data.gui.MessageInf;
+import com.openbravo.beans.JFlowPanel;
+import com.openbravo.beans.JPasswordDialog;
 import com.openbravo.data.gui.JMessageDialog;
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.BatchSentence;
 import com.openbravo.data.loader.BatchSentenceResource;
 import com.openbravo.data.loader.Session;
-import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.pludevice.DevicePLUs;
 import com.openbravo.pos.pludevice.DevicePLUsFactory;
+import com.openbravo.pos.printer.DeviceTicket;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.TicketParser;
+import com.openbravo.pos.printer.TicketPrinterException;
+import com.openbravo.pos.scale.DeviceScale;
+import java.awt.CardLayout;
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
 import java.sql.SQLException;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
+import javax.swing.*;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class JRootApp extends JPanel implements AppView {
  
@@ -267,10 +267,17 @@ public class JRootApp extends JPanel implements AppView {
         m_jLblTitle.setIcon(imgicon == null ? null : new ImageIcon(imgicon));
         m_jLblTitle.setText(m_dlSystem.getResourceAsText("Window.Title"));  
         
-        BufferedImage imgdesclogo = m_dlSystem.getResourceAsImage("Window.DescLogo");
-        m_jLblDescription.setIcon(imgdesclogo == null ? new ImageIcon(getClass().getResource("/com/openbravo/images/logo.png")) : new ImageIcon(imgdesclogo));
-        m_jLblDescription.setText(m_dlSystem.getResourceAsText("Window.Description")); 
+        BufferedImage imgdesclogo1 = m_dlSystem.getResourceAsImage("Window.DescLogo");
+        m_jLblDescriptionFirst.setIcon(imgdesclogo1 == null ? new ImageIcon(getClass().getResource("/com/openbravo/images/logo.png")) : new ImageIcon(imgdesclogo1));
+        m_jLblDescriptionFirst.setText(m_dlSystem.getResourceAsText("Window.Description")); 
 
+        BufferedImage imgdesclogo2 = m_dlSystem.getResourceAsImage("Window.DescLogoSecond");
+        m_jLblDescriptionSecond.setIcon(imgdesclogo2 == null ? null : new ImageIcon(imgdesclogo2));
+        m_jLblDescriptionSecond.setText(m_dlSystem.getResourceAsText("Window.DescriptionSecond")); 
+        
+        BufferedImage imgpoweredby = m_dlSystem.getResourceAsImage("Window.PoweredBy");        
+        m_jLblPoweredBy.setIcon(imgpoweredby == null ? new ImageIcon(getClass().getResource("/com/openbravo/images/poweredby.png")) : new ImageIcon(imgpoweredby));
+        
         BufferedImage imgsupportby = m_dlSystem.getResourceAsImage("Window.SupportBy");        
         m_jLblSupportBy.setIcon(imgsupportby == null ? null : new ImageIcon(imgsupportby));
         
@@ -669,12 +676,13 @@ public class JRootApp extends JPanel implements AppView {
 
         m_jPanelTitle = new javax.swing.JPanel();
         m_jLblTitle = new javax.swing.JLabel();
-        poweredby = new javax.swing.JLabel();
+        m_jLblPoweredBy = new javax.swing.JLabel();
         m_jLblSupportBy = new javax.swing.JLabel();
         m_jPanelContainer = new javax.swing.JPanel();
         m_jPanelLogin = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        m_jLblDescription = new javax.swing.JLabel();
+        m_jLblDescriptionFirst = new javax.swing.JLabel();
+        m_jLblDescriptionSecond = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         m_jLogonName = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -698,11 +706,13 @@ public class JRootApp extends JPanel implements AppView {
         m_jLblTitle.setText("Window.Title");
         m_jPanelTitle.add(m_jLblTitle, java.awt.BorderLayout.CENTER);
 
-        poweredby.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/poweredby.png"))); // NOI18N
-        poweredby.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        m_jPanelTitle.add(poweredby, java.awt.BorderLayout.LINE_END);
+        m_jLblPoweredBy.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        m_jLblPoweredBy.setMaximumSize(new java.awt.Dimension(142, 34));
+        m_jLblPoweredBy.setMinimumSize(new java.awt.Dimension(142, 34));
+        m_jLblPoweredBy.setPreferredSize(new java.awt.Dimension(142, 34));
+        m_jPanelTitle.add(m_jLblPoweredBy, java.awt.BorderLayout.LINE_END);
 
-        m_jLblSupportBy.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        m_jLblSupportBy.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         m_jLblSupportBy.setMaximumSize(new java.awt.Dimension(142, 34));
         m_jLblSupportBy.setMinimumSize(new java.awt.Dimension(142, 34));
         m_jLblSupportBy.setPreferredSize(new java.awt.Dimension(142, 34));
@@ -716,13 +726,22 @@ public class JRootApp extends JPanel implements AppView {
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
 
-        m_jLblDescription.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        m_jLblDescription.setText("Window.Description");
-        m_jLblDescription.setAlignmentX(0.5F);
-        m_jLblDescription.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        m_jLblDescription.setMaximumSize(new java.awt.Dimension(800, 1024));
-        m_jLblDescription.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel4.add(m_jLblDescription);
+        m_jLblDescriptionFirst.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        m_jLblDescriptionFirst.setText("Window.Description");
+        m_jLblDescriptionFirst.setAlignmentX(0.5F);
+        m_jLblDescriptionFirst.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jLblDescriptionFirst.setMaximumSize(new java.awt.Dimension(800, 1024));
+        m_jLblDescriptionFirst.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jPanel4.add(m_jLblDescriptionFirst);
+
+        m_jLblDescriptionSecond.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        m_jLblDescriptionSecond.setText("Window.Description");
+        m_jLblDescriptionSecond.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        m_jLblDescriptionSecond.setAlignmentX(0.5F);
+        m_jLblDescriptionSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        m_jLblDescriptionSecond.setMaximumSize(new java.awt.Dimension(800, 1024));
+        m_jLblDescriptionSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jPanel4.add(m_jLblDescriptionSecond);
 
         m_jPanelLogin.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -816,7 +835,9 @@ public class JRootApp extends JPanel implements AppView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton m_jClose;
     private javax.swing.JLabel m_jHost;
-    private javax.swing.JLabel m_jLblDescription;
+    private javax.swing.JLabel m_jLblDescriptionFirst;
+    private javax.swing.JLabel m_jLblDescriptionSecond;
+    private javax.swing.JLabel m_jLblPoweredBy;
     private javax.swing.JLabel m_jLblSupportBy;
     private javax.swing.JLabel m_jLblTitle;
     private javax.swing.JPanel m_jLogonName;
@@ -826,6 +847,5 @@ public class JRootApp extends JPanel implements AppView {
     private javax.swing.JPanel m_jPanelTitle;
     private javax.swing.JTextField m_txtKeys;
     private javax.swing.JPanel panelTask;
-    private javax.swing.JLabel poweredby;
     // End of variables declaration//GEN-END:variables
 }
