@@ -26,7 +26,8 @@ public class UnicodeTranslatorStar extends UnicodeTranslator {
     }
 
     public byte[] getCodeTable() {
-        return new byte[] {0x1B, 0x1D, 0x74, 0x01}; // Select code page 437
+//        return new byte[] {0x1B, 0x1D, 0x74, 0x01}; // Select code page 437
+        return ESCPOS.CODE_TABLE_13;
     }
 
     public final byte[] convertString(String sConvert) {

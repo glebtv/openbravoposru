@@ -224,7 +224,7 @@ public class DeviceTicket {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesEpson(), new UnicodeTranslatorGB2312Chinese()));                    
                 } else if ("tmu220".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesTMU220(), new UnicodeTranslatorInt()));
-                } else if ("star".equals(sPrinterType)) {
+                } else if ("star1251cyr".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesStar(), new UnicodeTranslatorStar()));
                 } else if ("ithaca".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterESCPOS(pws.getPrinterWritter(sPrinterParam1, sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity), new CodesIthaca(), new UnicodeTranslatorInt()));
