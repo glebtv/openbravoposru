@@ -19,14 +19,14 @@
 
 package com.openbravo.pos.printer.escpos;
 
-public class UnicodeTranslatorStar extends UnicodeTranslator {
+public class UnicodeTranslatorStar1251Cyr extends UnicodeTranslator {
 
     /** Creates a UnicodeTranslatorStar instance of UnicodeTranslatorInt */
-    public UnicodeTranslatorStar() {
+    public UnicodeTranslatorStar1251Cyr() {
     }
 
     public byte[] getCodeTable() {
-        return new byte[] {0x1B, 0x1D, 0x74, 0x01}; // Select code page 437
+        return ESCPOS.CODE_TABLE_13; // Select code page 1251
     }
 
     public final byte[] convertString(String sConvert) {
