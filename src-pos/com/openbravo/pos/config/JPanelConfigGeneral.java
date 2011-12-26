@@ -64,6 +64,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                                  "epson",
                                  "tmu220",
                                  "star",
+                                 "star1251cyr",                                 
                                  "samsung1251cyr",
                                  "bixolon866cyr",
                                  "senor866cyr",
@@ -492,6 +493,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         if ("epson".equals(sMachinePrinter)
                 || "tmu220".equals(sMachinePrinter)
                 || "star".equals(sMachinePrinter)
+                || "star1251cyr".equals(sMachinePrinter)
                 || "samsung1251cyr".equals(sMachinePrinter)
                 || "bixolon866cyr".equals(sMachinePrinter)
                 || "senor866cyr".equals(sMachinePrinter)
@@ -523,6 +525,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         if ("epson".equals(sMachinePrinter2)
                 || "tmu220".equals(sMachinePrinter2)
                 || "star".equals(sMachinePrinter2)
+                || "star1251cyr".equals(sMachinePrinter2)
                 || "samsung1251cyr".equals(sMachinePrinter2)
                 || "bixolon866cyr".equals(sMachinePrinter2)
                 || "senor866cyr".equals(sMachinePrinter2)
@@ -554,6 +557,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         if ("epson".equals(sMachinePrinter3)
                 || "tmu220".equals(sMachinePrinter3)
                 || "star".equals(sMachinePrinter3)
+                || "star1251cyr".equals(sMachinePrinter3)                
                 || "samsung1251cyr".equals(sMachinePrinter3)
                 || "bixolon866cyr".equals(sMachinePrinter3)
                 || "senor866cyr".equals(sMachinePrinter3)
@@ -2027,6 +2031,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         if ("epson".equals(jcboMachinePrinter3.getSelectedItem())
                 || "tmu220".equals(jcboMachinePrinter3.getSelectedItem())
                 || "star".equals(jcboMachinePrinter3.getSelectedItem())
+                || "star1251cyr".equals(jcboMachinePrinter3.getSelectedItem())
                 || "samsung1251cyr".equals(jcboMachinePrinter3.getSelectedItem())
                 || "bixolon866cyr".equals(jcboMachinePrinter3.getSelectedItem())
                 || "senor866cyr".equals(jcboMachinePrinter3.getSelectedItem())
@@ -2055,6 +2060,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         if ("epson".equals(jcboMachinePrinter2.getSelectedItem())
                 || "tmu220".equals(jcboMachinePrinter2.getSelectedItem())
                 || "star".equals(jcboMachinePrinter2.getSelectedItem())
+                || "star1251cyr".equals(jcboMachinePrinter2.getSelectedItem())                
                 || "samsung1251cyr".equals(jcboMachinePrinter2.getSelectedItem())
                 || "bixolon866cyr".equals(jcboMachinePrinter2.getSelectedItem())
                 || "senor866cyr".equals(jcboMachinePrinter2.getSelectedItem())
@@ -2106,6 +2112,7 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                 || "sprtpos58cyr".equals(jcboMachinePrinter.getSelectedItem())
                 || "gb2312chinese".equals(jcboMachinePrinter.getSelectedItem())
                 || "star".equals(jcboMachinePrinter.getSelectedItem())
+                || "star1251cyr".equals(jcboMachinePrinter.getSelectedItem())                
                 || "ithaca".equals(jcboMachinePrinter.getSelectedItem())
                 || "surepos".equals(jcboMachinePrinter.getSelectedItem())
                 || "elveskkm".equals(jcboMachinePrinter.getSelectedItem())
