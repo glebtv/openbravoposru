@@ -730,7 +730,7 @@ public class JRootApp extends JPanel implements AppView {
         m_jLblDescriptionFirst.setText("Window.Description");
         m_jLblDescriptionFirst.setAlignmentX(0.5F);
         m_jLblDescriptionFirst.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        m_jLblDescriptionFirst.setMaximumSize(new java.awt.Dimension(800, 1024));
+        m_jLblDescriptionFirst.setMaximumSize(new java.awt.Dimension(976, 800));
         m_jLblDescriptionFirst.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jPanel4.add(m_jLblDescriptionFirst);
 
@@ -739,7 +739,7 @@ public class JRootApp extends JPanel implements AppView {
         m_jLblDescriptionSecond.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         m_jLblDescriptionSecond.setAlignmentX(0.5F);
         m_jLblDescriptionSecond.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        m_jLblDescriptionSecond.setMaximumSize(new java.awt.Dimension(800, 1024));
+        m_jLblDescriptionSecond.setMaximumSize(new java.awt.Dimension(976, 800));
         m_jLblDescriptionSecond.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jPanel4.add(m_jLblDescriptionSecond);
 

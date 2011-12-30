@@ -133,7 +133,7 @@
                     <Property name="alignmentX" type="float" value="0.5"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[800, 1024]"/>
+                      <Dimension value="[976, 800]"/>
                     </Property>
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
@@ -146,7 +146,7 @@
                     <Property name="alignmentX" type="float" value="0.5"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[800, 1024]"/>
+                      <Dimension value="[976, 800]"/>
                     </Property>
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
