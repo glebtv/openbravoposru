@@ -134,7 +134,9 @@ public class ResourcesView extends JPanel implements EditorRecord {
                 m_jText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
             } else if (sResourceName.toLowerCase().startsWith("menu.")
                     || sResourceName.toLowerCase().startsWith("payment.")
-                    || sResourceName.toLowerCase().startsWith("script.")) {
+                    || sResourceName.toLowerCase().startsWith("script.")
+                    || sResourceName.toLowerCase().startsWith("event.")
+                    || sResourceName.toLowerCase().startsWith("code.")) {
                 m_jText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
             } else {
                 m_jText.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
