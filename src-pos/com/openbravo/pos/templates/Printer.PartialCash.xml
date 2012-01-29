@@ -31,7 +31,6 @@
         <line>
             <text bold="true">Отчёт по продажам</text>
         </line>
-        <barcode type="" position="bottom">946468058</barcode>
         <line>
             <text align ="left" length="12">Наименование</text>
             <text align ="right" length="14">Цена+Налог</text>
