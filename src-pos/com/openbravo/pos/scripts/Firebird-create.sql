@@ -38,10 +38,8 @@ ALTER TABLE ROLES ADD CONSTRAINT ROLES_NAME_INX UNIQUE (NAME);
 
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('0', 'Профиль Администратора', $FILE{/com/openbravo/pos/templates/Role.Administrator.xml} );
 INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('1', 'Профиль Менеджера', $FILE{/com/openbravo/pos/templates/Role.Manager.xml} );
--- INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('2', 'Профиль Товароведа', $FILE{/com/openbravo/pos/templates/Role.Researcher.xml} );
--- INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('3', 'Профиль Кладовщика', $FILE{/com/openbravo/pos/templates/Role.Storekeeper.xml} );
-INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('4', 'Профиль Продавца', $FILE{/com/openbravo/pos/templates/Role.Employee.xml} );
-INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('5', 'Профиль Гостя', $FILE{/com/openbravo/pos/templates/Role.Guest.xml} );
+INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('2', 'Профиль Продавца', $FILE{/com/openbravo/pos/templates/Role.Employee.xml} );
+INSERT INTO ROLES(ID, NAME, PERMISSIONS) VALUES('3', 'Профиль Гостя', $FILE{/com/openbravo/pos/templates/Role.Guest.xml} );
 
 CREATE TABLE PEOPLE (
     ID VARCHAR(255) NOT NULL,
@@ -59,10 +57,8 @@ ALTER TABLE PEOPLE ADD CONSTRAINT PEOPLE_FK_1 FOREIGN KEY ("ROLE") REFERENCES RO
 
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('0', 'Администратор', NULL, '0', 1, NULL);
 INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('1', 'Менеджер', NULL, '1', 1, NULL);
--- INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('2', 'Товаровед', NULL, '2', 1, NULL);
--- INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('3', 'Кладовщик', NULL, '3', 1, NULL);
-INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('4', 'Продавец', NULL, '4', 1, NULL);
-INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('5', 'Гость', NULL, '5', 1, NULL);
+INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('2', 'Продавец', NULL, '2', 1, NULL);
+INSERT INTO PEOPLE(ID, NAME, APPPASSWORD, ROLE, VISIBLE, IMAGE) VALUES ('3', 'Гость', NULL, '3', 1, NULL);
 
 CREATE TABLE RESOURCES (
     ID VARCHAR(255) NOT NULL,
