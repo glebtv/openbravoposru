@@ -2,19 +2,12 @@
     <shortName>openbravopos</shortName>
     <fullName>Openbravo POS</fullName>
     <version>2.30.2</version>
-    <readmeFile>../README</readmeFile>
+    <readmeFile>pos/README</readmeFile>
     <licenseFile>../licensing/gpl-3.0.txt</licenseFile>
     <leftImage>images/left.png</leftImage>
     <logoImage>images/icon.png</logoImage>
     <splashImage>images/splash.png</splashImage>
     <allowLanguageSelection>1</allowLanguageSelection>
-    <description>Openbravo POS is a point of sale designed for touch screens</description>
-    <enableRollback>1</enableRollback>
-    <outputDirectory>../build/installerpos</outputDirectory>
-    <release>3</release>
-    <requireInstallationByRootUser>1</requireInstallationByRootUser>
-    <summary>POS</summary>
-    <vendor>Openbravo</vendor>
     <componentList>
         <component>
             <name>default</name>
@@ -30,6 +23,7 @@
                     <name>Openbravo POS</name>
                     <path>${installdir}</path>
                     <platforms>all</platforms>
+                    <runAsAdmin>0</runAsAdmin>
                     <runInTerminal>0</runInTerminal>
                     <windowsExec>${installdir}/start.bat</windowsExec>
                     <windowsExecArgs></windowsExecArgs>
@@ -37,35 +31,6 @@
                     <windowsPath>${installdir}</windowsPath>
                 </shortcut>
             </desktopShortcutList>
-            <startMenuShortcutList>
-                <startMenuShortcut>
-                    <comment>Openbravo POS is a point of sale designed for touch screens</comment>
-                    <name>Openbravo POS</name>
-                    <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/start.bat</windowsExec>
-                    <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
-                    <windowsPath>${installdir}</windowsPath>
-                </startMenuShortcut>
-                <startMenuShortcut>
-                    <comment>Configure Openbravo POS</comment>
-                    <name>Openbravo POS configuration</name>
-                    <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/configure.bat</windowsExec>
-                    <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
-                    <windowsPath>${installdir}</windowsPath>
-                </startMenuShortcut>
-                <startMenuShortcut>
-                    <comment>Uninstall ${product_fullname}</comment>
-                    <name>Uninstall ${product_fullname}</name>
-                    <runInTerminal>0</runInTerminal>
-                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
-                    <windowsExecArgs></windowsExecArgs>
-                    <windowsIcon></windowsIcon>
-                    <windowsPath>${installdir}/</windowsPath>
-                </startMenuShortcut>
-            </startMenuShortcutList>
             <folderList>
                 <folder>
                     <description>DEB1</description>
@@ -119,34 +84,74 @@
                             <origin>../lib</origin>
                         </distributionDirectory>
                         <distributionFile>
-                            <origin>../build/jar/openbravopos.jar</origin>
+                            <origin>../dist/openbravopos.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../README</origin>
+                            <origin>pos/README</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../openbravo-logo-128.png</origin>
+                            <origin>pos/openbravo-logo-128.png</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../openbravo-logo.ico</origin>
+                            <origin>pos/openbravo-logo.ico</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../start.bat</origin>
+                            <origin>pos/start.bat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../start.sh</origin>
+                            <origin>pos/start.sh</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../configure.bat</origin>
+                            <origin>pos/configure.bat</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../configure.sh</origin>
+                            <origin>pos/configure.sh</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
             </folderList>
+            <startMenuShortcutList>
+                <startMenuShortcut>
+                    <comment>Openbravo POS - автоматизированная система продаж для работы с сенсорным экраном.</comment>
+                    <name>Openbravo POS</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/start.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>Настройка Openbravo POS</comment>
+                    <name>Openbravo POS настройки</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/configure.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>Удалить ${product_fullname}</comment>
+                    <name>Удалить ${product_fullname}</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon></windowsIcon>
+                    <windowsPath>${installdir}/</windowsPath>
+                </startMenuShortcut>
+            </startMenuShortcutList>
         </component>
     </componentList>
+    <description>Openbravo POS - автоматизированная система продаж для работы с сенсорным экраном.</description>
+    <enableRollback>1</enableRollback>
+    <enableTimestamp>1</enableTimestamp>
+    <outputDirectory>../build/installerpos</outputDirectory>
+    <release>3</release>
+    <requireInstallationByRootUser>1</requireInstallationByRootUser>
+    <summary>POS</summary>
+    <vendor>Openbravo</vendor>
     <parameterList>
         <directoryParameter>
             <name>installdir</name>
@@ -164,7 +169,7 @@
     </parameterList>
     <platformOptionsList>
         <platformOptions>
-            <description>Openbravo POS is a point of sale designed for touch screens</description>
+            <description>Openbravo POS - автоматизированная система продаж для работы с сенсорным экраном.</description>
             <platform>debian</platform>
             <release>1</release>
             <summary>POS</summary>
