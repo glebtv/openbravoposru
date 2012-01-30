@@ -19,34 +19,35 @@
 
 package com.openbravo.pos.inventory;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import java.awt.image.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.format.Formats;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ComboBoxValModel;
-import com.openbravo.data.loader.SentenceFind;
 import com.openbravo.data.gui.MessageInf;
+import com.openbravo.data.loader.SentenceFind;
 import com.openbravo.data.loader.SentenceList;
-import com.openbravo.data.user.EditorRecord;
 import com.openbravo.data.user.DirtyManager;
+import com.openbravo.data.user.EditorRecord;
+import com.openbravo.format.Formats;
+import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.sales.TaxesLogic;
-import java.util.Date;
-import java.util.UUID;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class ProductsEditor extends JPanel implements EditorRecord {
        
@@ -58,6 +59,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
     private String s_GenBarcode;
     private String s_DefBarcode;
     private String s_DefTaxCat;
+    private String s_DefProdCat;
 
     private SentenceList m_sentcat;
     private ComboBoxValModel m_CategoryModel;
@@ -148,6 +150,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         s_GenBarcode = app.getGenerateProductBarcode();
         s_DefBarcode = app.getUserBarcode();
         s_DefTaxCat = app.getDefaultTaxCategory();
+        s_DefProdCat = app.getDefaultProductCategory();
 
         // Load the taxes logic
         taxeslogic = new TaxesLogic(taxsent.list());        
@@ -280,7 +283,7 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         m_jName.setText(null);
         m_jComment.setSelected(false);
         m_jScale.setSelected(false);
-        m_CategoryModel.setSelectedKey(null);
+        m_CategoryModel.setSelectedKey(s_DefProdCat);
         taxcatmodel.setSelectedKey(s_DefTaxCat);
         attmodel.setSelectedKey(null);
         m_jPriceBuy.setText(null);

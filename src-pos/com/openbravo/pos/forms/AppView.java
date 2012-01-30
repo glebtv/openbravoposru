@@ -19,15 +19,16 @@
 
 package com.openbravo.pos.forms;
 
-import java.util.Date;
 import com.openbravo.data.loader.Session;
-import com.openbravo.pos.printer.*;
-import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.pludevice.DevicePLUs;
+import com.openbravo.pos.printer.DeviceTicket;
+import com.openbravo.pos.scale.DeviceScale;
+import java.util.Date;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public interface AppView {
     
@@ -56,6 +57,7 @@ public interface AppView {
     public String getProductPriceBarcode();
 
     public String getDefaultTaxCategory();
+    public String getDefaultProductCategory();
 
     public void waitCursorBegin();
     public void waitCursorEnd();

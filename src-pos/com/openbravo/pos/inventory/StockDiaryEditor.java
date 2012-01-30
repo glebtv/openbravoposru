@@ -19,37 +19,38 @@
 
 package com.openbravo.pos.inventory;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.UUID;
+import com.openbravo.basic.BasicException;
 import com.openbravo.beans.DateUtils;
 import com.openbravo.beans.JCalendarDialog;
-import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.ComboBoxValModel;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.SentenceList;
-import com.openbravo.format.Formats;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.data.user.EditorRecord;
+import com.openbravo.format.Formats;
 import com.openbravo.pos.catalog.CatalogSelector;
+import com.openbravo.pos.catalog.JCatalog;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
-import com.openbravo.pos.catalog.JCatalog;
 import com.openbravo.pos.forms.DataLogicSystem;
 import com.openbravo.pos.panels.JProductFinder;
 import com.openbravo.pos.sales.JProductAttEdit;
 import com.openbravo.pos.sales.PropertiesConfig;
 import com.openbravo.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord {
     
@@ -114,7 +115,7 @@ public class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord
     }
     
     public void activate() throws BasicException {
-        m_cat.loadCatalog();
+        m_cat.loadCatalog(m_App);
         
         m_LocationsModel = new ComboBoxValModel(m_sentlocations.list());
         m_jLocation.setModel(m_LocationsModel); // para que lo refresque   

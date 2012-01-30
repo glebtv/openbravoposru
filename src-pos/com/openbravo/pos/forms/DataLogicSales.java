@@ -19,36 +19,27 @@
 
 package com.openbravo.pos.forms;
 
-import com.openbravo.pos.ticket.CategoryInfo;
-import com.openbravo.pos.ticket.ProductInfoExt;
-import com.openbravo.pos.ticket.TaxInfo;
-import com.openbravo.pos.ticket.TicketInfo;
-import com.openbravo.pos.ticket.TicketLineInfo;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import com.openbravo.data.loader.*;
-import com.openbravo.format.Formats;
 import com.openbravo.basic.BasicException;
+import com.openbravo.data.loader.*;
 import com.openbravo.data.model.Field;
 import com.openbravo.data.model.Row;
+import com.openbravo.format.Formats;
 import com.openbravo.pos.customers.CustomerInfoExt;
-import com.openbravo.pos.inventory.AttributeSetInfo;
-import com.openbravo.pos.inventory.TaxCustCategoryInfo;
-import com.openbravo.pos.inventory.LocationInfo;
-import com.openbravo.pos.inventory.MovementReason;
-import com.openbravo.pos.inventory.TaxCategoryInfo;
+import com.openbravo.pos.inventory.*;
 import com.openbravo.pos.mant.FloorsInfo;
 import com.openbravo.pos.payment.PaymentInfo;
 import com.openbravo.pos.payment.PaymentInfoTicket;
-import com.openbravo.pos.ticket.FindTicketsInfo;
-import com.openbravo.pos.ticket.TicketTaxInfo;
+import com.openbravo.pos.ticket.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class DataLogicSales extends BeanFactoryDataSingle {
 
@@ -132,6 +123,13 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             , "SELECT ID, NAME, IMAGE FROM CATEGORIES WHERE PARENTID = ? ORDER BY NAME"
             , SerializerWriteString.INSTANCE
             , CategoryInfo.getSerializerRead()).list(category);
+    }
+    public CategoryInfo findCategory(String catid) throws BasicException {
+        return (CategoryInfo) new PreparedSentence(s
+                , "SELECT ID, NAME, IMAGE " +
+                  "FROM CATEGORIES WHERE ID = ?"
+                , SerializerWriteString.INSTANCE
+                , new CategoryRead()).find(catid);
     }
     public List<ProductInfoExt> getProductCatalog(String category) throws BasicException  {
         return new PreparedSentence(s
@@ -787,4 +785,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             return c;
         }
     }
+    
+    protected static class CategoryRead implements SerializerRead {
+
+        @Override
+        public Object readValues(DataRead dr) throws BasicException {
+            return new CategoryInfo(dr.getString(1), dr.getString(2), ImageUtils.readImage(dr.getBytes(3)));
+        }
+    }   
 }

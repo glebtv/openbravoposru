@@ -19,22 +19,27 @@
 
 package com.openbravo.pos.sales;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import com.openbravo.basic.BasicException;
 import com.openbravo.pos.catalog.CatalogSelector;
 import com.openbravo.pos.catalog.JCatalog;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.ticket.ProductInfoExt;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+/**
+ *
+ * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
+ */
 public class JPanelTicketSales extends JPanelTicket {
 
     private CatalogSelector m_cat;
-   
+    
     /** Creates a new instance of JPanelTicketSales */
     public JPanelTicketSales() {        
     }
@@ -72,8 +77,8 @@ public class JPanelTicketSales extends JPanelTicket {
     public void activate() throws BasicException {      
         super.activate();
         if ("false".equals(panelconfig.getProperty("catvisible")) == false) {
-        m_cat.loadCatalog();
-    }      
+            m_cat.loadCatalog(m_App);
+        }
     }
     
     private class CatalogListener implements ActionListener {

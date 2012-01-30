@@ -74,6 +74,7 @@ public class JRootApp extends JPanel implements AppView {
     private String m_sProductPriceBarcode;
 
     private String m_sDefaultTaxCategory;
+    private String m_sDefaultProductCategory;
 
     private StringBuffer inputtext;
    
@@ -248,6 +249,13 @@ public class JRootApp extends JPanel implements AppView {
             m_propsdb.setProperty("taxcategoryid", m_sDefaultTaxCategory);
             m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
         }
+        
+        m_sDefaultProductCategory = m_propsdb.getProperty("productcategoryid");
+        if (m_sDefaultProductCategory == null) {
+            m_sDefaultTaxCategory = "000";
+            m_propsdb.setProperty("productcategoryid", m_sDefaultProductCategory);
+            m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
+        }        
 
         // Inicializo la impresora...
         m_TP = new DeviceTicket(this, m_props);
@@ -349,6 +357,10 @@ public class JRootApp extends JPanel implements AppView {
     public String getDefaultTaxCategory() {
         return m_sDefaultTaxCategory;
     }
+    
+    public String getDefaultProductCategory() {
+        return m_sDefaultProductCategory;
+    }    
 
     public String getUserBarcode() {
         return m_sUserBarcode;

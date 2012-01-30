@@ -19,27 +19,34 @@
 
 package com.openbravo.pos.catalog;
 
-import com.openbravo.pos.ticket.CategoryInfo;
-import com.openbravo.pos.ticket.ProductInfoExt;
-import com.openbravo.pos.util.ThumbNailBuilder;
-
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.awt.*;
-import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.JMessageDialog;
 import com.openbravo.data.gui.MessageInf;
+import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.sales.PropertiesConfig;
 import com.openbravo.pos.sales.TaxesLogic;
+import com.openbravo.pos.ticket.CategoryInfo;
+import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.ticket.TaxInfo;
+import com.openbravo.pos.util.ThumbNailBuilder;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class JCatalog extends JPanel implements ListSelectionListener, CatalogSelector {
     
@@ -62,6 +69,8 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     private Integer iTextFontSize;
     
     private CategoryInfo showingcategory = null;
+    
+    private String s_DefProdCat;    
           
     public JCatalog(DataLogicSales dlSales, PropertiesConfig panelconfig) {
 
@@ -96,7 +105,7 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
         }
     }
     
-    public void loadCatalog() throws BasicException {
+    public void loadCatalog(AppView app) throws BasicException {
         
         // delete all categories panel
         m_jProducts.removeAll();
@@ -126,6 +135,8 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
             
         // Display catalog panel
         showRootCategoriesPanel();
+        
+        s_DefProdCat = app.getDefaultProductCategory();
     }
     
     public void setComponentEnabled(boolean value) {
@@ -241,11 +252,11 @@ public class JCatalog extends JPanel implements ListSelectionListener, CatalogSe
     }
     
     private void showRootCategoriesPanel() {
-        
+
         selectIndicatorCategories();
         // Show selected root category
         CategoryInfo cat = (CategoryInfo) m_jListCategories.getSelectedValue();
-        
+
         if (cat != null) {
             selectCategoryPanel(cat.getID());
         }

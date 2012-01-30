@@ -19,19 +19,26 @@
 
 package com.openbravo.pos.sql;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Date;
-import javax.swing.JFrame;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.JMessageDialog;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.loader.Session;
 import com.openbravo.pos.forms.*;
+import com.openbravo.pos.pludevice.DevicePLUs;
 import com.openbravo.pos.printer.DeviceTicket;
 import com.openbravo.pos.scale.DeviceScale;
-import com.openbravo.pos.pludevice.DevicePLUs;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Date;
+import javax.swing.JFrame;
 
+/**
+ *
+ * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
+ */
 public class JFrmSQL extends javax.swing.JFrame implements AppView {
     
     private AppProperties m_props;
@@ -137,6 +144,10 @@ public class JFrmSQL extends javax.swing.JFrame implements AppView {
     public String getDefaultTaxCategory() {
         return null;
     }
+    
+    public String getDefaultProductCategory() {
+        return null;
+    }    
 
     public void setActiveCash(String value, int iSeq, Date dStart, Date dEnd) {
     }

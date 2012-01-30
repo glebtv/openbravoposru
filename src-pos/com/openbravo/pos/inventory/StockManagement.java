@@ -19,34 +19,45 @@
 
 package com.openbravo.pos.inventory;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
 import com.openbravo.basic.BasicException;
-import com.openbravo.beans.*;
-import com.openbravo.data.gui.*;
-import com.openbravo.data.loader.*;
+import com.openbravo.beans.DateUtils;
+import com.openbravo.beans.JCalendarDialog;
+import com.openbravo.data.gui.ComboBoxValModel;
+import com.openbravo.data.gui.MessageInf;
+import com.openbravo.data.loader.LocalRes;
+import com.openbravo.data.loader.SentenceExec;
+import com.openbravo.data.loader.SentenceList;
 import com.openbravo.format.Formats;
-import com.openbravo.pos.scripting.ScriptEngine;
-import com.openbravo.pos.scripting.ScriptException;
-import com.openbravo.pos.scripting.ScriptFactory;
 import com.openbravo.pos.catalog.CatalogSelector;
-import com.openbravo.pos.forms.*;
 import com.openbravo.pos.catalog.JCatalog;
-import com.openbravo.pos.printer.TicketParser;
-import com.openbravo.pos.printer.TicketPrinterException;
-import com.openbravo.pos.printer.TicketFiscalPrinterException;
-import com.openbravo.pos.sales.JProductAttEdit;
-import com.openbravo.pos.sales.PropertiesConfig;
+import com.openbravo.pos.forms.*;
 import com.openbravo.pos.pludevice.DevicePLUs;
 import com.openbravo.pos.pludevice.DevicePLUsException;
 import com.openbravo.pos.pludevice.ProductDownloaded;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.TicketParser;
+import com.openbravo.pos.printer.TicketPrinterException;
+import com.openbravo.pos.sales.JProductAttEdit;
+import com.openbravo.pos.sales.PropertiesConfig;
+import com.openbravo.pos.scripting.ScriptEngine;
+import com.openbravo.pos.scripting.ScriptException;
+import com.openbravo.pos.scripting.ScriptFactory;
 import com.openbravo.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.UUID;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class StockManagement extends JPanel implements JPanelView {
 
@@ -119,7 +130,7 @@ public class StockManagement extends JPanel implements JPanelView {
     }
 
     public void activate() throws BasicException {
-        m_cat.loadCatalog();
+        m_cat.loadCatalog(m_App);
 
         java.util.List l = m_sentlocations.list();
         m_LocationsModel = new ComboBoxValModel(l);
