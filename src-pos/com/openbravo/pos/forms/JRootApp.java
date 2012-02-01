@@ -252,7 +252,7 @@ public class JRootApp extends JPanel implements AppView {
         
         m_sDefaultProductCategory = m_propsdb.getProperty("productcategoryid");
         if (m_sDefaultProductCategory == null) {
-            m_sDefaultTaxCategory = "000";
+            m_sDefaultProductCategory = "000";
             m_propsdb.setProperty("productcategoryid", m_sDefaultProductCategory);
             m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
         }        
