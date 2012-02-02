@@ -224,40 +224,41 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         m_jTitle.setText(AppLocal.getIntString("label.recordnew"));
         m_id = UUID.randomUUID().toString();
 
-        List a;
-
+        String GenCode = "";
+        
         try {
-            a = product.list();
-        } catch (BasicException eD) {
-            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.cannotloadlists"), eD);
-            msg.show(this);
-            a = new ArrayList();
+            if (product.list() != null) {
+                GenCode = Integer.toString(product.list().size() + 1);
+            } else {
+                GenCode = "1";
+            }
+        } catch (BasicException ex) {
         }
-
-        String GenCode = Integer.toString(a.size() + 1);
-
+        
         if (s_GenRef.equals("true")) {
+            for (int i = GenCode.length(); i < 4; i++) {
+                GenCode = "0".concat(GenCode);
+            }
             m_jRef.setText(GenCode);
         } else {
-        m_jRef.setText(null);
+            m_jRef.setText(null);
         }
 
         if (s_GenBarcode.equals("true")) {
-            String UserBarcode = s_DefBarcode;
 
             for (int i = GenCode.length(); i < 9; i++) {
-                UserBarcode = UserBarcode + "0";
+                GenCode = "0".concat(GenCode);
             }
-
-            UserBarcode = UserBarcode + GenCode;
+ 
+            GenCode = s_DefBarcode.concat(GenCode);
 
             int iBCC = 0;
 
             for (int i = 0; i < 12; i++) {
                 if (i == 1 || i == 3 || i == 5 || i == 7 || i == 9 || i == 11) {
-                    iBCC = iBCC + Integer.parseInt(UserBarcode.substring(i, i + 1)) * 3;
+                    iBCC = iBCC + Integer.parseInt(GenCode.substring(i, i + 1)) * 3;
                 } else {
-                    iBCC = iBCC + Integer.parseInt(UserBarcode.substring(i, i + 1));
+                    iBCC = iBCC + Integer.parseInt(GenCode.substring(i, i + 1));
                 }
             }
 
@@ -270,14 +271,11 @@ public class ProductsEditor extends JPanel implements EditorRecord {
                 iBCC = 10 - Integer.parseInt(Integer.toString(iBCC).substring(0, 1));
             }
 
+            GenCode = GenCode.concat(Integer.toString(iBCC));
 
-
-            UserBarcode = UserBarcode + Integer.toString(iBCC);
-
-            m_jCode.setText(UserBarcode);
-
+            m_jCode.setText(GenCode);
         } else {
-        m_jCode.setText(null);
+            m_jCode.setText(null);
         }
 
         m_jName.setText(null);
