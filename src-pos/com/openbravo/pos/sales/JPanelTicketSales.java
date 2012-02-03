@@ -59,7 +59,7 @@ public class JPanelTicketSales extends JPanelTicket {
         m_cat.addActionListener(new CatalogListener());
         m_cat.getComponent().setPreferredSize(new Dimension(
                 0,
-                Integer.parseInt(panelconfig.getProperty("cat-height", "245"))));
+                Integer.parseInt(panelconfig.getProperty("cat-height", "200"))));
         return m_cat.getComponent();
     }
 

@@ -18,15 +18,20 @@
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 package com.openbravo.pos.sales;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.*;
-import java.util.List;
 import com.openbravo.basic.BasicException;
 import com.openbravo.pos.ticket.ProductInfoExt;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
+/**
+ *
+ * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
+ */
 public class JPanelTicketEdits extends JPanelTicket {
 
     private JTicketCatalogLines m_catandlines;
@@ -75,7 +80,7 @@ public class JPanelTicketEdits extends JPanelTicket {
         m_catandlines = new JTicketCatalogLines(m_App, this, panelconfig);
         m_catandlines.setPreferredSize(new Dimension(
                 0,
-                Integer.parseInt(panelconfig.getProperty("cat-height", "245"))));
+                Integer.parseInt(panelconfig.getProperty("cat-height", "200"))));
         m_catandlines.addActionListener(new CatalogListener());
         return m_catandlines;
     }

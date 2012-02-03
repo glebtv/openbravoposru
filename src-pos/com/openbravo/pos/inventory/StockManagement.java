@@ -67,6 +67,7 @@ public class StockManagement extends JPanel implements JPanelView {
     private TicketParser m_TTP;
 
     private CatalogSelector m_cat;
+    private PropertiesConfig panelconfig;
     private ComboBoxValModel m_ReasonModel;
 
     private SentenceList m_sentlocations;
@@ -111,10 +112,15 @@ public class StockManagement extends JPanel implements JPanelView {
 
         m_jreason.setModel(m_ReasonModel);
 
-        m_cat = new JCatalog(m_dlSales, new PropertiesConfig(m_dlSystem.getResourceAsXML("Ticket.Buttons")));
+        panelconfig = new PropertiesConfig(m_dlSystem.getResourceAsXML("Ticket.Buttons"));
+
+        m_cat = new JCatalog(m_dlSales, panelconfig);
         m_cat.getComponent().setPreferredSize(new Dimension(0, 245));
         m_cat.addActionListener(new CatalogListener());
         catcontainer.add(m_cat.getComponent(), BorderLayout.CENTER);
+        catcontainer.setPreferredSize(new Dimension(
+                0,
+                Integer.parseInt(panelconfig.getProperty("cat-height", "200"))));
 
         // Las lineas de inventario
         m_invlines = new JInventoryLines();

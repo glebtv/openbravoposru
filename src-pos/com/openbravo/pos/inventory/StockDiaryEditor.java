@@ -55,7 +55,8 @@ import java.util.UUID;
 public class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord {
     
     private CatalogSelector m_cat;
-
+    private PropertiesConfig panelconfig;     
+   
     private String m_sID;
 
     private String productid;
@@ -83,9 +84,12 @@ public class StockDiaryEditor extends javax.swing.JPanel implements EditorRecord
         m_dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
 
         initComponents();      
-        
-        m_cat = new JCatalog(m_dlSales, new PropertiesConfig(m_dlSystem.getResourceAsXML("Ticket.Buttons")));
-        m_cat.getComponent().setPreferredSize(new Dimension(0, 245));
+
+        panelconfig = new PropertiesConfig(m_dlSystem.getResourceAsXML("Ticket.Buttons"));
+        m_cat = new JCatalog(m_dlSales, panelconfig);
+        m_cat.getComponent().setPreferredSize(new Dimension(
+                0, 
+                Integer.parseInt(panelconfig.getProperty("cat-height", "200"))));
         m_cat.addActionListener(new CatalogListener());
         add(m_cat.getComponent(), BorderLayout.SOUTH);
 
