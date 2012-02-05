@@ -8,6 +8,16 @@
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
+////    Openbravo POS is a point of sales application designed for touch screens.
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
+//
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
 //
 //    Openbravo POS is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,6 +36,7 @@ import com.openbravo.pos.util.StringUtils;
 /**
  *
  * @author adrianromero
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class InventoryLine {
     
@@ -34,6 +45,8 @@ public class InventoryLine {
     
     private String m_sProdID;
     private String m_sProdName;
+    private String m_sProdCode;
+    private String m_sProdRef;
 
     private String attsetid;
     private String attsetinstid;
@@ -43,6 +56,8 @@ public class InventoryLine {
     public InventoryLine(ProductInfoExt oProduct) {
         m_sProdID = oProduct.getID();
         m_sProdName = oProduct.getName();
+        m_sProdCode = oProduct.getCode();
+        m_sProdRef = oProduct.getReference();
         m_dMultiply = 1.0;
         m_dPrice = oProduct.getPriceBuy();
         attsetid = oProduct.getAttributeSetID();
@@ -53,6 +68,8 @@ public class InventoryLine {
     public InventoryLine(ProductInfoExt oProduct, double dpor, double dprice) {
         m_sProdID = oProduct.getID();
         m_sProdName = oProduct.getName();
+        m_sProdCode = oProduct.getCode();
+        m_sProdRef = oProduct.getReference();        
         m_dMultiply = dpor;
         m_dPrice = dprice;
         attsetid = oProduct.getAttributeSetID();
@@ -66,6 +83,14 @@ public class InventoryLine {
     
     public String getProductName() {
         return m_sProdName;
+    } 
+
+    public String getProductCode() {
+        return m_sProdCode;
+    }     
+    
+    public String getProductReference() {
+        return m_sProdRef;
     } 
     public void setProductName(String sValue) {
         if (m_sProdID == null) {
@@ -116,12 +141,20 @@ public class InventoryLine {
         return StringUtils.encodeXML(m_sProdName);
     }
     
+    public String printCode() {
+        return StringUtils.encodeXML(m_sProdCode);
+    }    
+    
+    public String printReference() {
+        return StringUtils.encodeXML(m_sProdRef);
+    }
+    
     public String printPrice() {
-        if (m_dMultiply == 1.0) {
-            return "";
-        } else {
+//        if (m_dMultiply == 1.0) {
+//            return "";
+//        } else {
             return Formats.CURRENCY.formatValue(new Double(getPrice()));
-        }
+//        }
     }
     
     public String printMultiply() {
