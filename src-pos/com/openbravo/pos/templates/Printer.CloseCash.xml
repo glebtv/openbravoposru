@@ -61,8 +61,8 @@
             <text bold="true">Отчёт по кассирам</text>
         </line>
         <line>
-            <text align="left" length="22">Имя</text>
-            <text align="center" length="10">Кол-во</text>
+            <text align="left" length="25">Имя</text>
+            <text align="center" length="7">Кол-во</text>
             <text align="right" length="10">Сумма</text>        
         </line>
         <line>
@@ -70,8 +70,8 @@
         </line>
         #foreach ($line in $payments.getCashiersLines())
         <line>
-            <text align="left" length="27">${line.printCashierName()}</text>
-            <text align="center" length="10">${line.printCashierUnits()}</text>
+            <text align="left" length="25">${line.printCashierName()}</text>
+            <text align="center" length="7">${line.printCashierUnits()}</text>
             <text align="right" length="10">${line.printCashierValue()}</text>
         </line> 
         #end
