@@ -43,7 +43,7 @@ CP=$CP:$DIRNAME/lib/jpos113.jar
 CP=$CP:$DIRNAME/lib/swingx-1.0.jar
 CP=$CP:$DIRNAME/lib/substance.jar
 CP=$CP:$DIRNAME/lib/substance-swingx.jar
-CP=$CP:$DIRNAME/lib/rsyntaxtextarea-1.5.2.jar
+CP=$CP:$DIRNAME/lib/AbsoluteLayout.jar
 
 # Apache Axis SOAP libraries.
 CP=$CP:$DIRNAME/lib/axis.jar
