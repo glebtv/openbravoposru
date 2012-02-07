@@ -19,10 +19,15 @@
 
 package com.openbravo.editor;
 
-import java.awt.Toolkit;
 import com.openbravo.basic.BasicException;
 import com.openbravo.format.DoubleUtils;
 import com.openbravo.format.Formats;
+import java.awt.Toolkit;
+
+/**
+ *
+ * @author adrianromero
+ */
 
 public abstract class JEditorNumber extends JEditorAbstract {
     
@@ -87,11 +92,7 @@ public abstract class JEditorNumber extends JEditorAbstract {
             return null; 
         } else {
             try {
-                if (getMode() == EditorKeys.MODE_PERCENT) {
-                    return Double.parseDouble(text)/100;
-                } else {
                 return Double.parseDouble(text);
-                }
             } catch (NumberFormatException e) {
                 return null;
             }

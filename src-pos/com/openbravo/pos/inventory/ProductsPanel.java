@@ -19,8 +19,6 @@
 
 package com.openbravo.pos.inventory;
 
-import java.awt.Component;
-import javax.swing.JButton;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.user.EditorListener;
 import com.openbravo.data.user.EditorRecord;
@@ -30,12 +28,14 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.DataLogicSales;
 import com.openbravo.pos.panels.JPanelTable2;
 import com.openbravo.pos.ticket.ProductFilter;
+import java.awt.Component;
+import javax.swing.JButton;
 
 /**
  *
  * @author adrianromero
  * Created on 1 de marzo de 2007, 22:15
- *
+ * @author Andrey Svininykh <svininykh@gmail.com>
  */
 public class ProductsPanel extends JPanelTable2 implements EditorListener {
 
@@ -65,7 +65,7 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
             m_dlSales.getProductCatDelete());
         
         // el panel del editor
-        jeditor = new ProductsEditor(m_dlSales, dirty);       
+        jeditor = new ProductsEditor(app, m_dlSales, dirty);       
     }
     
     public EditorRecord getEditor() {
@@ -95,16 +95,16 @@ public class ProductsPanel extends JPanelTable2 implements EditorListener {
     
     private void btnExtrasDevicePLUsActionPerformed(java.awt.event.ActionEvent evt) {
         JDlgUploadProducts.showMessage(this, app.getDevicePLUs(), bd);
-    }
-
+    }  
+    
     public String getTitle() {
         return AppLocal.getIntString("Menu.Products");
-    }
+    } 
         
     @Override
     public void activate() throws BasicException {
         
-        jeditor.activate(app);
+        jeditor.activate(app); 
         jproductfilter.activate();
         
         super.activate();
