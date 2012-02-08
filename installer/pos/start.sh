@@ -23,9 +23,9 @@ DIRNAME=`dirname $0`
 
 CP=$DIRNAME/openbravopos.jar
 
-CP=$CP:$DIRNAME/lib/jasperreports-4.1.1.jar
-CP=$CP:$DIRNAME/lib/jcommon-1.0.16.jar
-CP=$CP:$DIRNAME/lib/jfreechart-1.0.13.jar
+CP=$CP:$DIRNAME/lib/jasperreports-4.5.0.jar
+CP=$CP:$DIRNAME/lib/jcommon-1.0.17.jar
+CP=$CP:$DIRNAME/lib/jfreechart-1.0.14.jar
 CP=$CP:$DIRNAME/lib/jdt-compiler-3.1.1.jar
 CP=$CP:$DIRNAME/lib/commons-beanutils-1.8.3.jar
 CP=$CP:$DIRNAME/lib/commons-digester-1.7.jar
@@ -37,7 +37,7 @@ CP=$CP:$DIRNAME/lib/velocity-1.6.2.jar
 CP=$CP:$DIRNAME/lib/oro-2.0.8.jar
 CP=$CP:$DIRNAME/lib/commons-collections-3.2.1.jar
 CP=$CP:$DIRNAME/lib/commons-lang-2.4.jar
-CP=$CP:$DIRNAME/lib/bsh-2.1b2.jar
+CP=$CP:$DIRNAME/lib/bsh-2.1b5.jar
 CP=$CP:$DIRNAME/lib/RXTXcomm.jar
 CP=$CP:$DIRNAME/lib/jpos113.jar
 CP=$CP:$DIRNAME/lib/swingx-1.0.jar
