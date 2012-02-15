@@ -1,0 +1,40 @@
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.TransRegister");
+report.setReport("/com/openbravo/reports/transregister");
+report.setResourceBundle("com/openbravo/reports/transregister_messages");
+
+report.setSentence("SELECT " +
+"PEOPLE.NAME AS CASHIER, " +
+"TICKETS.TICKETID AS TICKET_NO, " +
+"RECEIPTS.DATENEW AS TICKET_DATE, " +
+"PAYMENTS.PAYMENT AS PAYMENTS, " +
+//"GROUP_CONCAT(PAYMENTS.PAYMENT) AS PAYMENTS, " +
+"PAYMENTS.TOTAL AS MONEY_TOTAL, " +
+//"SUM(PAYMENTS.TOTAL) AS MONEY_TOTAL, " +
+"TICKETLINES.LINE+1 AS LINE, " +
+"PRODUCTS.NAME AS PRODUCT, " +
+"TICKETLINES.UNITS AS UNITS, " +
+"TICKETLINES.PRICE AS PRICE, " +
+"TICKETLINES.UNITS*TICKETLINES.PRICE AS LINE_TOTAL " +
+"FROM TICKETLINES, TICKETS, PEOPLE, PRODUCTS, RECEIPTS " +
+"LEFT OUTER JOIN PAYMENTS ON RECEIPTS.ID = PAYMENTS.RECEIPT " +
+"WHERE TICKETLINES.TICKET = TICKETS.ID AND TICKETS.ID = RECEIPTS.ID AND PEOPLE.ID = TICKETS.PERSON AND PRODUCTS.ID = TICKETLINES.PRODUCT AND ?(QBF_FILTER) " +
+//"GROUP BY TICKETLINES.TICKET, TICKETLINES.LINE " +
+"ORDER BY TICKETS.PERSON, TICKETS.TICKETID, TICKETLINES.LINE ");
+report.addParameter("RECEIPTS.DATENEW");
+report.addParameter("RECEIPTS.DATENEW");
+report.addQBFFilter(new com.openbravo.pos.reports.JParamsDatesInterval());
+
+report.addField("CASHIER", com.openbravo.data.loader.Datas.STRING);
+report.addField("TICKET_NO", com.openbravo.data.loader.Datas.STRING);
+report.addField("TICKET_DATE", com.openbravo.data.loader.Datas.TIMESTAMP);
+report.addField("PAYMENTS", com.openbravo.data.loader.Datas.STRING);
+report.addField("MONEY_TOTAL", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("LINE", com.openbravo.data.loader.Datas.STRING);
+report.addField("PRODUCT", com.openbravo.data.loader.Datas.STRING);
+report.addField("UNITS", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("PRICE", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("LINE_TOTAL", com.openbravo.data.loader.Datas.DOUBLE);
+
+report;
