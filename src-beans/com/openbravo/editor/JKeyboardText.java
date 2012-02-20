@@ -85,6 +85,16 @@ public abstract class JKeyboardText extends JEditorAbstract {
     private static final char CHAR_abc1_Comma = ',';
     private static final char CHAR_abc1_Space = ' ';
     private static final char CHAR_abc1_Dot = '.';
+    private static final char CHAR_abc1_LSquareBrack= '[';
+    private static final char CHAR_abc1_RSquareBrack = ']';
+    private static final char CHAR_abc1_Colon = ':';
+    private static final char CHAR_abc1_Quotation = '"';
+    private static final char CHAR_abc1_Slash = '/';
+    private static final char CHAR_abc1_Ampersand = '&';
+    private static final char CHAR_abc1_At = '@';
+    
+    //private static final char CHAR_abc1_Backspace = '\u0008';
+    private static final char CHAR_abc1_Minus = '-';
     
     private static final char CHAR_ABC1_1 = '1';
     private static final char CHAR_ABC1_2 = '2';
@@ -125,6 +135,17 @@ public abstract class JKeyboardText extends JEditorAbstract {
     private static final char CHAR_ABC1_Comma = ',';
     private static final char CHAR_ABC1_Space = ' ';
     private static final char CHAR_ABC1_Dot = '.';
+    private static final char CHAR_ABC1_LSquareBrack= '[';
+    private static final char CHAR_ABC1_RSquareBrack = ']';
+    private static final char CHAR_ABC1_Colon = ':';
+    private static final char CHAR_ABC1_Quotation = '"';
+    private static final char CHAR_ABC1_Slash = '/';
+    private static final char CHAR_ABC1_Ampersand = '&';
+    private static final char CHAR_ABC1_At = '@';
+    
+        
+//    private static final char CHAR_ABC1_Backspace = '\u0008';
+    private static final char CHAR_ABC1_Minus = '-';
     
     /** Creates a new instance of JEditorString */
     public JKeyboardText() {
@@ -132,7 +153,7 @@ public abstract class JKeyboardText extends JEditorAbstract {
         
 //        m_iTicks = 0;
         m_cLastChar = '\u0000';
-        m_jtimer = new javax.swing.Timer(1000, new TimerAction());
+        m_jtimer = new javax.swing.Timer(100, new TimerAction());
         m_lcount = 0L;
         m_iMode = getStartMode(); //MODE_Abc1;
         m_jtimer.start();
@@ -264,7 +285,7 @@ public abstract class JKeyboardText extends JEditorAbstract {
         
         String sOldText = getText();
         
-        if (c == '-') {
+        if (c == '\u0008') {
             if (m_cLastChar == '\u0000') {
                 // borramos el \u00c3\u00baltimo caracter el si existe
                 if (m_svalue != null && m_svalue.length() > 0) {
@@ -281,18 +302,18 @@ public abstract class JKeyboardText extends JEditorAbstract {
             m_svalue = null;
 //            m_iTicks = 0;
             m_cLastChar = '\u0000';           
-//        } else if (c == '.') {
-//            if (m_cLastChar != '\u0000') {
-//                m_svalue = appendChar2Value(getKeyChar());
-//            }
-////            m_iTicks = 0;
-//            m_cLastChar = '\u0000';           
-//            m_iMode = (m_iMode + 1) % 4;
+        } else if (c == '\u0010') {
+            if (m_cLastChar != '\u0000') {
+                m_svalue = appendChar2Value(getKeyChar());
+            }
+//            m_iTicks = 0;
+            m_cLastChar = '\u0000';           
+            m_iMode = (m_iMode + 1) % 4;
         } else if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0' 
                 || c == 'Q' || c == 'W' || c == 'E' || c == 'R' || c == 'T' || c == 'Y' || c == 'U' || c == 'I' || c == 'O' || c == 'P' 
                 || c == 'A' || c == 'S' || c == 'D' || c == 'F' || c == 'G' || c == 'H' || c == 'J' || c == 'K' || c == 'L'
                 || c == 'Z' || c == 'X' || c == 'C' || c == 'V' || c == 'B' || c == 'N' || c == 'M' 
-                || c == ',' || c == ' ' || c == '.') {
+                || c == ',' || c == ' ' || c == '.' || c == '-' || c == '@' || c == '&' || c == '[' || c == ']' || c == ':' || c == '"' || c == '/') {
             if (m_iMode == MODE_123) {
                 m_svalue = appendChar2Value(c);
             } else if (c == m_cLastChar) {
@@ -366,6 +387,7 @@ public abstract class JKeyboardText extends JEditorAbstract {
                 case ',': c = CHAR_abc1_Comma; break;
                 case ' ': c = CHAR_abc1_Space; break;
                 case '.': c = CHAR_abc1_Dot; break;
+                case '-': c = CHAR_abc1_Minus; break;
               }
             break;
         case MODE_Abc1:
@@ -410,6 +432,7 @@ public abstract class JKeyboardText extends JEditorAbstract {
                 case ',': c = CHAR_ABC1_Comma; break;
                 case ' ': c = CHAR_ABC1_Space; break;
                 case '.': c = CHAR_ABC1_Dot; break;
+                case '-': c = CHAR_ABC1_Minus; break;
             }
             break;
         }
