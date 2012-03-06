@@ -709,8 +709,10 @@ public class ProductsEditor extends JPanel implements EditorRecord {
         jLabel6.setBounds(10, 20, 150, 18);
         jPanel1.add(m_jCode);
         m_jCode.setBounds(160, 20, 170, 28);
+
+        m_jImage.setMaxDimensions(new java.awt.Dimension(256, 256));
         jPanel1.add(m_jImage);
-        m_jImage.setBounds(340, 60, 200, 160);
+        m_jImage.setBounds(340, 20, 200, 180);
 
         jLabel3.setText(AppLocal.getIntString("label.prodpricebuy")); // NOI18N
         jPanel1.add(jLabel3);
