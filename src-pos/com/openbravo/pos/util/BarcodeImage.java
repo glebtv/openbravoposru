@@ -17,8 +17,10 @@ import org.krysalis.barcode4j.impl.AbstractBarcodeBean;
 import org.krysalis.barcode4j.impl.codabar.CodabarBean;
 import org.krysalis.barcode4j.impl.code128.Code128Bean;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
+import org.krysalis.barcode4j.impl.datamatrix.DataMatrixBean;
 import org.krysalis.barcode4j.impl.int2of5.Interleaved2Of5Bean;
 import org.krysalis.barcode4j.impl.postnet.POSTNETBean;
+import org.krysalis.barcode4j.impl.qr.QRCodeBean;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.impl.upcean.EAN8Bean;
 import org.krysalis.barcode4j.impl.upcean.UPCABean;
@@ -96,13 +98,23 @@ public class BarcodeImage {
         return getBarcode(value, barcode); 
     }
     
+    public static Image getDataMatrix(String value) {
+        AbstractBarcodeBean barcode = new DataMatrixBean();
+        return getBarcode(value, barcode); 
+    }   
+    
+    public static Image getQRCode(String value) {
+        AbstractBarcodeBean barcode = new QRCodeBean();
+        return getBarcode(value, barcode); 
+    }    
+    
     private static Image getBarcode(String value, AbstractBarcodeBean barcode) {
         
         barcode.setModuleWidth(1.0); 
         barcode.setBarHeight(40.0);
         barcode.setFontSize(10.0);
         barcode.setQuietZone(10.0);
-        barcode.doQuietZone(true);                
+        barcode.doQuietZone(true);  
         BarcodeDimension dim = barcode.calcDimensions(value);
         int width = (int) dim.getWidth(0) + 20;
         int height = (int) dim.getHeight(0);        

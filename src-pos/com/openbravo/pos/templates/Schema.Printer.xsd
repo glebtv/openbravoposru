@@ -193,6 +193,8 @@
                     <xs:documentation>Code 128</xs:documentation>
                 </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="QRCODE"/>
+            <xs:enumeration value="DATAMATRIX"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="PrinterNumber">

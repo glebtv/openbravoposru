@@ -22,6 +22,8 @@
 
 package com.openbravo.pos.util;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * @author Andrey Svininykh <svininykh@gmail.com>
  */
@@ -51,9 +53,26 @@ public class BarcodeString {
         }
         String m_sBarcode = normalizationCodeDigitAndCharacter(message);
         return m_sBarcode;
-
     }
+    
+    public static String getBarcodeStringDataMatrix(String message) {
+        String m_sBarcode = "";
+        try {
+            m_sBarcode = new String(message.getBytes("utf-8"), "ISO-8859-1");
+        } catch (UnsupportedEncodingException ex) {
+        }
+        return m_sBarcode;
+    }        
 
+    public static String getBarcodeStringQRCode(String message) {
+        String m_sBarcode = "";
+        try {
+            m_sBarcode = new String(message.getBytes("utf-8"), "Cp1251");
+        } catch (UnsupportedEncodingException ex) {
+        }
+        return m_sBarcode;
+    }
+    
     private static String alignDigitBarCode(String sLine, int iSize) {
         if (sLine.length() > iSize) {
             return sLine.substring(0, iSize);

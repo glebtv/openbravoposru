@@ -22,6 +22,10 @@ package com.openbravo.pos.printer;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
+/**
+ * @author Adrián Romero
+ * @author Andrey Svininykh <svininykh@gmail.com>
+ */
 public interface DevicePrinter {
 
     public static final int SIZE_0 = 0;
@@ -41,6 +45,8 @@ public interface DevicePrinter {
     public static final String BARCODE_EAN13 = "EAN13";
     public static final String BARCODE_CODE39 = "CODE39";
     public static final String BARCODE_CODE128 = "CODE128";
+    public static final String BARCODE_DATAMATRIX = "DATAMATRIX";
+    public static final String BARCODE_QRCODE = "QRCODE";
 
     public static final String POSITION_TOP = "top";
     public static final String POSITION_BOTTOM = "bottom";
