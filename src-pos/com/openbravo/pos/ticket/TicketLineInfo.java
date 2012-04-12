@@ -19,16 +19,19 @@
 
 package com.openbravo.pos.ticket;
 
-import java.io.*;
-import com.openbravo.pos.util.StringUtils;
-import com.openbravo.data.loader.DataRead;
-import com.openbravo.data.loader.SerializableRead;
-import com.openbravo.data.loader.DataWrite;
-import com.openbravo.format.Formats;
-import com.openbravo.data.loader.SerializableWrite;
 import com.openbravo.basic.BasicException;
+import com.openbravo.data.loader.DataRead;
+import com.openbravo.data.loader.DataWrite;
+import com.openbravo.data.loader.SerializableRead;
+import com.openbravo.data.loader.SerializableWrite;
+import com.openbravo.format.Formats;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.util.RoundUtils;
+import com.openbravo.pos.util.StringUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
@@ -89,6 +92,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
                 attributes.setProperty("product.code", "");
             } else {
                 attributes.setProperty("product.code", product.getCode());
+            }
+            if (product.getName().equals("")) {
+                attributes.setProperty("product.reference", "");
+            } else {
+                attributes.setProperty("product.reference", product.getReference());
             }
             attributes.setProperty("product.com", product.isCom() ? "true" : "false");
             if (product.getAttributeSetID() != null) {
@@ -195,7 +203,11 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     public String getProductCode() {
         return attributes.getProperty("product.code");
     }
-
+    
+    public String getProductReference() {
+        return attributes.getProperty("product.reference");
+    }
+    
     public Double getDiscountRate() {
         return Double.parseDouble(attributes.getProperty("discountrate", "0.0"));
     }
@@ -325,11 +337,15 @@ public class TicketLineInfo implements SerializableWrite, SerializableRead, Seri
     }
 
     public String printName() {
-        return StringUtils.encodeXML(attributes.getProperty("product.name"));
+        return StringUtils.encodeXML(getProductName());
     }
 
     public String printCode() {
-        return StringUtils.encodeXML(attributes.getProperty("product.code"));
+        return StringUtils.encodeXML(getProductCode());
+    }
+    
+    public String printReference() {
+        return StringUtils.encodeXML(getProductReference());
     }
 
     public String printMultiply() {
