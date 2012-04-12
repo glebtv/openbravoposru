@@ -45,25 +45,23 @@ public class PaymentsModel {
             
     private Integer m_iPayments;
     private Double m_dPaymentsTotal;
-    private List<PaymentsLine> m_lpayments;
+    private java.util.List<PaymentsLine> m_lpayments;
     
     private final static String[] PAYMENTHEADERS = {"Label.Payment", "label.totalcash"};
     
     private Integer m_iSales;
     private Double m_dSalesBase;
     private Double m_dSalesTaxes;
-    private List<SalesLine> m_lsales;
+    private java.util.List<SalesLine> m_lsales;
     
     private final static String[] SALEHEADERS = {"label.taxcash", "label.totalcash"};
 
     private Integer m_iProductSalesRows;
     private Double m_dProductSalesTotalUnits;
     private Double m_dProductSalesTotal;
-    private List<ProductSalesLine> m_lproductsales;
+    private java.util.List<ProductSalesLine> m_lproductsales;
     
-    private List<CategorySalesLine> m_lcategorysales;    
-    
-    private List<CashiersLine> m_lcashiers;    
+    private java.util.List<CategorySalesLine> m_lcategorysales;    
 
     private PaymentsModel() {
     }    
@@ -87,7 +85,6 @@ public class PaymentsModel {
         p.m_lproductsales = new ArrayList<ProductSalesLine>();
         
         p.m_lcategorysales = new ArrayList<CategorySalesLine>();  
-        p.m_lcashiers = new ArrayList<CashiersLine>();   
 
         return p;
     }
@@ -218,25 +215,6 @@ public class PaymentsModel {
         } else {
             p.m_lcategorysales = categorys;
         }        
-        
-        List cashiers = new StaticSentence(app.getSession()
-             , "SELECT PEOPLE.NAME, SUM(TICKETLINES.UNITS), SUM(TICKETLINES.UNITS * (TICKETLINES.PRICE + (TICKETLINES.PRICE * TAXES.RATE))) " +
-               "FROM PEOPLE " +
-               "LEFT JOIN TICKETS ON PEOPLE.ID = TICKETS.PERSON " +
-               "LEFT JOIN TICKETLINES ON TICKETS.ID = TICKETLINES.TICKET " +
-               "LEFT JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID " +
-               "LEFT JOIN RECEIPTS ON TICKETLINES.TICKET = RECEIPTS.ID " +
-               "WHERE RECEIPTS.MONEY = ? " +
-               "GROUP BY PEOPLE.NAME"
-            , SerializerWriteString.INSTANCE
-            , new SerializerReadClass(PaymentsModel.CashiersLine.class))
-            .list(app.getActiveCashIndex());
-        
-        if (cashiers == null) {
-            p.m_lcashiers = new ArrayList();
-        } else {
-            p.m_lcashiers = cashiers;
-        }
 
         List<SalesLine> asales = new StaticSentence(app.getSession(),
                 "SELECT TAXCATEGORIES.NAME, SUM(TAXLINES.AMOUNT) " +
@@ -355,7 +333,7 @@ public class PaymentsModel {
             m_SalesTaxes = dr.getDouble(2);
         }
         public String printTaxName() {
-            return m_SalesTaxName;
+            return StringUtils.encodeXML(m_SalesTaxName);
         }      
         public String printTaxes() {
             return Formats.CURRENCY.formatValue(m_SalesTaxes);
@@ -521,7 +499,7 @@ public class PaymentsModel {
         }
 
         public String printCategoryName() {
-            return m_CategoryName;
+            return StringUtils.encodeXML(m_CategoryName);
         }
 
         public String printCategoryUnits() {
@@ -540,40 +518,4 @@ public class PaymentsModel {
             return m_CategorySum;
         }
     }    
-    
-    public List<CashiersLine> getCashiersLines() {
-        return m_lcashiers;
-    }
-
-    public static class CashiersLine implements SerializableRead {
-        
-        private String m_sCashierName;
-        private Double m_dCashierUnits;
-        private Double m_dCashierValue;
-        
-        public void readValues(DataRead dr) throws BasicException {
-            m_sCashierName = dr.getString(1);
-            m_dCashierUnits = dr.getDouble(2);            
-            m_dCashierValue = dr.getDouble(3);
-        }
-        
-        public String printCashierName() {
-            return StringUtils.encodeXML(m_sCashierName);
-        }
-        public String getCashierName() {
-            return m_sCashierName;
-        }
-        public String printCashierUnits() {
-            return Formats.DOUBLE.formatValue(m_dCashierUnits);
-        }
-        public Double getCashierUnits() {
-            return m_dCashierUnits;
-        }        
-        public String printCashierValue() {
-            return Formats.CURRENCY.formatValue(m_dCashierValue);
-        }
-        public Double getCashierValue() {
-            return m_dCashierValue;
-        }        
-    }     
 }
