@@ -205,7 +205,7 @@ ORDER BY TICKETS.PERSON, TICKETS.TICKETID, TICKETLINES.LINE]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<imageExpression><![CDATA[com.openbravo.data.loader.ImageUtils.readImageFromResource("/com/openbravo/images/poweredby.png")]]></imageExpression>
+				<imageExpression><![CDATA[com.openbravo.pos.forms.DataLogicSystem.getResourceAsImage("Window.UsedBy")]]></imageExpression>
 			</image>
 		</band>
 	</title>

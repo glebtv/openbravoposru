@@ -275,7 +275,7 @@ ORDER BY CLOSEDCASH.HOST, CLOSEDCASH.DATESTART]]>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<imageExpression><![CDATA[com.openbravo.data.loader.ImageUtils.readImageFromResource("/com/openbravo/images/poweredby.png")]]></imageExpression>
+				<imageExpression><![CDATA[com.openbravo.pos.forms.DataLogicSystem.getResourceAsImage("Window.UsedBy")]]></imageExpression>
 			</image>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-21" mode="Transparent" x="13" y="7" width="375" height="28" forecolor="#FFFFFF" backcolor="#FFFFFF"/>

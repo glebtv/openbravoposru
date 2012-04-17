@@ -51,7 +51,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     private SentenceExec m_changepassword;    
     private SentenceFind m_locationfind;
     
-    private SentenceFind m_resourcebytes;
+    private static SentenceFind m_resourcebytes;
     private SentenceExec m_resourcebytesinsert;
     private SentenceExec m_resourcebytesupdate;
 
@@ -59,7 +59,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     protected SentenceFind m_activecash;
     protected SentenceExec m_insertcash;
     
-    private Map<String, byte[]> resourcescache;
+    private static Map<String, byte[]> resourcescache;
     
     /** Creates a new instance of DataLogicSystem */
     public DataLogicSystem() {            
@@ -175,7 +175,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         resourcescache = new HashMap<String, byte[]>();      
     }
     
-    private final byte[] getResource(String name) {
+    private static byte[] getResource(String name) {
 
         byte[] resource;
         
@@ -222,7 +222,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
         return Formats.BYTEA.formatValue(getResource(sName));
     }    
     
-    public final BufferedImage getResourceAsImage(String sName) {
+    public static BufferedImage getResourceAsImage(String sName) {
         try {
             byte[] img = getResource(sName); // , ".png"
             return img == null ? null : ImageIO.read(new ByteArrayInputStream(img));

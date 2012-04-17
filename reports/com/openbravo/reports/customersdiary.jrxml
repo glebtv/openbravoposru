@@ -166,7 +166,7 @@
 			</rectangle>
 			<image scaleImage="Clip">
 				<reportElement key="image-1" x="391" y="2" width="132" height="34"/>
-				<imageExpression><![CDATA[com.openbravo.data.loader.ImageUtils.readImageFromResource("/com/openbravo/images/poweredby.png")]]></imageExpression>
+				<imageExpression><![CDATA[com.openbravo.pos.forms.DataLogicSystem.getResourceAsImage("Window.UsedBy")]]></imageExpression>
 			</image>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-3" mode="Transparent" x="14" y="8" width="375" height="28" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
