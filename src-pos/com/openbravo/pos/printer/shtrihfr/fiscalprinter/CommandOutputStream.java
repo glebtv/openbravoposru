@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 
 
-class CommandOutputStream
+public class CommandOutputStream
 {
     private final String charsetName;
     private ByteArrayOutputStream stream;
