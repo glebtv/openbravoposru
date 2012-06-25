@@ -36,7 +36,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Andrey Svininykh <svininykh@gmail.com>
  * @author Algaja 
  */
-public class PaymentsModel {
+public class  PaymentsModel {
 
     private String m_sHost;
     private int m_iSeq;
@@ -62,6 +62,8 @@ public class PaymentsModel {
     private java.util.List<ProductSalesLine> m_lproductsales;
     
     private java.util.List<CategorySalesLine> m_lcategorysales;    
+    
+    private List<PaymentsModel.CashiersLine> m_lcashiers;    
 
     private PaymentsModel() {
     }    
@@ -85,6 +87,7 @@ public class PaymentsModel {
         p.m_lproductsales = new ArrayList<ProductSalesLine>();
         
         p.m_lcategorysales = new ArrayList<CategorySalesLine>();  
+        p.m_lcashiers = new ArrayList<CashiersLine>();   
 
         return p;
     }
@@ -215,6 +218,25 @@ public class PaymentsModel {
         } else {
             p.m_lcategorysales = categorys;
         }        
+        
+        List cashiers = new StaticSentence(app.getSession()
+             , "SELECT PEOPLE.NAME, SUM(TICKETLINES.UNITS), SUM(TICKETLINES.UNITS * (TICKETLINES.PRICE + (TICKETLINES.PRICE * TAXES.RATE))) " +
+               "FROM PEOPLE " +
+               "LEFT JOIN TICKETS ON PEOPLE.ID = TICKETS.PERSON " +
+               "LEFT JOIN TICKETLINES ON TICKETS.ID = TICKETLINES.TICKET " +
+               "LEFT JOIN TAXES ON TICKETLINES.TAXID = TAXES.ID " +
+               "LEFT JOIN RECEIPTS ON TICKETLINES.TICKET = RECEIPTS.ID " +
+               "WHERE RECEIPTS.MONEY = ? " +
+               "GROUP BY PEOPLE.NAME"
+            , SerializerWriteString.INSTANCE
+            , new SerializerReadClass(CashiersLine.class))
+            .list(app.getActiveCashIndex());
+        
+        if (cashiers == null) {
+            p.m_lcashiers = new ArrayList();
+        } else {
+            p.m_lcashiers = cashiers;
+        }
 
         List<SalesLine> asales = new StaticSentence(app.getSession(),
                 "SELECT TAXCATEGORIES.NAME, SUM(TAXLINES.AMOUNT) " +
@@ -222,7 +244,7 @@ public class PaymentsModel {
                 "AND RECEIPTS.MONEY = ?" +
                 "GROUP BY TAXCATEGORIES.NAME"
                 , SerializerWriteString.INSTANCE
-                , new SerializerReadClass(PaymentsModel.SalesLine.class))
+                , new SerializerReadClass(SalesLine.class))
                 .list(app.getActiveCashIndex());
         if (asales == null) {
             p.m_lsales = new ArrayList<SalesLine>();
@@ -518,4 +540,40 @@ public class PaymentsModel {
             return m_CategorySum;
         }
     }    
+    
+    public List<CashiersLine> getCashiersLines() {
+        return m_lcashiers;
+    }
+
+    public static class CashiersLine implements SerializableRead {
+        
+        private String m_sCashierName;
+        private Double m_dCashierUnits;
+        private Double m_dCashierValue;
+        
+        public void readValues(DataRead dr) throws BasicException {
+            m_sCashierName = dr.getString(1);
+            m_dCashierUnits = dr.getDouble(2);            
+            m_dCashierValue = dr.getDouble(3);
+        }
+        
+        public String printCashierName() {
+            return StringUtils.encodeXML(m_sCashierName);
+        }
+        public String getCashierName() {
+            return m_sCashierName;
+        }
+        public String printCashierUnits() {
+            return Formats.DOUBLE.formatValue(m_dCashierUnits);
+        }
+        public Double getCashierUnits() {
+            return m_dCashierUnits;
+        }        
+        public String printCashierValue() {
+            return Formats.CURRENCY.formatValue(m_dCashierValue);
+        }
+        public Double getCashierValue() {
+            return m_dCashierValue;
+        }        
+    }     
 }
