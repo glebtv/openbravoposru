@@ -168,7 +168,28 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-            </xs:sequence>
+                <xs:element name="fiscalcash" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="fiscalcashin" minOccurs="0">
+                               <xs:complexType>
+                                    <xs:attribute name="value" type="xs:double" default="0.0"/>
+                                </xs:complexType>
+                            </xs:element>    
+                            <xs:element name="fiscalcashout" minOccurs="0">
+                               <xs:complexType>
+                                    <xs:attribute name="value" type="xs:double" default="0.0"/>
+                                </xs:complexType>
+                            </xs:element>    
+                            <xs:element name="cutpaper" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="complete" type="xs:boolean" default="true"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+         </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:simpleType name="BarcodeType">

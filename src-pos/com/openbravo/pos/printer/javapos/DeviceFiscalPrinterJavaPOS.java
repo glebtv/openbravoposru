@@ -19,18 +19,21 @@
 
 package com.openbravo.pos.printer.javapos;
 
-import javax.swing.JComponent;
-import jpos.FiscalPrinter;
-import jpos.JposException;
 import com.openbravo.pos.printer.DeviceFiscalPrinter;
 import com.openbravo.pos.printer.TicketPrinterException;
 import com.openbravo.pos.util.RoundUtils;
+import javax.swing.JComponent;
+import jpos.FiscalPrinter;
+import jpos.JposException;
 
 public class DeviceFiscalPrinterJavaPOS extends javax.swing.JPanel implements DeviceFiscalPrinter  {
 
     private String m_sName;
 
     private FiscalPrinter m_fiscal;
+    
+    public void printCashIn(double dsumm) {};
+    public void printCashOut(double dsumm) {};
 
     /** Creates new form DeviceFiscalPrinterJavaPOSPanel */
     public DeviceFiscalPrinterJavaPOS(String sDeviceFiscalPrinterName) throws TicketPrinterException {

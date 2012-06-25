@@ -23,13 +23,10 @@
 
 package com.openbravo.pos.printer.shtrihfr;
 
+import com.openbravo.pos.printer.shtrihfr.command.*;
+import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.forms.JPrincipalApp;
-
-import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
 
 
 /**

@@ -27,26 +27,23 @@
 
 package com.openbravo.pos.printer.shtrihfr;
 
-import gnu.io.NoSuchPortException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JComponent;
-
 import com.openbravo.pos.printer.DeviceFiscalPrinter;
 import com.openbravo.pos.printer.TicketFiscalPrinterException;
-
-import com.openbravo.pos.printer.shtrihfr.DeviceShtrihFR;
-
+import com.openbravo.pos.printer.shtrihfr.command.*;
 import com.openbravo.pos.printer.shtrihfr.fiscalprinter.*;
-
+import com.openbravo.pos.util.RoundUtils;
+import java.util.logging.Level;
+import javax.swing.JComponent;
 
 /**
  * @author: Gennady Kovalev <gik@bigur.ru>
+ * @author: Artur Akchurin <akartkam@gmail.com>
  */
 
 public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements DeviceFiscalPrinter {
 
+    private String m_sTicketType;
+    
     // Constants
 
     // Creates new TicketPrinter
@@ -62,7 +59,85 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
         return null;
     }
 
+    public void printCashIn(double dsumm) throws TicketFiscalPrinterException{
+         logger.finer("Printing CashIn started");
 
+        try {
+            int iFiscalPassword = getFiscalPassword();
+            long lSum1 = (long) (RoundUtils.round(dsumm) * 100);
+            PrinterCommand command = new PrintCashIn(iFiscalPassword, lSum1);
+
+            Infinity:
+            for (;;) {
+                executeCommand(command);
+
+                switch (command.getResultCode()) {
+
+                    // Command complete successfully
+                    case 0:
+                        break Infinity;
+
+                    // Printing previous command, waiting
+                    case 0x50:
+                        waitCommandComplete();
+                        break;
+
+                    // Other errors, generate exception
+                    default:
+                        String message = PrinterError.getFullText(command.getResultCode());
+                        closePort();
+                        throw new TicketFiscalPrinterException(message);
+                }
+            }
+            logger.info("Платеж - Внесение кассу CashIn на сумму "+  RoundUtils.round(dsumm)+ " записан в ККМ");
+        
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error occurs while CashIn", e);
+            closePort();
+            throw new TicketFiscalPrinterException(e);
+        }
+        logger.finer("Printing CashIn ended");
+    }    
+    
+    public void printCashOut(double dsumm) throws TicketFiscalPrinterException{
+         logger.finer("Printing CashOut started");
+
+        try {
+            int iFiscalPassword = getFiscalPassword();
+            long lSum1 = (long) (RoundUtils.round(dsumm) * 100);
+            PrinterCommand command = new PrintCashOut(iFiscalPassword, lSum1);
+
+            Infinity:
+            for (;;) {
+                executeCommand(command);
+
+                switch (command.getResultCode()) {
+
+                    // Command complete successfully
+                    case 0:
+                        break Infinity;
+
+                    // Printing previous command, waiting
+                    case 0x50:
+                        waitCommandComplete();
+                        break;
+
+                    // Other errors, generate exception
+                    default:
+                        String message = PrinterError.getFullText(command.getResultCode());
+                        closePort();
+                        throw new TicketFiscalPrinterException(message);
+                }
+            }
+            logger.info("Платеж - Извлечение из кассы CashOut на сумму "+ RoundUtils.round(dsumm)+ " записан в ККМ");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error occurs while CashOut", e);
+            closePort();
+            throw new TicketFiscalPrinterException(e);
+        }
+        logger.finer("Printing CashOut ended");
+    }    
+    
     //
     // OpenbravoPOS' printer interface methods
     //
@@ -70,12 +145,14 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     // Начало печати чека
     public void beginReceipt(String sType, String sCashier) throws TicketFiscalPrinterException {
         logger.finer("Begin printing receipt started");
-
+        
         try {
             setCashierName(sCashier);
 
             int iFiscalPassword = getFiscalPassword();
-            PrinterCommand command = new BeginFiscalReceipt(iFiscalPassword, 0x00);
+            m_sTicketType = sType;
+            int iReceiptType = "refund".equals(m_sTicketType) ? 2 : 0;
+            PrinterCommand command = new BeginFiscalReceipt(iFiscalPassword, iReceiptType);
 
             boolean bMustExit = false;
 
@@ -121,7 +198,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                 }
 
             }
-
+            logger.info("Чек типа "+ sType + " - начало печати ");
         } catch (java.io.IOException e) {
             logger.severe("I/O error with device using port " + m_sSerialDevice + ": " + e.getMessage());
             closePort();
@@ -141,11 +218,18 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     // Печать строки продажи по товару
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) throws TicketFiscalPrinterException {
         logger.finer("Printing line started");
-
+        boolean bIsRefund = false;
         try {
+            //Моё 27.03.2012
+            if (dprice < 0 && dunits < 0 && "refund".equals(m_sTicketType)) {
+               bIsRefund = true; 
+               dunits = Math.abs(dunits); 
+               dprice = Math.abs(dprice);
+            }
             int iFiscalPassword = getFiscalPassword();
 
-            long lPrice = (long) (dprice / dunits * 100);
+            //long lPrice = (long) (RoundUtils.round(dprice / dunits) * 100);
+            long lPrice = (long)RoundUtils.round((RoundUtils.round(dprice)/dunits)*100);
             long lQuantity = (long) (dunits * 1000);
             int iDepartment = 0;
             int iTax1 = 0;
@@ -156,10 +240,14 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
             if (sproduct.length() > MAX_TEXT_LENGHT) {
                 sText = sproduct.substring(0, MAX_TEXT_LENGHT);
             }
-            PriceItem m_PriceItem = new PriceItem(lPrice, lQuantity, iDepartment, iTax1, iTax2, iTax3, iTax4, sText);
-
-            PrinterCommand command = new PrintSale(iFiscalPassword, m_PriceItem);
-
+                        
+            PrinterCommand command;
+            if (bIsRefund) {
+                command = new PrintSaleRefund(iFiscalPassword, lPrice, lQuantity, iDepartment , iTax1, iTax2, iTax3, iTax4, sText);
+            } else {
+                PriceItem m_PriceItem = new PriceItem(lPrice, lQuantity, iDepartment, iTax1, iTax2, iTax3, iTax4, sText);
+                command = new PrintSale(iFiscalPassword, m_PriceItem);
+            }  
             Infinity:
             for (;;) {
                 executeCommand(command);
@@ -182,7 +270,8 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                         throw new TicketFiscalPrinterException(message);
                 }
             }
-
+            logger.info("Чек типа "+ m_sTicketType + " - печать строки, товар="+sproduct+" , цена="+RoundUtils.round(dprice)+
+                        " , кол-во="+dunits);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while printing line", e);
             closePort();
@@ -223,7 +312,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                         throw new TicketFiscalPrinterException(message);
                 }
             }
-
+        logger.info("Печать текста - "+sText);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while printing message", e);
             closePort();
@@ -237,44 +326,50 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
         logger.finer("Printing total started");
 
         try {
-            int iFiscalPassword = getFiscalPassword();
+            
+            if ("cash".equals(sPaymentType) || "cashrefund".equals(sPaymentType)) {           
+            
+                int iFiscalPassword = getFiscalPassword();
 
-            long lSum1 = (long) (dpaid * 100);
-            long lSum2 = 0;
-            long lSum3 = 0;
-            long lSum4 = 0;
-            int iTax1 = 0;
-            int iTax2 = 0;
-            int iTax3 = 0;
-            int iTax4 = 0;
-            int iDiscount = 0;
-            CloseRecParams m_Params = new CloseRecParams(lSum1, lSum2, lSum3, lSum4, iTax1, iTax2, iTax3, iTax4, iDiscount, sPayment);
+                long lSum1 = (long)(RoundUtils.round(Math.abs(dpaid) * 100));
+                //long lSum1 = (long) Math.abs(dpaid * 100);
+                long lSum2 = 0;
+                long lSum3 = 0;
+                long lSum4 = 0;
+                int iTax1 = 0;
+                int iTax2 = 0;
+                int iTax3 = 0;
+                int iTax4 = 0;
+                int iDiscount = 0;
+                CloseRecParams m_Params = new CloseRecParams(lSum1, lSum2, lSum3, lSum4, iTax1, iTax2, iTax3, iTax4, iDiscount, sPayment);
 
-            PrinterCommand command = new EndFiscalReceipt(iFiscalPassword, m_Params);
+                PrinterCommand command = new EndFiscalReceipt(iFiscalPassword, m_Params);
 
-            Infinity:
-            for (;;) {
-                executeCommand(command);
+                Infinity:
+                for (;;) {
+                    executeCommand(command);
 
-                switch (command.getResultCode()) {
+                    switch (command.getResultCode()) {
 
-                    // Command complete successfully
-                    case 0:
-                        break Infinity;
+                        // Command complete successfully
+                        case 0:
+                            break Infinity;
 
-                    // Printing previous command, waiting
-                    case 0x50:
-                        waitCommandComplete();
-                        break;
+                        // Printing previous command, waiting
+                        case 0x50:
+                            waitCommandComplete();
+                            break;
 
-                    // Other errors, generate exception
-                    default:
-                        String message = PrinterError.getFullText(command.getResultCode());
-                        closePort();
-                        throw new TicketFiscalPrinterException(message);
+                        // Other errors, generate exception
+                        default:
+                            String message = PrinterError.getFullText(command.getResultCode());
+                            closePort();
+                            throw new TicketFiscalPrinterException(message);
+                    }
                 }
-            }
-
+                logger.info("Чек типа "+ sPaymentType + " - печать итоговой оплаты , сумма="+RoundUtils.round(dpaid));
+          }
+            
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while printing total", e);
             closePort();
@@ -287,6 +382,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
     public void endReceipt() throws TicketFiscalPrinterException {
         logger.finer("End of printing receipt started");
         closePort();
+        logger.info("Окончание печати чека");
         logger.finer("End of printing receipt ended");
     }
 
@@ -366,7 +462,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                         throw new TicketFiscalPrinterException(message);
                 }
             }
-
+            logger.info("Печать Z-отчета");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while printing Z-Report", e);
             closePort();
@@ -406,7 +502,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                         throw new TicketFiscalPrinterException(message);
                 }
             }
-
+            logger.info("Печать X-отчета");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while printing X-Report", e);
             closePort();
@@ -451,7 +547,7 @@ public class DeviceFiscalPrinterShtrihFR extends DeviceShtrihFR implements Devic
                         throw new TicketFiscalPrinterException(message);
                 }
             }
-
+            logger.info("Отмена печати чека");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error occurs while closing receipt", e);
             closePort();
