@@ -44,6 +44,7 @@ CP=$CP:$DIRNAME/lib/swingx-1.0.jar
 CP=$CP:$DIRNAME/lib/substance.jar
 CP=$CP:$DIRNAME/lib/substance-swingx.jar
 CP=$CP:$DIRNAME/lib/AbsoluteLayout.jar
+CP=$CP:$DIRNAME/lib/bcd4j-1.1.jar
 
 # Apache Axis SOAP libraries.
 CP=$CP:$DIRNAME/lib/axis.jar
