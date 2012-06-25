@@ -19,13 +19,11 @@
 //    Ознакомится с условиями изложенными в GNU Lesser General Public License
 //    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
 //    А также на сайте <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.util;
 
 /**
  * @author Andrey Svininykh svininykh@gmail.com
  */
-
 public class ByteArrayUtils {
 
     private ByteArrayUtils() {
@@ -38,8 +36,8 @@ public class ByteArrayUtils {
         }
         return result;
     }
-    
-        public static final byte[] convertIntegerToByteArray(int value, int bytes, boolean revers) {
+
+    public static final byte[] convertIntegerToByteArray(int value, int bytes, boolean revers) {
         if (bytes == 1 && !revers) {
             return new byte[]{
                         (byte) value

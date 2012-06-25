@@ -19,29 +19,39 @@
 //    Ознакомится с условиями изложенными в GNU Lesser General Public License
 //    вы можете в файле lgpl-3.0.txt каталога licensing проекта Openbravo POS ru.
 //    А также на сайте <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.printer.aurafr;
 
+import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.printer.DevicePrinter;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.aurafr.command.Beep;
+import com.openbravo.pos.printer.aurafr.command.CutPaper;
+import com.openbravo.pos.printer.aurafr.command.PrintString;
+import com.openbravo.pos.printer.aurafr.command.ReadFullStatus;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
-import com.openbravo.pos.printer.*;
-import com.openbravo.pos.forms.AppLocal;
-
-public class DevicePrinterAuraFR implements DevicePrinter {
+public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
 
     private AuraFRReaderWritter m_CommOutputPrinter;
     private String m_sName;
+    private String sLine = "";
+    private PrintString cmd_PrintString;
+    private CutPaper cmd_CutPaper;
+    private ReadFullStatus cmd_ReadFullStatus;
 
     // Creates new TicketPrinter
-    public DevicePrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketPrinterException {
+    public DevicePrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketFiscalPrinterException {
 
         m_sName = AppLocal.getIntString("Printer.Serial");
         m_CommOutputPrinter = new DeviceAuraFRComm(sDevicePrinterPort, iPortSpeed, iPortBits, iPortStopBits, iPortParity);
         m_CommOutputPrinter.connectDevice();
-        m_CommOutputPrinter.sendInitMessage();
 
-        m_CommOutputPrinter.sendBeepMessage();
+        cmd_ReadFullStatus = new ReadFullStatus();
+        GenerateCommand(m_CommOutputPrinter, cmd_ReadFullStatus);
+
+        GenerateCommand(m_CommOutputPrinter, new Beep());
+
         m_CommOutputPrinter.disconnectDevice();
     }
 
@@ -60,17 +70,13 @@ public class DevicePrinterAuraFR implements DevicePrinter {
     public void reset() {
     }
 
-
-
     //Начало печати чека
     public void beginReceipt() {
         try {
             m_CommOutputPrinter.connectDevice();
-//            m_CommOutputPrinter.sendInitMessage();
-            m_CommOutputPrinter.sendBeepMessage();
-        } catch (TicketPrinterException e) {
+            GenerateCommand(m_CommOutputPrinter, new Beep());
+        } catch (TicketFiscalPrinterException e) {
         }
-
     }
 
     public void printImage(BufferedImage image) {
@@ -83,23 +89,38 @@ public class DevicePrinterAuraFR implements DevicePrinter {
     }
 
     //Печать текста
-    public void printText(int iStyle, String sText) {
-        try {
-            m_CommOutputPrinter.sendTextMessage(sText);
-        } catch (TicketPrinterException e) {
-        }
+    @Override
+    public void printText(int iStyle, String sText){
+        sLine = sLine.concat(sText);
     }
 
     public void endLine() {
+        try {
+            cmd_PrintString = new PrintString(sLine);
+            GenerateCommand(m_CommOutputPrinter, cmd_PrintString);
+            CheckErrorAnswer(m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+            sLine = "";
+        } catch (TicketFiscalPrinterException ex) {
+        }
     }
 
     //Окончание печати чека
     public void endReceipt() {
         try {
 //            m_CommOutputPrinter.sendStampTitleReportMessage();
-            m_CommOutputPrinter.sendBeepMessage();
-            m_CommOutputPrinter.sendCutTicketMessage(1);
-        } catch (TicketPrinterException e) {
+         
+            for (int iSpcStr = 0; iSpcStr < SPACE_STRINGE_BEFORE_CUT; iSpcStr++) {
+                cmd_PrintString = new PrintString("");
+                GenerateCommand(m_CommOutputPrinter, cmd_PrintString);
+                CheckErrorAnswer(m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+            }
+            
+            cmd_CutPaper = new CutPaper(0);
+            GenerateCommand(m_CommOutputPrinter, cmd_CutPaper);
+            CheckErrorAnswer(m_CommOutputPrinter, cmd_CutPaper.getErrorAnswer());
+
+            GenerateCommand(m_CommOutputPrinter, new Beep());
+        } catch (TicketFiscalPrinterException ex) {
         }
         m_CommOutputPrinter.disconnectDevice();
     }
@@ -108,9 +129,9 @@ public class DevicePrinterAuraFR implements DevicePrinter {
     public void openDrawer() {
         try {
             m_CommOutputPrinter.connectDevice();
-            m_CommOutputPrinter.sendInitMessage();
-            m_CommOutputPrinter.sendOpenDrawerMessage();
-        } catch (TicketPrinterException e) {
+//            m_CommOutputPrinter.sendInitMessage();
+//            m_CommOutputPrinter.sendOpenDrawerMessage();
+        } catch (TicketFiscalPrinterException e) {
         }
         m_CommOutputPrinter.disconnectDevice();
     }

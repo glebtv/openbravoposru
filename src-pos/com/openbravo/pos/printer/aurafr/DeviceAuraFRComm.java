@@ -22,12 +22,16 @@
 
 package com.openbravo.pos.printer.aurafr;
 
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.aurafr.command.PrinterCommand;
 import gnu.io.*;
-import java.io.*;
-import java.util.TooManyListenersException;
-import com.openbravo.pos.printer.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.TooManyListenersException;
 
 public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventListener {
 
@@ -42,7 +46,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
 
     private OutputStream m_out;
     private InputStream m_in;
-    private AuraFR m_FR;
+    private DeviceAuraFR m_FR;
 
     //Состояние принтера
     private static final int FR_READY = 0;     //ФР готов к получению сообщения
@@ -56,7 +60,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
 
     //Интервалы ожидания сообщений от принтера
     private static final int T5 = 2000;             //Задержка 2,0 сек
-    private static final int T6 = 1000;              //Задержка 0,5 сек
+    private static final int T6 = 500;              //Задержка 0,5 сек
 
     //Управляющие символы протокола
     private static final byte[] ENQ = {0x05};       //Запрос
@@ -66,7 +70,8 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
     private static final byte[] NAK = {0x15};       //Отрицание получения сообщения
     private static final byte ETX = 0x03;           //Символ конца блока данных
     private static final byte DLE = 0x10;           //Экранирование управляющих символов
-
+    private static final byte[] PASS = {0x00, 0x00};
+    
     private Queue<byte[]> m_aLines;
     private ByteArrayOutputStream m_abuffer;
 
@@ -82,7 +87,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
         m_out = null;
         m_in = null;
         m_iStatusPrinter = 0;
-        m_FR = new AuraFR();
+        m_FR = new DeviceAuraFR();
     }
 
     public void connectDevice() {
@@ -140,134 +145,85 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
         m_out = null;
         m_in = null;
     }
-
-    //Команды обмена с принтером
-    //Проверка состояния принтера
-    public void sendInitMessage() throws TicketPrinterException {
-        sendMessage(m_FR.InitMessage(), true);
-    }
-
-    //Вывод звукового сигнала
-    public void sendBeepMessage() throws TicketPrinterException {
-        sendMessage(m_FR.BeepMessage(), false);
-    }
-
-    public void sendCutTicketMessage(int iFlag) throws TicketPrinterException {
-        sendMessage(m_FR.CutTicketMessage(iFlag), true);
-    }
-
-    public void sendTextMessage(String sText) throws TicketPrinterException {
-        sendMessage(m_FR.TextMessage(sText), true);
-    }
-
-    public void sendStampTitleReportMessage() throws TicketPrinterException {
-        sendMessage(m_FR.StampTitleReportMessage(), true);
-    }
-
-    public void sendOpenDrawerMessage() throws TicketPrinterException {
-        sendMessage(m_FR.OpenDrawerMessage(), true);
-    }
-
-    public void sendOpenTicket(int iFlag, String sTypeTicket) throws TicketPrinterException {
-        if (sTypeTicket.equals("refund")) {
-            sendMessage(m_FR.OpenTicket(iFlag, 2), true);
-        } else {
-            sendMessage(m_FR.OpenTicket(iFlag, 1), true);
-        }
-    }
-
-    public void sendSelectModeMessage(int iMode) throws TicketPrinterException {
-        sendMessage(m_FR.SelectMode(iMode), true);
-    }
-
-    public void sendCancelModeMessage() throws TicketPrinterException {
-        sendMessage(m_FR.CancelMode(), true);
-    }
-
-    public void sendCloseTicketMessage(int iFlag, int iType, double dPaid) throws TicketPrinterException {
-        sendMessage(m_FR.CloseTicket(iFlag, iType, dPaid), true);
-    }
-
-    public void sendRegistrationLine(int iFlag, double dProductPrice, double dSaleUnits, int iProductSection) throws TicketPrinterException {
-        sendMessage(m_FR.RegistrationLine(iFlag, dProductPrice, dSaleUnits, iProductSection), true);
-    }
     
-    public void sendRefundLine(int iFlag, double dProductPrice, double dSaleUnits) throws TicketPrinterException {
-        sendMessage(m_FR.RefundLine(iFlag, dProductPrice, dSaleUnits), true);
-    }    
-
-    public void printXReport(int iType) throws TicketPrinterException {
-        sendMessage(m_FR.XReport(iType), true);
-    }
-
-    public void printZReport() throws TicketPrinterException {
-        sendMessage(m_FR.ZReport(), true);
-    }
-
-//    private void readCommand(byte[] cmd) throws TicketPrinterException {
+//    private void readCommand() throws TicketPrinterException {
 //        byte[] b = readLine();
-//        if (!checkCommand(cmd, b)) {
-//            throw new TicketPrinterException("Command not expected");
-//        }
+////        System.out.println("ReadLine: " + b.length);        
+//        System.out.println("Packet(" + b.length + "):" + ByteArrayUtils.getHexString(b));
+////        if (!checkCommand(cmd, b)) {
+////            throw new TicketPrinterException("Command not expected");
+////        }
 //    }
 
-    private void sendMessage(byte[] bMessage, boolean GetAnswer) throws TicketPrinterException {
-        writeLine(ENQ);
-        System.out.println("ReadLine: " + readLine().length);
-//        readCommand(ACK);
-        writeLine(bMessage);
-        System.out.println("ReadLine: " + readLine().length);
-//        readCommand(ACK);
-        writeLine(EOT);
-        if (GetAnswer) {
-            System.out.println("ReadLine: " + readLine().length);
-//        readCommand(ENQ);
-            writeLine(ACK);
-            System.out.println("ReadLine: " + readLine().length);
-//        readCommand(STX);
-            writeLine(ACK);
-            System.out.println("ReadLine: " + readLine().length);
-//        readCommand(EOT);
+    private boolean checkCommand(byte[] bcommand, byte[] brecieved) {
+        if (bcommand[0] == brecieved[0]) {
+            return true;
+        } else {
+            return false;
         }
     }
-
-    private void writeLine(byte[] aline) throws TicketPrinterException {
+    
+    public void sendMessage(String sCsrPwd, PrinterCommand oPrnCmd) throws TicketFiscalPrinterException {
+        writeLine(ENQ);
+        for (int i = 5; i > 0; i--) {
+            if (checkCommand(readLine(), ACK)) {
+                i = 0;
+                writeLine(oPrnCmd.createMessage(sCsrPwd));
+                for (int j = 10; j > 0; j--) {
+                    j = 0;
+                    if (checkCommand(readLine(), ACK)) {
+                        writeLine(EOT);
+                        if (oPrnCmd.isAnswer()) {
+                            checkCommand(readLine(), ENQ);
+                            writeLine(ACK);
+                            oPrnCmd.readAnswer(readLine());
+                            writeLine(ACK);
+                            checkCommand(readLine(), EOT);
+                        }
+                    } else {
+                        System.out.println("Not send MESSAGE");
+                    }
+                }
+            } else {
+                System.out.println("Not get ACK");
+            }
+        }
+    }
+    
+    private void writeLine(byte[] aline) throws TicketFiscalPrinterException {
         if (m_CommPortPrinter == null) {
-            throw new TicketPrinterException("No Serial port opened");
+            throw new TicketFiscalPrinterException("No Serial port opened");
         } else {
             synchronized (this) {
                 try {
                     m_out.write(aline);
                     m_out.flush();
                 } catch (IOException e) {
-                    throw new TicketPrinterException(e);
+                    throw new TicketFiscalPrinterException(e);
                 }
             }
         }
     }
 
-    private byte[] readLine() throws TicketPrinterException {
+    private byte[] readLine() throws TicketFiscalPrinterException {
         synchronized (this) {
 
             if (!m_aLines.isEmpty()) {
                 return m_aLines.poll();
             }
-
-//            if (m_iStatusPrinter != 0) {
-                try {
-                    wait(T5);
-                } catch (InterruptedException e) {
-                }
-//                if (m_iStatusPrinter != 0) {
-//                    m_iStatusPrinter = 0;
-
+            
+            try {
+                wait(T5);
+            } catch (InterruptedException e) {
+            }
+            
             if (m_aLines.isEmpty()) {
-                throw new TicketPrinterException("Timeout");
+                throw new TicketFiscalPrinterException("Timeout");
             } else {
                 return m_aLines.poll();
             }
         }
-            
+
     }
 
 //    private boolean checkCommand(byte[] bcommand, byte[] brecieved) {
@@ -300,7 +256,7 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
                 try {
                     while (m_in.available() > 0) {
                         int b = m_in.read();
-
+                                
                         synchronized(this) {
                             if ((b == ACK[0]  || b == ENQ[0] || b == EOT[0]) && m_iStatusPrinter == FR_READY || (b != ACK[0]  || b != ENQ[0] || b != EOT[0]) && m_iStatusPrinter == FR_FINISH) {
                                 m_abuffer.write(b);

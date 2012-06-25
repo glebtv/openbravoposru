@@ -20,20 +20,34 @@
 package com.openbravo.pos.printer;
 
 import com.openbravo.data.loader.LocalRes;
-import java.io.*;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.util.StringUtils;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.image.BufferedImage;
-import java.applet.*;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.DefaultHandler;
-import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
-import com.openbravo.pos.forms.DataLogicSystem;
-import com.openbravo.pos.util.StringUtils;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
+/**
+ * @author: Andrey Svininykh <svininykh@gmail.com>
+ * @author: Gennady Kovalev <gik@bigur.ru>
+ * @author: Artur Akchurin <akartkam@gmail.com>
+ */
 
 public class TicketParser extends DefaultHandler {
 
@@ -68,6 +82,7 @@ public class TicketParser extends DefaultHandler {
     private static final int OUTPUT_TICKET = 2;
     private static final int OUTPUT_FISCAL = 3;
     private static final int OUTPUT_FISCALREP = 4;
+    private static final int OUTPUT_FISCALCASH = 5;
     
     private DevicePrinter m_oOutputPrinter;
     private InputStream InputStream;
@@ -130,7 +145,7 @@ public class TicketParser extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException, TicketFiscalPrinterException{
 
         switch (m_iOutputType) {
         case OUTPUT_NONE:
@@ -160,11 +175,19 @@ public class TicketParser extends DefaultHandler {
                 m_sVisorLine2 = null;
                 m_oOutputPrinter = null;
             } else if ("fiscalreceipt".equals(qName)) {
+//            try {
                 m_iOutputType = OUTPUT_FISCAL;
-                    m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("type"), "sale"), readString(attributes.getValue("cashier"), "Администратор"));
-                } else if ("fiscalreport".equals(qName)) {
-                    m_iOutputType = OUTPUT_FISCALREP;
-            }  
+                m_printer.getFiscalPrinter().beginReceipt(readString(attributes.getValue("type"), "sale"), readString(attributes.getValue("cashier"), "Администратор"));
+//            } catch (TicketPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (TicketFiscalPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            } else if ("fiscalreport".equals(qName)) {
+                m_iOutputType = OUTPUT_FISCALREP;
+            } else if ("fiscalcash".equals(qName)) {
+                m_iOutputType = OUTPUT_FISCALCASH;
+            }
             break;
         case OUTPUT_TICKET:
             if ("image".equals(qName)){
@@ -225,17 +248,43 @@ public class TicketParser extends DefaultHandler {
                     m_dValue1 = parseDouble(attributes.getValue("paid"), 0.0);
                     m_sPaymentType = readString(attributes.getValue("type"), "cash");
             } else if ("cutpaper".equals(qName)) {
+//            try {
                 m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
+//            } catch (TicketPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (TicketFiscalPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            }
             }
             break;
-            case OUTPUT_FISCALREP:
+        case OUTPUT_FISCALREP:
+//            try {
                 if ("fiscalzreport".equals(qName)) {
                     m_printer.getFiscalPrinter().printZReport();
                 } else if ("fiscalxreport".equals(qName)) {
                     m_printer.getFiscalPrinter().printXReport();
                 } else if ("cutpaper".equals(qName)) {
                     m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
-            }
+                }
+//            } catch (TicketPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (TicketFiscalPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            }                
+        case OUTPUT_FISCALCASH:
+//            try {
+                if ("fiscalcashin".equals(qName)) {
+                    m_printer.getFiscalPrinter().printCashIn(parseDouble(attributes.getValue("value"), 0.0));
+                } else if ("fiscalcashout".equals(qName)) {
+                    m_printer.getFiscalPrinter().printCashOut(parseDouble(attributes.getValue("value"), 0.0));
+                } else if ("cutpaper".equals(qName)) {
+                    m_printer.getFiscalPrinter().cutPaper(readBoolean(attributes.getValue("complete"), true));
+                }
+//            } catch (TicketPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (TicketFiscalPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         }
     }
 
@@ -338,25 +387,37 @@ public class TicketParser extends DefaultHandler {
             }
             break;
         case OUTPUT_FISCAL:
-            if ("fiscalreceipt".equals(qName)) {
-                m_printer.getFiscalPrinter().endReceipt();
+//            try {
+                if ("fiscalreceipt".equals(qName)) {
+                    m_printer.getFiscalPrinter().endReceipt();
+                    m_iOutputType = OUTPUT_NONE;
+                } else if ("line".equals(qName)) {
+                    m_printer.getFiscalPrinter().printLine(text.toString(), m_dValue1, m_dValue2, attribute3);
+                    text = null;
+                } else if ("message".equals(qName)) {
+                    m_printer.getFiscalPrinter().printMessage(text.toString());
+                    text = null;
+                } else if ("total".equals(qName)) {
+                    m_printer.getFiscalPrinter().printTotal(text.toString(), m_dValue1, m_sPaymentType);
+                    text = null;
+                }
+//            } catch (TicketPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (TicketFiscalPrinterException ex) {
+//                Logger.getLogger(TicketParser.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            break;
+        case OUTPUT_FISCALREP:
+            if ("fiscalreport".equals(qName)) {
                 m_iOutputType = OUTPUT_NONE;
-            } else if ("line".equals(qName)) {
-                m_printer.getFiscalPrinter().printLine(text.toString(), m_dValue1, m_dValue2, attribute3);
-                text = null;
-            } else if ("message".equals(qName)) {
-                m_printer.getFiscalPrinter().printMessage(text.toString());
-                text = null;
-            } else if ("total".equals(qName)) {
-                m_printer.getFiscalPrinter().printTotal(text.toString(), m_dValue1, m_sPaymentType);
-                text = null;
             }
             break;
-            case OUTPUT_FISCALREP:
-                if ("fiscalreport".equals(qName)) {
-                    m_iOutputType = OUTPUT_NONE;
+        case OUTPUT_FISCALCASH:
+            if ("fiscalcash".equals(qName)) {
+                m_iOutputType = OUTPUT_NONE;
             }
-}            
+            break;
+        }
     }
 
     @Override

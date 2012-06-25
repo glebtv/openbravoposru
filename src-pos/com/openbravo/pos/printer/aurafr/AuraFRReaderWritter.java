@@ -22,23 +22,14 @@
 
 package com.openbravo.pos.printer.aurafr;
 
-import com.openbravo.pos.printer.*;
+import com.openbravo.pos.printer.TicketFiscalPrinterException;
+import com.openbravo.pos.printer.aurafr.command.PrinterCommand;
 
 public interface AuraFRReaderWritter {
-    public void connectDevice() throws TicketPrinterException;
-     public void sendInitMessage() throws TicketPrinterException;
-     public void sendTextMessage(String sText) throws TicketPrinterException;
-     public void sendBeepMessage() throws TicketPrinterException;
-     public void sendCutTicketMessage(int iFlag) throws TicketPrinterException;
-     public void sendStampTitleReportMessage() throws TicketPrinterException;
-     public void sendOpenDrawerMessage() throws TicketPrinterException;
-     public void sendOpenTicket(int iFlag, String sTypeTicket) throws TicketPrinterException;
-     public void sendRegistrationLine(int iFlag, double dProductPrice, double dSaleUnits, int iProductTax) throws TicketPrinterException;
-     public void sendRefundLine(int iFlag, double dProductPrice, double dSaleUnits) throws TicketPrinterException;
-     public void sendSelectModeMessage(int iMode) throws TicketPrinterException;
-     public void sendCancelModeMessage() throws TicketPrinterException;
-     public void sendCloseTicketMessage(int iFlag, int iType, double dPaid) throws TicketPrinterException;
-     public void printXReport(int iType) throws TicketPrinterException;
-     public void printZReport() throws TicketPrinterException;
-     public void disconnectDevice();
+
+    public void connectDevice() throws TicketFiscalPrinterException;
+
+    public void sendMessage(String sCashierPassword, PrinterCommand oPrinterCommand) throws TicketFiscalPrinterException;
+
+    public void disconnectDevice();
 }

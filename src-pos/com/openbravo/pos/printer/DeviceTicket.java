@@ -18,23 +18,28 @@
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
 package com.openbravo.pos.printer;
 
-import java.util.*;
 import com.openbravo.pos.forms.AppProperties;
+import com.openbravo.pos.printer.aurafr.DeviceFiscalPrinterAuraFR;
+import com.openbravo.pos.printer.aurafr.DevicePrinterAuraFR;
+import com.openbravo.pos.printer.elveskkm.DevicePrinterElvesKKM;
 import com.openbravo.pos.printer.escpos.*;
 import com.openbravo.pos.printer.javapos.DeviceDisplayJavaPOS;
 import com.openbravo.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import com.openbravo.pos.printer.javapos.DevicePrinterJavaPOS;
 import com.openbravo.pos.printer.printer.DevicePrinterPrinter;
-import com.openbravo.pos.printer.elveskkm.*;
-import com.openbravo.pos.printer.shtrihfr.*;
-import com.openbravo.pos.printer.aurafr.*;
-import com.openbravo.pos.printer.screen.*;
-
-import com.openbravo.pos.util.StringParser;
+import com.openbravo.pos.printer.screen.DeviceDisplayPanel;
+import com.openbravo.pos.printer.screen.DeviceDisplayWindow;
+import com.openbravo.pos.printer.screen.DevicePrinterPanel;
+import com.openbravo.pos.printer.shtrihfr.DeviceFiscalPrinterShtrihFR;
+import com.openbravo.pos.printer.shtrihfr.DevicePrinterShtrihFR;
 import com.openbravo.pos.util.SerialPortParameters;
+import com.openbravo.pos.util.StringParser;
 import gnu.io.SerialPort;
-
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -239,7 +244,11 @@ public class DeviceTicket {
                 } else if ("shtrihfr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
                     addPrinter(sPrinterIndex, new DevicePrinterShtrihFR(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
                 } else if ("aurafr".equals(sPrinterType) && "serial".equals(sPrinterParam1)) {
-                    addPrinter(sPrinterIndex, new DevicePrinterAuraFR(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
+                    try {
+                        addPrinter(sPrinterIndex, new DevicePrinterAuraFR(sPrinterParam2, iPrinterSerialPortSpeed, iPrinterSerialPortDataBits, iPrinterSerialPortStopBits, iPrinterSerialPortParity));
+                    } catch (TicketFiscalPrinterException ex) {
+                        Logger.getLogger(DeviceTicket.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+                    }
                 } else if ("javapos".equals(sPrinterType)) {
                     addPrinter(sPrinterIndex, new DevicePrinterJavaPOS(sPrinterParam1, sPrinterParam2));
                 }

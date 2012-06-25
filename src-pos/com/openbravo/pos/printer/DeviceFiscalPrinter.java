@@ -21,6 +21,12 @@ package com.openbravo.pos.printer;
 
 import javax.swing.JComponent;
 
+/**
+ * @author: Gennady Kovalev <gik@bigur.ru>
+ * @author: Andrey Svininykh <svininykh@gmail.com>
+ * @author: Artur Akchurin <akartkam@gmail.com>
+ */
+
 public interface DeviceFiscalPrinter {
 
     public String getFiscalName();
@@ -36,4 +42,7 @@ public interface DeviceFiscalPrinter {
 
     public void printZReport() throws TicketFiscalPrinterException;
     public void printXReport() throws TicketFiscalPrinterException;
+    
+    public void printCashIn(double dsumm) throws TicketFiscalPrinterException;
+    public void printCashOut(double dsumm) throws TicketFiscalPrinterException;
 }
