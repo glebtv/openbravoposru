@@ -45,8 +45,6 @@ public class PrintCashOut extends PrinterCommand {
         bCashOutFlag = (byte) iCashOutFlag;
         bCashOutAmount = new PackedBCD(
                 new BigDecimal(dCashOutAmount * Math.pow(10, 2)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
-
-        System.out.println("Packet(" + bCashOutAmount.length + "):" + ByteArrayUtils.getHexString(bCashOutAmount));
     }
 
     public final int getCode() {

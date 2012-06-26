@@ -70,8 +70,6 @@ public class EndFiscalReceipt extends PrinterCommand {
         bPaymentType = (byte) iPaymentType;
         bPaymentAmount = new PackedBCD(
                 new BigDecimal(dPaymentAmount * Math.pow(10, 2)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
-
-        System.out.println("Packet(" + bPaymentAmount.length + "):" + ByteArrayUtils.getHexString(bPaymentAmount));
     }
 
     public final int getCode() {

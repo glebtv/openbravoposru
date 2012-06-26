@@ -37,7 +37,9 @@ import javax.swing.JComponent;
 public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFiscalPrinter {
 
     private AuraFRReaderWritter m_CommOutputFiscal;
-//    private int iFPCounter;
+    
+    private int iFPCounter = 0;
+    
     private String m_sName;
     private String m_sTicketType;
     
@@ -56,6 +58,8 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
     private CutPaper cmd_CutPaper;
     private PrintXReport cmd_PrintXReport;
     private PrintZReport cmd_PrintZReport;
+    private ReadCashRegister cmd_ReadCashRegister;
+    private BeginFiscalDay cmd_BeginFiscalDay;
     
     int iReceiptLineCounter = 0;
 
@@ -68,13 +72,11 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
             m_CommOutputFiscal.connectDevice();
 
             cmd_ReadFullStatus = new ReadFullStatus();
-            GenerateCommand(m_CommOutputFiscal, cmd_ReadFullStatus);
+            GenerateCommand(iFPCounter++, m_CommOutputFiscal, cmd_ReadFullStatus);
 
-    //        SetPrinterMode(MODE_SELECT);
+            SetPrinterMode(MODE_SELECT);
 
-            GenerateCommand(m_CommOutputFiscal, new Beep());
-
-    //        m_CommOutputFiscal.sendCancelModeMessage();
+            GenerateCommand(iFPCounter++, m_CommOutputFiscal, new Beep());
 
             m_CommOutputFiscal.disconnectDevice();
         } catch (TicketFiscalPrinterException ex) {
@@ -98,9 +100,20 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
         SetPrinterMode(MODE_SELECT);
         SetPrinterMode(MODE_REGISTRATION);
         
+        CheckCurrentOpenDay();
+
+        cmd_ReadCashRegister = new ReadCashRegister((byte) 0x04, (byte) 0x00, (byte) 0x00);
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_ReadCashRegister);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_ReadCashRegister.getErrorAnswer());  
+        iFPCounter++;
+        
         cmd_PrintCashIn = new PrintCashIn(RECEIPT_FLAG_POST, dSumm);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintCashIn);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintCashIn.getErrorAnswer());        
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintCashIn);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintCashIn.getErrorAnswer());  
+        iFPCounter++;
+        
+        GenerateCommand(iFPCounter++, m_CommOutputFiscal, new Beep());
+        m_CommOutputFiscal.disconnectDevice();
     }
 
     public void printCashOut(double dSumm) throws TicketFiscalPrinterException {
@@ -108,9 +121,20 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
         SetPrinterMode(MODE_SELECT);
         SetPrinterMode(MODE_REGISTRATION);
 
+        CheckCurrentOpenDay();
+      
+        cmd_ReadCashRegister = new ReadCashRegister((byte) 0x05, (byte) 0x00, (byte) 0x00);
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_ReadCashRegister);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_ReadCashRegister.getErrorAnswer());  
+        iFPCounter++;
+        
         cmd_PrintCashOut = new PrintCashOut(RECEIPT_FLAG_POST, dSumm);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintCashOut);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintCashOut.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintCashOut);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintCashOut.getErrorAnswer());
+        iFPCounter++;
+
+        GenerateCommand(iFPCounter++, m_CommOutputFiscal, new Beep());
+        m_CommOutputFiscal.disconnectDevice();
     }
 
     //Начало печати чека
@@ -119,6 +143,8 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
         m_CommOutputFiscal.connectDevice();
         SetPrinterMode(MODE_SELECT);
         SetPrinterMode(MODE_REGISTRATION);
+
+        CheckCurrentOpenDay();
 
         if (m_sTicketType.equals("sale")) {
             cmd_BeginFiscalReceipt = new BeginFiscalReceipt(RECEIPT_FLAG_POST, RECEIPT_TYPE_SALE);
@@ -131,28 +157,30 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
 //            
 //        }        
 
-        GenerateCommand(m_CommOutputFiscal, cmd_BeginFiscalReceipt);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_BeginFiscalReceipt.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_BeginFiscalReceipt);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_BeginFiscalReceipt.getErrorAnswer());
+        iFPCounter++;
 
-        GenerateCommand(m_CommOutputFiscal, new Beep());
+        GenerateCommand(iFPCounter++, m_CommOutputFiscal, new Beep());
     }
 
     // Печать строки продажи или возврата по товару
     public void printLine(String sproduct, double dprice, double dunits, int taxinfo) throws TicketFiscalPrinterException {
 
         cmd_PrintString = new PrintString(sproduct);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintString);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintString);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        iFPCounter++;
 
         if (dprice >= 0 && dunits >= 0 && m_sTicketType.equals("sale")) {
             cmd_PrintSale = new PrintSale(LINE_FLAG_POST,  dprice / dunits, dunits, Integer.toString(taxinfo));
-            GenerateCommand(m_CommOutputFiscal, cmd_PrintSale);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintSale.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintSale);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintSale.getErrorAnswer());
             iReceiptLineCounter++;
         } else if (dprice < 0 && dunits < 0 && m_sTicketType.equals("refund")) {
-            cmd_PrintSaleRefund = new PrintSaleRefund(LINE_FLAG_POST, -1 * (dprice / dunits), -1 * dunits);
-            GenerateCommand(m_CommOutputFiscal, cmd_PrintSaleRefund);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintSaleRefund.getErrorAnswer());
+            cmd_PrintSaleRefund = new PrintSaleRefund(LINE_FLAG_POST, dprice / dunits, -1 * dunits);
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintSaleRefund);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintSaleRefund.getErrorAnswer());
             iReceiptLineCounter++;
         } else {
             iReceiptLineCounter = 0;
@@ -165,8 +193,9 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
     //Печать текста
     public void printMessage(String sText) throws TicketFiscalPrinterException {
         cmd_PrintString = new PrintString(sText);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintString);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintString);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        iFPCounter++;
     }
 
     public void endLine() {
@@ -177,20 +206,22 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
 //        SetPrinterMode(0);
         if (iReceiptLineCounter == 0) {
             cmd_VoidFiscalReceipt = new VoidFiscalReceipt();
-            GenerateCommand(m_CommOutputFiscal, cmd_VoidFiscalReceipt);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_VoidFiscalReceipt.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_VoidFiscalReceipt);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_VoidFiscalReceipt.getErrorAnswer());
+            iFPCounter++;
         } else {
             iReceiptLineCounter = 0;
         }
-        GenerateCommand(m_CommOutputFiscal, new Beep());
+        GenerateCommand(iFPCounter++, m_CommOutputFiscal, new Beep());
         m_CommOutputFiscal.disconnectDevice();
     }
 
     //Печать итоговой оплаты по чеку
     public void printTotal(String sPayment, double dpaid, String sPaymentType) throws TicketFiscalPrinterException {
         cmd_PrintString = new PrintString(sPayment);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintString);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintString);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        iFPCounter++;
 
         int iType = 0;
         
@@ -208,12 +239,14 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
                     
         if (dpaid >= 0 && m_sTicketType.equals("sale") && iType != 0) {
             cmd_EndFiscalReceipt = new EndFiscalReceipt(RECEIPT_FLAG_POST, iType, dpaid);
-            GenerateCommand(m_CommOutputFiscal, cmd_EndFiscalReceipt);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_EndFiscalReceipt);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+            iFPCounter++;
         } else if (dpaid < 0 && m_sTicketType.equals("refund") && iType != 0) {
             cmd_EndFiscalReceipt = new EndFiscalReceipt(RECEIPT_FLAG_POST, iType, 0.0);
-            GenerateCommand(m_CommOutputFiscal, cmd_EndFiscalReceipt);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_EndFiscalReceipt);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+            iFPCounter++;
         } else {
             String sCloseTicketError = "Error close ticket.";
             CancelCurrentOpenReceipt(sCloseTicketError);
@@ -225,8 +258,9 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
     public void cutPaper(boolean complete) throws TicketFiscalPrinterException {
         if (complete) {
             cmd_CutPaper = new CutPaper(1);
-            GenerateCommand(m_CommOutputFiscal, cmd_CutPaper);
-            CheckErrorAnswer(m_CommOutputFiscal, cmd_CutPaper.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_CutPaper);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_CutPaper.getErrorAnswer());
+            iFPCounter++;
         }
     }
 
@@ -236,8 +270,9 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
         SetPrinterMode(MODE_X_REPORT);
         
         cmd_PrintXReport = new PrintXReport(REPORT_TYPE_X);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintXReport);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintXReport.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintXReport);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintXReport.getErrorAnswer());
+        iFPCounter++;
         
         m_CommOutputFiscal.disconnectDevice();
     }
@@ -248,17 +283,19 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
         SetPrinterMode(MODE_Z_REPORT);
         
         cmd_PrintZReport = new PrintZReport();
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintZReport);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintZReport.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintZReport);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintZReport.getErrorAnswer());
+        iFPCounter++;
        
         m_CommOutputFiscal.disconnectDevice();
     }
 
     private PrinterMode GetModeAnswer() throws TicketFiscalPrinterException {
         cmd_ReadMode = new ReadMode();
-        GenerateCommand(m_CommOutputFiscal, cmd_ReadMode);
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_ReadMode);
         PrinterMode mModeCurrent = cmd_ReadMode.getMode();
-        logger.log(Level.INFO, "Answer: {0} {1}", new Object[]{mModeCurrent.getModeStatus(), mModeCurrent.getModeText()});
+        logger.log(Level.WARNING, "Get mode {0}: {1} {2}", new Object[]{iFPCounter, mModeCurrent.getModeStatus(), mModeCurrent.getModeText()});
+        iFPCounter++;
         return mModeCurrent;
     }
 
@@ -269,19 +306,21 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
 
             if (iCurrentMode != MODE_SELECT) {
                 cmd_CancelCurrentMode = new CancelCurrentMode();
-                GenerateCommand(m_CommOutputFiscal, cmd_CancelCurrentMode);
+                GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_CancelCurrentMode);
                 bCurrentError = cmd_CancelCurrentMode.getErrorAnswer().getCodeError();
-                if (bCurrentError == (byte) 0x89) {
+                if (bCurrentError == (byte) 0x89 || bCurrentError == (byte) 0x87 || bCurrentError == (byte) 0x82) {
                     CancelCurrentOpenReceipt(cmd_CancelCurrentMode.getErrorAnswer().getFullTextError());
                 } else {
-                    CheckErrorAnswer(m_CommOutputFiscal, cmd_CancelCurrentMode.getErrorAnswer());
+                    CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_CancelCurrentMode.getErrorAnswer());
+                    iFPCounter++;
                 }
             }
 
             if (iMode != MODE_SELECT) {
                 cmd_SelectMode = new SelectMode(iMode, ADMIN_PASSWORD);
-                GenerateCommand(m_CommOutputFiscal, cmd_SelectMode);
-                CheckErrorAnswer(m_CommOutputFiscal, cmd_SelectMode.getErrorAnswer());
+                GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_SelectMode);
+                CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_SelectMode.getErrorAnswer());
+                iFPCounter++;
             }
 
             PrinterMode mMode = GetModeAnswer();
@@ -294,17 +333,33 @@ public class DeviceFiscalPrinterAuraFR extends DeviceAuraFR implements DeviceFis
     
     private void CancelCurrentOpenReceipt(String sPrintErrorText) throws TicketFiscalPrinterException {
         cmd_PrintString = new PrintString(sPrintErrorText);
-        GenerateCommand(m_CommOutputFiscal, cmd_PrintString);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_PrintString);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_PrintString.getErrorAnswer());
+        iFPCounter++;
 
         cmd_VoidFiscalReceipt = new VoidFiscalReceipt();
-        GenerateCommand(m_CommOutputFiscal, cmd_VoidFiscalReceipt);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_VoidFiscalReceipt.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_VoidFiscalReceipt);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_VoidFiscalReceipt.getErrorAnswer());
+        iFPCounter++;
         
         cmd_CancelCurrentMode = new CancelCurrentMode();
-        GenerateCommand(m_CommOutputFiscal, cmd_CancelCurrentMode);
-        CheckErrorAnswer(m_CommOutputFiscal, cmd_CancelCurrentMode.getErrorAnswer());
+        GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_CancelCurrentMode);
+        CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_CancelCurrentMode.getErrorAnswer());
+        iFPCounter++;
         
 //        throw new TicketFiscalPrinterException(sPrintErrorText);
+    }
+    
+    private void CheckCurrentOpenDay() throws TicketFiscalPrinterException {
+        cmd_ReadCashRegister = new ReadCashRegister((byte) 0x12, (byte) 0x00, (byte) 0x00);
+        GenerateCommand(iFPCounter++, m_CommOutputFiscal, cmd_ReadCashRegister);
+        logger.log(Level.WARNING, "Fiscal day open: {0} Last data close: {1}", new Object[]{cmd_ReadCashRegister.isOpenFiscalDay(), cmd_ReadCashRegister.getDateCloseFiscalDay().getTime().toString()});
+
+        if (!cmd_ReadCashRegister.isOpenFiscalDay()) {
+            cmd_BeginFiscalDay = new BeginFiscalDay(RECEIPT_FLAG_POST, "");
+            GenerateCommand(iFPCounter, m_CommOutputFiscal, cmd_BeginFiscalDay);
+            CheckErrorAnswer(iFPCounter, m_CommOutputFiscal, cmd_BeginFiscalDay.getErrorAnswer());
+            iFPCounter++;
+        }
     }
 }

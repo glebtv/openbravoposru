@@ -94,6 +94,8 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
         try {
             m_PortIdPrinter = CommPortIdentifier.getPortIdentifier(m_sPort);
             m_CommPortPrinter = (SerialPort) m_PortIdPrinter.open("PORTID", T6);
+            m_CommPortPrinter.setOutputBufferSize(1024);
+            m_CommPortPrinter.setInputBufferSize(1024);
             m_out = m_CommPortPrinter.getOutputStream();
             m_in = m_CommPortPrinter.getInputStream();
             m_CommPortPrinter.addEventListener(this);
@@ -256,36 +258,34 @@ public class DeviceAuraFRComm implements AuraFRReaderWritter, SerialPortEventLis
                 try {
                     while (m_in.available() > 0) {
                         int b = m_in.read();
-                                
-                        synchronized(this) {
-                            if ((b == ACK[0]  || b == ENQ[0] || b == EOT[0]) && m_iStatusPrinter == FR_READY || (b != ACK[0]  || b != ENQ[0] || b != EOT[0]) && m_iStatusPrinter == FR_FINISH) {
+
+                        if ((b == ACK[0] || b == ENQ[0] || b == EOT[0]) && m_iStatusPrinter == FR_READY || (b != ACK[0] || b != ENQ[0] || b != EOT[0]) && m_iStatusPrinter == FR_FINISH) {
+                            synchronized (this) {
                                 m_abuffer.write(b);
                                 m_aLines.add(m_abuffer.toByteArray());
                                 m_iStatusPrinter = FR_READY;
 //                                System.out.println("b: " + Integer.toHexString(b) + " SP: " + m_iStatusPrinter);
                                 m_abuffer.reset();
                                 notifyAll();
-                            } else if (b == STX[0] && m_iStatusPrinter == FR_READY) {
-                                m_abuffer.write(b);
-                                m_iStatusPrinter = FR_READING;
-//                                System.out.println("b: " + Integer.toHexString(b) + " SP: " + m_iStatusPrinter);
-                            } else if (b == DLE && m_iStatusPrinter == FR_READING) {
-                                m_iStatusPrinter = FR_MASKING;
-//                                System.out.println("b: " + Integer.toHexString(b) + " SP: " + m_iStatusPrinter);
-                            } else if (m_iStatusPrinter == FR_READING && b != ETX && b != DLE) {
-                                m_abuffer.write(b);
-//                                System.out.println("b: " + Integer.toHexString(b) + " SP: " + m_iStatusPrinter);
-                            } else if (m_iStatusPrinter == FR_MASKING && b == ETX || b == DLE) {
-                                m_abuffer.write(b);
-                                m_iStatusPrinter = 1;
-//                                System.out.println("b: " + Integer.toHexString(b) + " SP: " + m_iStatusPrinter);
-                            } else if (b == ETX && m_iStatusPrinter != FR_MASKING) {
-                                m_abuffer.write(b);
-                                m_iStatusPrinter = FR_FINISH;
                             }
+                        } else if (b == STX[0] && m_iStatusPrinter == FR_READY) {
+                            m_abuffer.write(b);
+                            m_iStatusPrinter = FR_READING;
+                        } else if (b == DLE && m_iStatusPrinter == FR_READING) {
+                            m_iStatusPrinter = FR_MASKING;
+                        } else if (m_iStatusPrinter == FR_READING && b != ETX && b != DLE) {
+                            m_abuffer.write(b);
+                        } else if (m_iStatusPrinter == FR_MASKING && b == ETX || b == DLE) {
+                            m_abuffer.write(b);
+                            m_iStatusPrinter = FR_READING;
+                        } else if (b == ETX && m_iStatusPrinter != FR_MASKING) {
+                            m_abuffer.write(b);
+                            m_iStatusPrinter = FR_FINISH;
                         }
                     }
-                } catch (IOException eIO) {}
+
+                } catch (IOException eIO) {
+                }
                 break;
         }
     }

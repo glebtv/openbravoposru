@@ -45,12 +45,10 @@ public class PrintCashIn extends PrinterCommand {
         bCashInFlag = (byte) iCashInFlag;
         bCashInAmount = new PackedBCD(
                 new BigDecimal(dCashInAmount * Math.pow(10, 2)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
-
-        System.out.println("Packet(" + bCashInAmount.length + "):" + ByteArrayUtils.getHexString(bCashInAmount));
     }
 
     public final int getCode() {
-        return 0x4F;
+        return 0x49;
     }
 
     public final String getText() {

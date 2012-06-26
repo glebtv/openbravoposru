@@ -68,13 +68,9 @@ public class PrintSale extends PrinterCommand {
         bSalePrice = new PackedBCD(
                 new BigDecimal(dSalePrice * Math.pow(10, 2)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
 
-        System.out.println("Packet(" + bSalePrice.length + "):" + ByteArrayUtils.getHexString(bSalePrice));
-
         bSaleUnit = new PackedBCD(
                 new BigDecimal(dSaleUnit * Math.pow(10, 3)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
 
-        System.out.println("Packet(" + bSaleUnit.length + "):" + ByteArrayUtils.getHexString(bSaleUnit));
-        
         bSaleSection = new PackedBCD(new BigInteger(sSaleSection), 2).toByteArray();
 
     }

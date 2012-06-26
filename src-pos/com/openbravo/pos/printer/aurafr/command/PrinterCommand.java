@@ -1,5 +1,6 @@
 package com.openbravo.pos.printer.aurafr.command;
 
+import com.openbravo.pos.util.ByteArrayUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;

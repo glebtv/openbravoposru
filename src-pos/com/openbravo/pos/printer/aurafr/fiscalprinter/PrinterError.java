@@ -82,12 +82,12 @@ public class PrinterError {
              case 0x7F : return "Переполнение при умножении";
              case (byte) 0x80 : return "Операция запрещена в таблице настроек";
              case (byte) 0x81 : return "Переполнение итога чека";
-             case (byte) 0x82 : return "Открыт чек аннулирования – операция невозможна";
+             case (byte) 0x82 : return "Открыт чек аннулирования - операция невозможна";
              case (byte) 0x84 : return "Переполнение буфера контрольной ленты";
              case (byte) 0x86 : return "Вносимая клиентом сумма меньше суммы чека";
-             case (byte) 0x87 : return "Открыт чек возврата – операция невозможна";
+             case (byte) 0x87 : return "Открыт чек возврата - операция невозможна";
              case (byte) 0x88 : return "Смена превысила 24 часа";
-             case (byte) 0x89 : return "Открыт чек продажи – операция невозможна";
+             case (byte) 0x89 : return "Открыт чек продажи - операция невозможна";
              case (byte) 0x8A : return "Переполнение ФП";
              case (byte) 0x8C : return "Неверный пароль";
              case (byte) 0x8D : return "Буфер контрольной ленты не переполнен";
@@ -101,8 +101,8 @@ public class PrinterError {
              case (byte) 0x96 : return "Сумма чека по секции меньше суммы сторно";
              case (byte) 0x97 : return "Подсчет суммы сдачи невозможен";
              case (byte) 0x98 : return "В ККМ нет денег для выплаты";
-             case (byte) 0x9A : return "Чек закрыт – операция невозможна";
-             case (byte) 0x9B : return "Чек открыт – операция невозможна";
+             case (byte) 0x9A : return "Чек закрыт - операция невозможна";
+             case (byte) 0x9B : return "Чек открыт - операция невозможна";
              case (byte) 0x9C : return "Смена открыта, операция невозможна";
              case (byte) 0x9D : return "ККМ заблокирована, ждет ввода пароля доступа к ФП";
              case (byte) 0x9E : return "Заводской номер уже задан";
@@ -163,10 +163,10 @@ public class PrinterError {
     }
 
     public String getFullTextError() {
-        if (bCode > 0x7F) {
-            return String.valueOf(256 + bCode) + " " + getTextMessage(bCode);
-        } else {
+        if (bCode >= 0x00) {
             return String.valueOf(bCode) + " " + getTextMessage(bCode);
+        } else {
+            return String.valueOf(256 +bCode) + " " + getTextMessage(bCode);
         }
     }
 }

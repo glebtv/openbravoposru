@@ -73,53 +73,19 @@ public class DeviceAuraFR {
     public static final byte REPORT_TYPE_BY_PRODUCT = 0x04;
     public static final byte REPORT_TYPE_BY_HOUR = 0x05;
     public static final byte REPORT_TYPE_BY_UNIT = 0x07;
-
-//    private ByteArrayOutputStream lineout;
-//    public static final byte[] ADMIN_PASSWORD = {0x00, 0x00, 0x00, 0x30};
-
-//    private static final byte INIT = 0x3f; //Запрос состояния ККМ
-//    private static final byte PRN = 0x4C; //Печать строки текста
-//    private static final byte BEEP = 0x47; //Гудок
-//    private static final byte TITLE = 0x6C; //Печать клише чека
-//    private static final byte CUT = 0x75; //Отрезать чек
-//    private static final byte OPEN_DRAWER = (byte) 0x80; //Открыть денежный ящик
-//
-//    private static final byte OPEN_TICKET = (byte) 0x92; //Открыть чек
-//    private static final byte CLOSETICKET = (byte) 0x4A;
-//    private static final byte REGISTRATION = (byte) 0x52;
-//    private static final byte SELECTMODE = (byte) 0x56;
-//    private static final byte CANCELMODE = (byte) 0x48;
-//    private static final byte REFUND = (byte) 0x57;    
-//
-//    private static final byte XREPORT = (byte) 0x67;
-//    private static final byte ZREPORT = (byte) 0x5A;
-//    
-//    private static final byte READ_REGISTER = (byte) 0x91;
-//    private static final byte OPEN = (byte) 0x9A;
-//
-//    private static final byte ETX = 0x03;
-//    private static final byte STX = 0x02;
-//
-//    private static final byte DLE = 0x10;
-//
-//    private static final byte NULL = 0x00; // Нулевое значение
-//
-//    private static final byte[] PASS = {0x00, 0x00};
-
-//    public DeviceAuraFR() {
-////        lineout = null;
-//    }
     
-    public void GenerateCommand(AuraFRReaderWritter mFiscalPrinter, PrinterCommand mCommand) throws TicketFiscalPrinterException {
-        logger.log(Level.INFO, "Message: {0} {1}", new Object[]{mCommand.getCode(), mCommand.getText()});
+    public void GenerateCommand(int iMessageCounter, AuraFRReaderWritter mFiscalPrinter, PrinterCommand mCommand) throws TicketFiscalPrinterException {
+        logger.log(Level.INFO, "Send message {0}: {1} {2}", new Object[]{iMessageCounter, mCommand.getCode(), mCommand.getText()});
         mFiscalPrinter.sendMessage(CASHIER_PASSWORD, mCommand);
     }
 
-    public void CheckErrorAnswer(AuraFRReaderWritter mFiscalPrinter, PrinterError mError) throws TicketFiscalPrinterException {
-        logger.log(Level.INFO, "Answer: {0} {1}", new Object[]{mError.getCodeError(), mError.getTextError()});
+    public void CheckErrorAnswer(int iMessageCounter, AuraFRReaderWritter mFiscalPrinter, PrinterError mError) throws TicketFiscalPrinterException {
         if (mError.getCodeError() != 0) {
+            logger.log(Level.SEVERE, "Get error {0}: {1} {2}", new Object[]{iMessageCounter, mError.getCodeError(), mError.getTextError()});
             mFiscalPrinter.disconnectDevice();
             throw new TicketFiscalPrinterException(mError.getFullTextError());
+        } else {
+            logger.log(Level.INFO, "Get answer {0}: {1} {2}", new Object[]{iMessageCounter, mError.getCodeError(), mError.getTextError()});
         }
     }
 
@@ -138,126 +104,6 @@ public class DeviceAuraFR {
 //        lineout.write(STX);
 //        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
 //        lineout.write(OPEN_DRAWER);
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//public byte[] RefundLine(int iFlag, double dProductPrice, double dProductUnit) {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(REFUND);
-//        lineout.write(iFlag);
-//        byte[] MSG = new byte[5];
-//        MSG = convertDouble(Math.abs(dProductPrice),2);
-//        for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
-//        MSG = null;
-//        MSG = convertDouble(Math.abs(dProductUnit),3);
-//        for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
-//        byte[] bData = new byte[lineout.size()];
-//        bData = lineout.toByteArray();
-//        lineout.reset();
-//        for (int i = 0; i < 4; i++) lineout.write(bData[i]);;
-//        for (int i = 4; i < bData.length; i++) {
-//            if (bData[i] == ETX || bData[i] == DLE) {
-//                lineout.write(DLE);
-//            }
-//            lineout.write(bData[i]);
-//        }
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//    public byte[] CloseTicket(int iFlag,int iPaidType, double dTotalPaid) {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(CLOSETICKET);
-//        lineout.write(iFlag);
-//        lineout.write(iPaidType);
-//        byte[] MSG = new byte[5];
-//        MSG = convertDouble(Math.abs(dTotalPaid),2);
-//        for (int i = 0; i < MSG.length; i++) lineout.write(MSG[i]);
-//        byte[] bData = new byte[lineout.size()];
-//        bData = lineout.toByteArray();
-//        lineout.reset();
-//        for (int i = 0; i < 4; i++) lineout.write(bData[i]);;
-//        for (int i = 4; i < bData.length; i++) {
-//            if (bData[i] == ETX || bData[i] == DLE) {
-//                lineout.write(DLE);
-//            }
-//            lineout.write(bData[i]);
-//        }
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//    public byte[] XReport(int iTypeReport) {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(XREPORT);
-//        lineout.write(iTypeReport);
-//        byte[] bData = new byte[lineout.size()];
-//        bData = lineout.toByteArray();
-//        lineout.reset();
-//        for (int i = 0; i < 4; i++) lineout.write(bData[i]);;
-//        for (int i = 4; i < bData.length; i++) {
-//            if (bData[i] == ETX || bData[i] == DLE) {
-//                lineout.write(DLE);
-//            }
-//            lineout.write(bData[i]);
-//        }
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//    public byte[] ZReport() {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(ZREPORT);
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//    public byte[] ReadRegister(int iRegister, int iParameter1, int iParameter2) {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(READ_REGISTER);
-//        byte[] MSG = new byte[1];
-//        String hex = Integer.toHexString(iRegister);
-//        MSG = hexStringToByteArray(hex);
-//        lineout.write(MSG[0]);
-//        lineout.write(iParameter1);
-//        lineout.write(iParameter2);
-//        byte[] bData = new byte[lineout.size()];
-//        bData = lineout.toByteArray();
-//        lineout.reset();
-//        for (int i = 0; i < 4; i++) lineout.write(bData[i]);;
-//        for (int i = 4; i < bData.length; i++) {
-//            if (bData[i] == ETX || bData[i] == DLE) {
-//                lineout.write(DLE);
-//            }
-//            lineout.write(bData[i]);
-//        }
-//        lineout.write(ETX);
-//        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
-//        return lineout.toByteArray();
-//    }
-//
-//    public byte[] OpenMessage(int iFlag, String iText) {
-//        ByteArrayOutputStream lineout = new ByteArrayOutputStream();
-//        lineout.write(STX);
-//        for (int i = 0; i < PASS.length; i++) lineout.write(PASS[i]);
-//        lineout.write(OPEN);
-//        lineout.write(iFlag);
 //        lineout.write(ETX);
 //        lineout.write(calcCheckSumCRC(lineout.toByteArray()));
 //        return lineout.toByteArray();

@@ -59,13 +59,8 @@ public class PrintSaleRefund extends PrinterCommand {
         bSaleRefundPrice = new PackedBCD(
                 new BigDecimal(dSaleRefundPrice * Math.pow(10, 2)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
 
-        System.out.println("Packet(" + bSaleRefundPrice.length + "):" + ByteArrayUtils.getHexString(bSaleRefundPrice));
-
         bSaleRefundUnit = new PackedBCD(
                 new BigDecimal(dSaleRefundUnit * Math.pow(10, 3)).setScale(0, RoundingMode.HALF_UP).toBigInteger(), 10).toByteArray();
-
-        System.out.println("Packet(" + bSaleRefundUnit.length + "):" + ByteArrayUtils.getHexString(bSaleRefundUnit));
-
     }
 
     public final int getCode() {

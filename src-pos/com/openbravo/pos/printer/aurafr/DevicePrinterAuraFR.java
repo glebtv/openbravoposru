@@ -39,6 +39,8 @@ public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
     private PrintString cmd_PrintString;
     private CutPaper cmd_CutPaper;
     private ReadFullStatus cmd_ReadFullStatus;
+    
+    private int iFPCounter = 0;
 
     // Creates new TicketPrinter
     public DevicePrinterAuraFR(String sDevicePrinterPort, Integer iPortSpeed, Integer iPortBits, Integer iPortStopBits, Integer iPortParity) throws TicketFiscalPrinterException {
@@ -48,9 +50,9 @@ public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
         m_CommOutputPrinter.connectDevice();
 
         cmd_ReadFullStatus = new ReadFullStatus();
-        GenerateCommand(m_CommOutputPrinter, cmd_ReadFullStatus);
+        GenerateCommand(iFPCounter++, m_CommOutputPrinter, cmd_ReadFullStatus);
 
-        GenerateCommand(m_CommOutputPrinter, new Beep());
+        GenerateCommand(iFPCounter++, m_CommOutputPrinter, new Beep());
 
         m_CommOutputPrinter.disconnectDevice();
     }
@@ -74,7 +76,7 @@ public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
     public void beginReceipt() {
         try {
             m_CommOutputPrinter.connectDevice();
-            GenerateCommand(m_CommOutputPrinter, new Beep());
+            GenerateCommand(iFPCounter++, m_CommOutputPrinter, new Beep());
         } catch (TicketFiscalPrinterException e) {
         }
     }
@@ -97,8 +99,9 @@ public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
     public void endLine() {
         try {
             cmd_PrintString = new PrintString(sLine);
-            GenerateCommand(m_CommOutputPrinter, cmd_PrintString);
-            CheckErrorAnswer(m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputPrinter, cmd_PrintString);
+            CheckErrorAnswer(iFPCounter, m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+            iFPCounter++;
             sLine = "";
         } catch (TicketFiscalPrinterException ex) {
         }
@@ -111,15 +114,17 @@ public class DevicePrinterAuraFR extends DeviceAuraFR implements DevicePrinter {
          
             for (int iSpcStr = 0; iSpcStr < SPACE_STRINGE_BEFORE_CUT; iSpcStr++) {
                 cmd_PrintString = new PrintString("");
-                GenerateCommand(m_CommOutputPrinter, cmd_PrintString);
-                CheckErrorAnswer(m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+                GenerateCommand(iFPCounter, m_CommOutputPrinter, cmd_PrintString);
+                CheckErrorAnswer(iFPCounter, m_CommOutputPrinter, cmd_PrintString.getErrorAnswer());
+                iFPCounter++;
             }
             
             cmd_CutPaper = new CutPaper(0);
-            GenerateCommand(m_CommOutputPrinter, cmd_CutPaper);
-            CheckErrorAnswer(m_CommOutputPrinter, cmd_CutPaper.getErrorAnswer());
+            GenerateCommand(iFPCounter, m_CommOutputPrinter, cmd_CutPaper);
+            CheckErrorAnswer(iFPCounter, m_CommOutputPrinter, cmd_CutPaper.getErrorAnswer());
+            iFPCounter++;
 
-            GenerateCommand(m_CommOutputPrinter, new Beep());
+            GenerateCommand(iFPCounter++, m_CommOutputPrinter, new Beep());
         } catch (TicketFiscalPrinterException ex) {
         }
         m_CommOutputPrinter.disconnectDevice();

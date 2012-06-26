@@ -28,7 +28,7 @@ public class PrintString extends PrinterCommand {
      * 
      */
     
-    private final String sText;
+    private String sText;
     
     private PrinterError mError = new PrinterError();
 
@@ -50,7 +50,6 @@ public class PrintString extends PrinterCommand {
 
     public byte[] getMessageData() {
         if (sText != null) {
-            System.out.println(sText);
             return UnicodeConverterCP866KZ.convertString(sText);
         } else {
             return null;
