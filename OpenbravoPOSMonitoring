@@ -1,0 +1,192 @@
+#summary Настройка системы мониторинга Icinga для отслеживания работы с базой данных Openbravo POS.
+
+= Вводная =
+
+Данная инструкция содержит руководство по установке и настройке:
+  * системы мониторинга Icinga для отслеживания параметров базы данных Openbravo POS;
+  * плагина check_mysql_helth для получения данных из базы данных Openbravo POS;
+  * утилиты RRDtool для хранения и обработки динамических последовательностей параметров Openbravo POS;
+  * веб-оболочки pnp4nagios для вывода информации в виде графиков построенных на основе параметров базы данных Openbravo POS.
+
+В рамках данной инструкции установка и настройка производится в ОС Ubuntu 9.10 и если не оговаривается иное с правами *root*. Перед началом работы необходимо ввести:
+{{{
+ $ sudo su
+}}}
+
+= Icinga =
+
+== Установка необходимых компонентов ==
+
+До начала установки основного пакета Icinga требуется установить следующие программы библиотеки:
+  * HTTP-сервер [http://ru.wikipedia.org/wiki/Apache Apache];
+  * компилятор [http://ru.wikipedia.org/wiki/Gcc GCC];
+  * библиотеки разработчиков [http://ru.wikipedia.org/wiki/%D0%AF%D0%B7%D1%8B%D0%BA_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_C%2B%2B C/C++];
+  * графическая библиотека [http://ru.wikipedia.org/wiki/GD GD];
+  * драйверы [http://libdbi.sourceforge.net/ libdbi] для [http://ru.wikipedia.org/wiki/MySQL СУБД MySQL].
+
+Для Ubuntu следует установить следующие пакеты:
+{{{
+ # apt-get install apache2 libapache2-mod-php5 build-essential libgd2-xpm-dev
+ # apt-get install libjpeg62 libjpeg62-dev libpng12 libpng12-dev
+ # apt-get install mysql-server mysql-client libdbi0 libdbi0-dev libdbd-mysql
+}}}
+
+== Компиляция и установка из исходного кода ==
+
+[http://www.icinga.org/download/ Скачать] наиболее свежий релиз Icinga в каталог и распаковать архив с исходным кодом.
+
+{{{
+ # cd /usr/src/
+ # wget http://sourceforge.net/projects/icinga/files/icinga/1.0-RC1/icinga-1.0-RC1.tar.gz/download
+ # tar xvzf icinga-1.0-RC1.tar.gz 
+ # cd icinga-1.0-RC1
+}}}
+
+Запустить скрипт конфигуратора Icinga с включёнными параметрами IDOUtils и поддержкой СУБД MySQL (для более подробной информации по доступным параметрам используйте --help).
+
+{{{
+ # ./configure --enable-idoutils --enable-mysql
+}}}
+
+Создать нового пользователя *icinga* и задать пароль для него.
+
+{{{
+ # useradd -m -s /bin/bash icinga
+ # passwd icinga
+}}}
+
+Создать группу *icinga* для включения в неё пользователей веб-интерфейса и объединить пользователей Icinga и пользователей Apache в одной группе *www-data*.
+
+{{{
+ # groupadd icinga
+ # usermod -a -G icinga www-data
+}}}
+
+Скомпилировать исходный код Icinga.
+
+{{{
+ # make all
+}}}
+
+Установить все компоненты программы.
+
+{{{
+ # make fullinstall
+}}}
+
+== Настройка Веб-интерфейса ==
+
+Установить конфигурационный файл Icinga в каталог {{{conf.d}}} сервера Apache.
+
+{{{
+ # make install-webconf
+}}}
+
+Создать учётную запись *icingaadmin* для доступа к веб-интерфейсу Icinga.
+
+{{{
+ # htpasswd -c /usr/local/icinga/etc/htpasswd.users icingaadmin
+}}}
+
+Перезагрузить сервер Apache для применения новых установок.
+
+{{{
+ # /etc/init.d/apache2 restart
+}}}
+
+== Создание базы данных icinga ==
+
+Для СУБД MySQL создать базу данных, пользователя icinga и назначение ему прав доступа:
+
+{{{
+ # mysql -u root -p
+
+ mysql> CREATE DATABASE icinga;
+ GRANT USAGE ON *.* TO 'icinga'@'localhost' IDENTIFIED BY 'icinga' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
+ GRANT SELECT , INSERT , UPDATE , DELETE ON icinga.* TO 'icinga'@'localhost';
+ FLUSH PRIVILEGES ;
+ mysql> quit
+}}}
+
+Импортировать структуру базы данных для MySQL.
+
+{{{
+ # cd /path/to/icinga-src/module/idoutils/db 
+ # mysql -u root -p icinga < mysql.sql
+}}}
+
+== Настройка IDOUtils ==
+
+Перейти в каталог с настройками Icinga и переименовать шаблоны {{{idomod.cfg-sample}}} и {{{ido2db.cfg-sample}}}.
+
+{{{
+ # cd /usr/local/icinga/etc/
+ # cp idomod.cfg-sample idomod.cfg
+ # cp ido2db.cfg-sample ido2db.cfg
+}}}
+
+Если необходимо отредактировать настройки для базы данных MySQL.
+
+{{{
+ # nano /usr/local/icinga/etc/ido2db.cfg
+}}}
+
+Необходимо установить тип СУБД, порт, имя пользователя и пароль.
+
+{{{
+ db_servertype=mysql
+ db_port=3306
+ db_user=icinga
+ db_pass=icinga
+}}}
+
+Редактировать основной файл конфигурации.
+
+{{{
+ # vi /usr/local/icinga/etc/icinga.cfg
+}}}
+
+Сняв комментарий включить для {{{idomod.o}}} действие {{{broker_module}}}:
+
+{{{
+broker_module=/usr/local/icinga/bin/idomod.o config_file=/usr/local/icinga/etc/idomod.cfg
+}}}
+
+== Запуск IDOUtils ==
+
+IDOUtils должен быть запущен и работать до того как будет запущен Icinga.
+
+Запустить IDOUtils.
+
+{{{
+ # /etc/init.d/ido2db start
+}}}
+
+== Запуск Icinga ==
+
+Проверить конфигурационные файлы Icinga.
+
+{{{
+ # /usr/local/icinga/bin/icinga -v /usr/local/icinga/etc/icinga.cfg
+}}}
+
+Если ошибок нет, запустить Icinga.
+
+{{{
+ # /etc/init.d/icinga start
+}}}
+
+Чтобы в дальнейшем Icinga запускался автоматически добавить скрипт запуска в список системных сервисов.
+{{{
+ # ln -s /etc/init.d/icinga /etc/rcS.d/S99icinga
+}}}
+
+Для доступа к веб-интерфейсу перейдите по ссылке [http://localhost/icinga/ http://localhost/icinga/].
+
+= RRDtool =
+
+= pnp4nagios =
+
+= check_mysql_helth =
+
+
